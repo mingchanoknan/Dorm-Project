@@ -22,10 +22,10 @@ const Example = () => {
   };
 
   return (
-    <View style={{backgroundColor: '#E5F8FE'}}>
-      <TouchableOpacity style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', padding: 8, top: 5, borderWidth: 1, borderColor: '#D8D4D4', borderRadius: 10, backgroundColor: '#F7F8FB'}} onPress={showDatePicker}>
-        <Text style={{color:"#8F9AB3"}}>{date.toLocaleDateString()}</Text>
-        <AntDesign name="calendar"  style={{marginLeft: 8}} size={18} color="#65778E" />
+    <View>
+      <TouchableOpacity style={{display: 'flex', flexDirection: 'row', padding: 5, paddingLeft:10, borderWidth: 1, borderColor: '#D8D4D4', borderRadius: 50, backgroundColor: '#F7F8FB', width: 110}} onPress={showDatePicker}>
+        <Text style={{color:"#8F9AB3", fontSize: '12px'}}>{date.toLocaleDateString()}</Text>
+        <AntDesign name="calendar"  style={{marginLeft: 8}} size={14} color="#65778E" />
       </TouchableOpacity>
       <DateTimePickerModal
         isVisible={isDatePickerVisible}

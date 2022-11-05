@@ -8,24 +8,29 @@ import {
   Alert,
 } from "react-native";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
-import RoomGridTile from "../../component/contract/RoomGridTile";
+import BillGridTile from "../../component/invoice/BillGridTile";
 import { RENT } from "../../dummy/RENT";
 import Search from "../../component/contract/searchBar";
 import Time from "../../component/invoice/time";
 import Modal from "react-native-modal";
 import RESERVE from "../../dummy/RESERVE";
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-const CheckRoomsStatus = ({ route, navigation }) => {
+const ManageInvoice = ({ route, navigation }) => {
 
   const renderGridItem = (itemData) => {
     return (
-      <RoomGridTile
+      <BillGridTile
         title={itemData.item.room_number}
-        color={itemData.item.color}
-        data={itemData.item.room_status}
+        color={itemData.item.room_status === "unavailable" ? '#48c78e' : '#c0b7c7'}
         onSelect={() => {
-          if (itemData.item.room_status === "available") {
-            Alert.alert("ยังไม่มีผู้เช่า", "ทำการจองห้องพัก", [
+          if (itemData.item.room_status === "unavailable") {
+            navigation.navigate("BillInvoice", {
+              id: itemData.item.id,
+              categoryTitle: itemData.item.room_number,
+            });
+          } else {
+            Alert.alert("ยังไม่มีผู้เช่า", "ในห้องนี้", [
               // {
               //   text: "Cancel",
               //   onPress: () => console.log("Cancel Pressed"),
@@ -33,20 +38,6 @@ const CheckRoomsStatus = ({ route, navigation }) => {
               // },
               { text: "OK", onPress: () => console.log("OK Pressed") },
             ]);
-            navigation.navigate("ReserveRoom", {
-              categoryId: itemData.item.id,
-              categoryTitle: itemData.item.room_number,
-            });
-          } else if (itemData.item.room_status === "reserve") {
-            navigation.navigate("DetailReserve", {
-              categoryId: itemData.item.id,
-              categoryTitle: itemData.item.room_number,
-            });
-          } else {
-            navigation.navigate("UserProfile", {
-              categoryId: itemData.item.id,
-              categoryTitle: itemData.item.room_number,
-            });
           }
         }}
       />
@@ -68,83 +59,7 @@ const CheckRoomsStatus = ({ route, navigation }) => {
           </Text>
           <AntDesign name="down" size={13} color="white" />
         </TouchableOpacity>
-
-        <View
-          style={{
-            flexDirection: "row",
-            alignSelf: "flex-end",
-            marginTop: 45,
-            marginRight: 10,
-          }}
-        >
-          <Text style={{ fontWeight: "bold", fontSize: "11px", top: 5 }}>
-            สถานะ{" "}
-          </Text>
-          <View
-            style={{
-              flexDirection: "row",
-              backgroundColor: "white",
-              marginLeft: 5,
-              width: "50%",
-              height: 30,
-              borderWidth: 1,
-              borderColor: "#938B8B",
-              borderRadius: 10,
-              justifyContent: "center",
-            }}
-          >
-            <View style={{ flexDirection: "row", top: 3 }}>
-              <View
-                style={{
-                  backgroundColor: "#48C78E",
-                  marginLeft: 5,
-                  width: 20,
-                  height: 20,
-                  borderRadius: "50%",
-                }}
-              />
-              <Text
-                style={{ marginLeft: 5, fontSize: "12px", fontWeight: "bold" }}
-              >
-                ว่าง
-              </Text>
-            </View>
-
-            <View style={{ flexDirection: "row", top: 3 }}>
-              <View
-                style={{
-                  backgroundColor: "#F14668",
-                  marginLeft: 5,
-                  width: 20,
-                  height: 20,
-                  borderRadius: "50%",
-                }}
-              />
-              <Text
-                style={{ marginLeft: 5, fontSize: "12px", fontWeight: "bold" }}
-              >
-                ไม่ว่าง
-              </Text>
-            </View>
-
-            <View style={{ flexDirection: "row", top: 3 }}>
-              <View
-                style={{
-                  backgroundColor: "#3E8ED0",
-                  marginLeft: 5,
-                  width: 20,
-                  height: 20,
-                  borderRadius: "50%",
-                }}
-              />
-              <Text
-                style={{ marginLeft: 5, fontSize: "12px", fontWeight: "bold" }}
-              >
-                จอง
-              </Text>
-            </View>
-          </View>
-        </View>
+       
       </View>
       <View style={styles.header2}>
         <TouchableOpacity style={[styles.bill, { position: "absolute" }]}>
@@ -161,7 +76,6 @@ const CheckRoomsStatus = ({ route, navigation }) => {
           <AntDesign name="down" size={13} color="#2D83FC" />
         </TouchableOpacity>
 
-        <Search />
       </View>
       <View style={styles.container}>
         <FlatList data={RENT} renderItem={renderGridItem} numColumns={3} />
@@ -240,4 +154,4 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFB085",
   },
 });
-export default CheckRoomsStatus;
+export default ManageInvoice;

@@ -8,6 +8,7 @@ class Rent_room {
       room_type,
       common_fee,
       room_status,
+      color,
       tenant_id
     ) {
       this.id = id;
@@ -18,6 +19,7 @@ class Rent_room {
       this.room_type = room_type;
       this.common_fee = common_fee;
       this.room_status = room_status;
+      this.color = color;
       this.tenant_id = tenant_id;
     }
   }
