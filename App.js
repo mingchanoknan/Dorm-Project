@@ -8,8 +8,8 @@ const App = () => {
   return (
     <ApplicationProvider {...eva} theme={eva.light}>
       <NavigationContainer>
-        {/* <LessorNavigation /> */}
-        <TenantNavigation/>
+        <LessorNavigation />
+        {/* <TenantNavigation/> */}
       </NavigationContainer>
     </ApplicationProvider>
     

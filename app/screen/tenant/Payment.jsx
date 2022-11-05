@@ -273,7 +273,7 @@ const styles = StyleSheet.create({
     elevation: 7,
   },
   inputInfo: {
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: "#D8D4D4",
     backgroundColor: "white",
     borderRadius: "5px",
@@ -322,7 +322,7 @@ const styles = StyleSheet.create({
     height: "12%",
     color: "white",
     top: '80%',
-    borderRadius: 5,
+    borderRadius: "10%",
   }
 });
 export default Payment

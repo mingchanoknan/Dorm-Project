@@ -26,8 +26,8 @@ const TimePicker = () => {
   );
 
   return (
-    <View>
-      <TouchableOpacity style={{display: 'flex', flexDirection: 'row', padding: 10, borderWidth: 1, borderColor: '#D8D4D4', borderRadius: 5, backgroundColor: '#F7F8FB'}} onPress={showDatePicker}>
+    <View style={{backgroundColor: '#E5F8FE'}}>
+      <TouchableOpacity style={{display: 'flex', flexDirection: 'row', top: 5, padding: 8, borderWidth: 1, borderColor: '#D8D4D4', borderRadius: 10, backgroundColor: '#F7F8FB'}} onPress={showDatePicker}>
         <Text style={{color:"#8F9AB3"}}>{time.toLocaleTimeString('en-US')}</Text>
         <MaterialIcons style={{marginLeft: 6}} name="access-time" size={18} color="#65778E" />
       </TouchableOpacity>

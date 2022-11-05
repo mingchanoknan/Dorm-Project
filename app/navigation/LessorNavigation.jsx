@@ -9,6 +9,11 @@ import LeaseContract from "../screen/lessor/LeaseContract";
 import ManageParcel from "../screen/lessor/ManageParcel";
 import RecordMeter from "../screen/lessor/RecordMeter";
 import Response from "../screen/lessor/Response";
+import DetailReserve from "../screen/lessor/DetailReserve";
+import ReserveRoom from "../screen/lessor/ReserveRoom";
+import UserProfile from "../screen/lessor/UserProfile";
+import ManageInvoice from "../screen/lessor/ManageInvoice";
+import BillInvoice from "../screen/lessor/BillInvoice";
 import { FontAwesome } from "@expo/vector-icons";
 const LessorNavigation = () => {
   const LessorNavigator = createDrawerNavigator();
@@ -16,6 +21,7 @@ const LessorNavigation = () => {
   const RoomNavigator = createNativeStackNavigator();
   const ContractNavigator = createNativeStackNavigator();
   const ParcelNavigator = createNativeStackNavigator();
+  const BillNavigator = createNativeStackNavigator();
 
   const listIconToOpenDrawer = (navigation) => (
     <FontAwesome
@@ -60,30 +66,114 @@ const LessorNavigation = () => {
     );
   };
 
+  // const ContractNavigation = () => {
+  //   return (
+  //     <ContractNavigator.Navigator>
+  //       <ContractNavigator.Screen
+  //         name="LeaseContract"
+  //         component={LeaseContract}
+  //         options={({ route, navigation }) => {
+  //           return {
+  //             title: "Lease Contract",
+  //             headerLeft: () => listIconToOpenDrawer(navigation),
+  //           };
+  //         }}
+  //       />
+  //       <ContractNavigator.Screen
+  //         name="CancelContract"
+  //         component={CancelContract}
+  //         options={({ route, navigation }) => {
+  //           return {
+  //             title: "Cancel Contract",
+  //             headerLeft: () => listIconToOpenDrawer(navigation),
+  //           };
+  //         }}
+  //       />
+  //     </ContractNavigator.Navigator>
+  //   );
+  // };
+
   const ContractNavigation = () => {
     return (
       <ContractNavigator.Navigator>
+      <ContractNavigator.Screen
+         name="CheckRoomsStatus"
+        component={CheckRoomsStatus}
+        options={({ route, navigation }) => {
+          return {
+            title: "Room Status",
+            headerShown: true,
+            headerLeft: () => listIconToOpenDrawer2(navigation),
+          };
+        }}
+        />
+        <ContractNavigator.Screen
+          name="ReserveRoom"
+          component={ReserveRoom}
+          options={({ route, navigation }) => {
+            return {
+              title: "ห้อง " + route.params.categoryTitle,
+              headerTintColor: '#47C5FC',
+            };
+          }}
+        />
+        <ContractNavigator.Screen
+          name="DetailReserve"
+          component={DetailReserve}
+          options={({ route, navigation }) => {
+            return {
+              title: "ห้อง " + route.params.categoryTitle,
+              headerTintColor: '#47C5FC',
+            };
+          }}
+        />
         <ContractNavigator.Screen
           name="LeaseContract"
           component={LeaseContract}
           options={({ route, navigation }) => {
             return {
               title: "Lease Contract",
-              headerLeft: () => listIconToOpenDrawer(navigation),
             };
           }}
         />
-        <ContractNavigator.Screen
-          name="CancelContract"
-          component={CancelContract}
+        <ContractNavigator.Screen 
+          name="UserProfile"
+          component={UserProfile}
           options={({ route, navigation }) => {
             return {
-              title: "Cancel Contract",
-              headerLeft: () => listIconToOpenDrawer(navigation),
+              title: "ห้อง " + route.params.categoryTitle,
+              headerTintColor: '#47C5FC',
             };
           }}
         />
+
       </ContractNavigator.Navigator>
+    );
+  };
+
+  const ManageInvoiceNavigation = () => {
+    return (
+      <BillNavigator.Navigator>
+      <BillNavigator.Screen
+         name="ManageInvoice"
+        component={ManageInvoice}
+        options={({ route, navigation }) => {
+          return {
+            title: "Manage Invoice",
+            headerShown: true,
+            headerLeft: () => listIconToOpenDrawer2(navigation),
+          };
+        }}
+        />
+        <BillNavigator.Screen name="BillInvoice" component={BillInvoice}
+        options={({ route, navigation }) => {
+            return {
+              title: "ห้อง " + route.params.categoryTitle,
+              headerTintColor: '#47C5FC',
+            };
+          }}
+         />
+      </BillNavigator.Navigator>
     );
   };
 
@@ -106,7 +196,7 @@ const LessorNavigation = () => {
   };
 
   return (
-    <LessorNavigator.Navigator
+    <LessorNavigator.Navigator initialRouteName="Contract"
       screenOptions={({ route, navigation }) => {
         return {
           headerShown: false,
@@ -114,19 +204,19 @@ const LessorNavigation = () => {
       }}
     >
       <LessorNavigator.Screen name="Room" component={RoomNavigation} />
-      <LessorNavigator.Screen name="Contract" component={ContractNavigation} />
+      {/* <LessorNavigator.Screen name="Contract" component={ContractNavigation} /> */}
       <LessorNavigator.Screen
         name="CancelContract"
         component={CancelContract}
         options={({ route, navigation }) => {
           return {
-            title: "Cancel Contract",
+            title: "Contract",
             headerShown: true,
             headerLeft: () => listIconToOpenDrawer2(navigation),
           };
         }}
       />
-      <LessorNavigator.Screen
+      {/* <LessorNavigator.Screen
         name="CheckRoomsStatus"
         component={CheckRoomsStatus}
         options={({ route, navigation }) => {
@@ -136,7 +226,8 @@ const LessorNavigation = () => {
             headerLeft: () => listIconToOpenDrawer2(navigation),
           };
         }}
-      />
+      /> */}
+      <LessorNavigator.Screen name="Room Status" component={ContractNavigation} />
       <LessorNavigator.Screen
         name="RecordMeter"
         component={RecordMeter}
@@ -148,13 +239,16 @@ const LessorNavigation = () => {
           };
         }}
       />
+      <LessorNavigator.Screen name="Manage Invoice" component={ManageInvoiceNavigation} 
+       
+      />
       <LessorNavigator.Screen name="Parcel" component={ParcelNavigation} />
       <LessorNavigator.Screen
         name="Response"
         component={Response}
         options={({ route, navigation }) => {
           return {
-            title: "Room Status",
+            title: "Response",
             headerShown: true,
             headerLeft: () => listIconToOpenDrawer2(navigation),
           };
