@@ -202,6 +202,7 @@ const LessorNavigation = () => {
           headerShown: false,
         };
       }}
+      initialRouteName="Response"
     >
       <LessorNavigator.Screen name="Room" component={RoomNavigation} />
       {/* <LessorNavigator.Screen name="Contract" component={ContractNavigation} /> */}

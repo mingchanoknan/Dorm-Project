@@ -65,6 +65,7 @@ const TenantNavigation = () => {
 
   return (
     <TenantNavigator.Navigator
+      initialRouteName="Reports"
       screenOptions={({ route, navigation }) => {
         return {
           headerShown: false,
@@ -74,7 +75,13 @@ const TenantNavigation = () => {
       {/* <TenantNavigator.Screen name="AnnouceNews" component={AnnouceNews} /> */}
       <TenantNavigator.Screen name="Invoice" component={InvoiceNavigation} />
       <TenantNavigator.Screen name="Parcel" component={Parcel} />
-      <TenantNavigator.Screen name="Reports" component={Reports} />
+      <TenantNavigator.Screen name="Reports" component={Reports}
+        options={({ route, navigation }) => {
+          return {
+            headerShown: true,
+          }
+        }}
+      />
     </TenantNavigator.Navigator>
   );
 };

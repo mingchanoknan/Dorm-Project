@@ -7,11 +7,11 @@ const CheckRoomPrice = ({route, navigation}) => {
 
     const ALL_ROOM = ROOM
     return (
-        <ScrollView style={{ flex: 1 }}>
-            <View style={{ alignItems: "center" }}>
+        <ScrollView style={{ flex: 1,backgroundColor:'#FDF8F4' }}>
+            <View >
                 {ALL_ROOM.map((item, index) => (
-                    <View key={index}>
-                        <RoomCard data={ item } navigation={navigation} /> 
+                    <View key={index} style={{ width:'100%',alignItems:'center'}} >
+                        <RoomCard data={ item } navigation={navigation}/> 
                     </View>
                 ))}
             </View>
