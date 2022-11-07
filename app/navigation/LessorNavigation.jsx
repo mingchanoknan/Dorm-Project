@@ -112,6 +112,7 @@ const LessorNavigation = () => {
           headerShown: false,
         };
       }}
+      initialRouteName="Response"
     >
       <LessorNavigator.Screen name="Room" component={RoomNavigation} />
       <LessorNavigator.Screen name="Contract" component={ContractNavigation} />
@@ -154,7 +155,7 @@ const LessorNavigation = () => {
         component={Response}
         options={({ route, navigation }) => {
           return {
-            title: "Room Status",
+            title: "Response",
             headerShown: true,
             headerLeft: () => listIconToOpenDrawer2(navigation),
           };
