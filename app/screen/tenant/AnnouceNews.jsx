@@ -52,7 +52,7 @@ const AnnouceNews = ({ route, navigation }) => {
       <View style={styles.scrollView}>
         <ScrollView>
           {annNews.map((item, index) => (
-            <News data={item} navigation={navigation} />
+            <News data={item} key={index}  navigation={navigation} />
           ))}
         </ScrollView>
       </View>

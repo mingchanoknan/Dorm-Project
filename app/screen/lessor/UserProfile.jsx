@@ -16,10 +16,15 @@ import {
   Feather,
   MaterialIcons,
 } from "@expo/vector-icons";
-import DatePicker from "../../component/contract/DatePicker"
+import DatePicker from "../../component/contract/DatePicker";
+import { USERS } from "../../dummy/USERS";
 
-const UserProfile = () => {
+const UserProfile = ({ route, navigation }) => {
     const gender = 'male';
+    const detail = USERS.filter(
+      (item) => item.room_number == 'A205'
+    );
+    console.log(detail);
   return (
     <View style={styles.view}>
       <Image
@@ -40,7 +45,7 @@ const UserProfile = () => {
         }}
       >
         {" "}
-        Somsak Deena{" "}
+        {detail[0].first_name}{" "}{detail[0].last_name}
       </Text>
       <Divider
         style={{
@@ -55,7 +60,7 @@ const UserProfile = () => {
       <Layout style={styles.container2}>
         <Layout style={styles.layout}>
           <Ionicons name="md-calendar-sharp" size={24} color="#f5718b" />
-          <Text style={{ fontWeight: "bold", left: 10, fontSize: "13px"}}>2022-05-12</Text>
+          <Text style={{ fontWeight: "bold", left: 10, fontSize: "13px"}}>{detail[0].birth_date}</Text>
         </Layout>
 
         <Layout style={styles.layout}>
@@ -64,7 +69,7 @@ const UserProfile = () => {
             size={24}
             color="#f5718b"
           />
-          <Text style={{ fontWeight: "bold", left: 10, fontSize: "13px" }}>ชาย</Text>
+          <Text style={{ fontWeight: "bold", left: 10, fontSize: "13px" }}>{detail[0].sex == 'MALE' ? 'ชาย' : 'หญิง'}</Text>
         </Layout>
       </Layout>
       <Layout style={[styles.container2]}>
@@ -72,7 +77,7 @@ const UserProfile = () => {
           style={[styles.layout, { justifyContent: "flex-start", left: 23 }]}
         >
           <Ionicons name="md-location-sharp" size={24} color="#f5718b" />
-          <Text style={{ fontWeight: "bold", left: 10, fontSize: "13px" }}>กรุงเทพ</Text>
+          <Text style={{ fontWeight: "bold", left: 10, fontSize: "13px" }}>{detail[0].address}</Text>
         </Layout>
       </Layout>
       <Divider
@@ -89,16 +94,16 @@ const UserProfile = () => {
         <Layout style={[styles.layout2]} >
           <Feather name="phone-call" size={24} color="#f5718b" />
           <Layout style={{ flexDirection: "column" }} >
-            <Text style={{ fontWeight: "bold", left: 10, fontSize: "13px" }}>0622108493</Text>
+            <Text style={{ fontWeight: "bold", left: 10, fontSize: "13px" }}>{detail[0].phone1}</Text>
 
-            <Text style={{ fontWeight: "bold", left: 10, fontSize: "13px" }}>0622108493</Text>
+            <Text style={{ fontWeight: "bold", left: 10, fontSize: "13px" }}>{detail[0].phone2}</Text>
           </Layout>
         </Layout>
 
         <Layout style={styles.layout2} >
           <MaterialIcons name="email" size={24} color="#f5718b" />
           <Text style={{ fontWeight: "bold", left: 10, fontSize: "13px" }}>
-            63070188@kmitl.ac.th
+          {detail[0].email}
           </Text>
         </Layout>
       </Layout>

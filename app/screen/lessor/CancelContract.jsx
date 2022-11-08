@@ -20,17 +20,17 @@ const CancelContract = ({ route, navigation }) => {
         source={require("../../assets/bg_cancle.png")}
         style={styles.background}
       ></Image>
-      <View style={{backgroundColor: '#FFB085', width: '90%', height: '5%', top: -300, flexDirection: "row", alignItems: "center", justifyContent: "space-around"}}>
-        <Text style={styles.text}> ลำดับ </Text>
-        <Text style={styles.text}> ชื่อผู้ทำสัญญา </Text>
-        <Text style={styles.text}> วันเริ่มทำสัญญา </Text>
-        <Text style={styles.text}> วันสิ้นสุดสัญญา </Text>
-        <Text style={styles.text}> เลขที่ห้อง </Text>
-        <Text></Text>
-        <Text></Text>
-        <Text></Text>
+      <View style={{backgroundColor: '#FFB085', width: '90%', height: '5%', top: -250, flexDirection: "row", alignItems: "center", justifyContent: "space-around"}}>
+        <Text style={[styles.text]}> ลำดับ </Text>
+        <Text style={[styles.text]}> ชื่อผู้ทำสัญญา </Text>
+        <Text style={[styles.text]}> วันเริ่มทำสัญญา </Text>
+        <Text style={[styles.text]}> วันสิ้นสุดสัญญา </Text>
+        <Text style={[styles.text]}> เลขที่ห้อง </Text>
+        <Text ></Text>
+        <Text ></Text>
+        <Text ></Text>
       </View>
-      <View style={{ width: '90%', height: '70%', top: -280}}>
+      <View style={{ width: '90%', height: '70%', top: -240}}>
       <ScrollView style={[styles.box, { flex: 1 }]}>
         <View style={[{ alignItems: "center", width: "100%" }]}>
           {ALL_ROOM.map((item, index) => (
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "40%",
     zIndex: -100,
-    top: "-10%",
+    top: "-12%",
     borderRadius: "40%"
   },
   box: {
@@ -64,6 +64,7 @@ const styles = StyleSheet.create({
   },
   text:{
     fontWeight: "bold",
+    fontSize: "11px"
   }
 });
 
