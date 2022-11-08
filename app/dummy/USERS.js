@@ -1,6 +1,6 @@
 import Users from "../models/users"
 
-export const RENT = [
+export const USERS = [
     new Users(
         "1",
         "Somsak",

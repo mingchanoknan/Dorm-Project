@@ -13,9 +13,9 @@ import { IndexPath, Layout, Select, SelectItem } from "@ui-kitten/components";
 import Box from "../../component/invoice/InvoiveBox";
 import { INVOICE } from "../../dummy/INVOICE";
 
-const CheckRoomPrice = ({ route, navigation }) => {
+const Invoices = ({ route, navigation }) => {
   const ALL_ROOM = INVOICE;
-  const data = ["Developer", "Designer", "Product Manager"];
+  const data = ["บิลทั้งหมด", "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
   const [selectedIndex, setSelectedIndex] = React.useState(new IndexPath(0));
   const displayValue = data[selectedIndex.row];
 
@@ -27,32 +27,47 @@ const CheckRoomPrice = ({ route, navigation }) => {
         source={require("../../assets/bg_invoice.png")}
         style={styles.background}
       ></Image>
-      <TouchableOpacity style={[styles.bill, { position: "absolute" }]}>
+      
+      {/* <Layout style={{position: "absolute", width: "35%", borderRadius: "50%", top: "12%", left: "10%"}} level='1'>
+      <Select  size='meduim'
+        selectedIndex={selectedIndex}
+        onSelect={index => setSelectedIndex(index)}>
+        <SelectItem title='Option 1'/>
+        <SelectItem title='Option 2'/>
+        <SelectItem title='Option 3'/>
+      </Select>
+    </Layout> */}
+      {/* <TouchableOpacity style={[styles.bill, { position: "absolute" }]}>
         <Text
           style={{ color: "#5099FF", fontWeight: "bold", fontSize: "14px" }}
         >
           รอบบิล
         </Text>
         <AntDesign name="down" size={20} color="#9E9E9E" />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
-      {/* <Layout style={styles.bill1} level="1">
-        <Select
-          style={{ width: "100%"}}
+      <Layout style={styles.bill1} level="1">
+        <Select 
+          style={{ width: "100%", borderRadius: "50%"}}
           placeholder="รอบบิล"
           value={displayValue}
           selectedIndex={selectedIndex}
           onSelect={(index) => setSelectedIndex(index)}
         >
-          {data.map(renderOption)}
+          {data.map((title, index) => (
+            
+            <SelectItem key={index} title={title} />
+            
+          ))}
+          {/* {data.map(renderOption)} */}
         </Select>
-      </Layout> */}
-
+      </Layout>
+      {/* <Text style={{position: "absolute"}}>{displayValue}</Text> */}
       <ScrollView style={[styles.box, { flex: 1 }]}>
         <View style={[{ alignItems: "center" }]}>
           {ALL_ROOM.map((item, index) => (
             <View key={index}>
-              <Box data={item} navigation={navigation} />
+              <Box data={item} filter={displayValue} navigation={navigation} />
             </View>
           ))}
         </View>
@@ -99,10 +114,15 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
     backgroundColor: "white",
     position: "absolute",
-    width: "40%",
+    width: "35%",
     borderRadius: 50,
-    top: "12%",
-    marginLeft: 55,
+    top: "10%",
+    marginLeft: 50,
+    borderRadius: 4,
+    margin: 2,
+    padding: 6,
+    backgroundColor: 'pink',
+    
   },
   box: {
     top: -145,
@@ -110,4 +130,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CheckRoomPrice;
+export default Invoices;

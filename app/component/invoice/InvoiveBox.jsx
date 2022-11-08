@@ -7,9 +7,15 @@ import React from "react";
 const RoomCard = (props) => {
   // const color2 = props.status;
   // const colorStatus = color2.equals("UNAPPROVED_BILL") ? '#4291FF' : '#F26565';
-
+  //const { id } = route.params;
+  // const [data, setData] = useState();
+  // useEffect(() => {
+  //   let get = INVOICE.filter((item) => item.id == id)[0];
+  //   setData(get);
+  // }, [id]);
   return (
     <View style={styles.container}>
+    {props.filter === 'บิลทั้งหมด' && (
       <Card
         style={[styles.cardContainer]}
         onPress={() =>
@@ -76,7 +82,78 @@ const RoomCard = (props) => {
           </Text>
         </TouchableOpacity>
       </Card>
+      )}
+
+      {props.data.month === props.filter && (
+      <Card
+        style={[styles.cardContainer]}
+        onPress={() =>
+          props.navigation.navigate("InvoiceDetail", { id: props.data.id })
+        }
+      >
+        <View style={styles.build}>
+          <FontAwesome name="building" size={24} color="black" />
+          <FontAwesome
+            style={{ left: "-5%", top: 3.5 }}
+            name="building"
+            size={18}
+            color="black"
+          />
+        </View>
+        <View style={styles.head}>
+          <Text
+            style={{ fontSize: "13px", fontWeight: "bold", color: "white" }}
+          >
+            {" "}
+            ห้อง {props.data.room_number} {props.data.month}/{props.data.year}{" "}
+          </Text>
+        </View>
+        {/* <Text style={styles.text} category="h2">
+          {props.data.month}
+        </Text>
+        <Text style={styles.text} category="s1">
+          Start at <Text category="h6">{props.data.year}</Text> THB / month
+        </Text> */}
+
+        <View style={{ display: "flex", flexDirection: "column" }}>
+          <View style={styles.state}>
+            <Text style={styles.txt}> สถานะ: </Text>
+            <Text style={[styles.txt, { color: "#F26565" }]}>
+              {" "}
+              {props.data.status}{" "}
+            </Text>
+          </View>
+          <View style={styles.total}>
+            <Text style={styles.txt}> รวมค่าใช้จ่าย </Text>
+            <Text
+              style={[styles.txt, { backgroundColor: "#CAEEF8", padding: 5 }]}
+            >
+              {" "}
+              {props.data.total.toFixed(2)}{" "}
+            </Text>
+            <Text style={styles.txt}> บาท </Text>
+          </View>
+        </View>
+        <TouchableOpacity style={styles.btnLoad}>
+          <Text
+            style={{ fontSize: "10px", fontWeight: "bold", color: "white" }}
+          >
+            {" "}
+            downloade{" "}
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.btnNext}>
+          <Text
+            style={{ fontSize: "10px", fontWeight: "bold", color: "#FFB085" }}
+          >
+            {" "}
+            ดูรายละเอียด{" "}
+          </Text>
+        </TouchableOpacity>
+      </Card>
+      )}
     </View>
+    
   );
 };
 

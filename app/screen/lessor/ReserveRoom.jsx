@@ -9,7 +9,7 @@ import {
   import { Card, Layout, Divider } from "@ui-kitten/components";
   import DatePicker from "../../component/contract/DatePicker";
   import { RESERVE } from "../../dummy/RESERVE";
-  
+
   
   const ReserveRoom = ({ route, navigation }) => {
     // const catId = route.params.categoryId

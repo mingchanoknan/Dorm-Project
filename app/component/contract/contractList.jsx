@@ -12,15 +12,30 @@ const ContractList = (props) => {
       <Card
         style={[styles.cardContainer]}
       >
-      <View style={{ flexDirection: "row", alignItems: "center", justifyContent: 'space-around'}}>
-        <Text style={styles.text}> 1 </Text>
-        <Text style={styles.text}>มิเตอร์</Text>
+      <View style={{ flexDirection: "row", alignItems: "center", justifyContent: 'space-between'}}>
+        <Text style={{fontWeight: "bold", fontSize: "12px"}}> 1 </Text>
+        <Text style={[styles.text, {width: "26%", textAlign: "center"}]}>อาภัสรา โมรัษเฐียร</Text>
         <Text style={styles.text}> 2022-04-01 </Text>
         <Text style={styles.text}> 2023-04-01 </Text>
-        <Text style={styles.text}> {props.data.room_number} </Text>
-        <Text></Text>
-        <Text></Text>
-        <Text></Text>
+        <Text style={{fontWeight: "bold", width: "20%", fontSize: "12px"}}> {props.data.room_number} </Text>
+        <View style={{ flexDirection: "row", width: "5%",}}>
+        <TouchableOpacity style={styles.btnLoad}>
+          <Text
+            style={{ fontSize: "10px", fontWeight: "bold", color: "white" }}
+          >
+            {" "}
+            ดูสัญญา{" "}
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.btnNext}>
+          <Text
+            style={{ fontSize: "10px", fontWeight: "bold", color: "white" }}
+          >
+            {" "}
+            ยกเลิกสัญญา{" "}
+          </Text>
+        </TouchableOpacity>
+        </View>
         </View>
       </Card>
     </View>
@@ -38,11 +53,8 @@ const styles = StyleSheet.create({
     borderRadius: 0,
     backgroundColor: '#EEEEEE',
   },
-  text: {
-    marginBottom: 20,
-  },
   container: {
-    width: "98%",
+    width: "100%",
     paddingVertical: 5,
   },
   build: {
@@ -111,31 +123,33 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "center",
-    position: "absolute",
-    margin: 25,
-    marginTop: 10,
-    left: 60,
-    top: 100,
-    width: "35%",
+    // position: "absolute",
+    // margin: 25,
+    // marginTop: 10,
+    // left: 60,
+    // top: 100,
+    left: -80,
+    width: 60,
     height: 25,
+    marginRight: 5,
     borderRadius: 30,
-    backgroundColor: "#FFB085",
+    backgroundColor: "#47C5FC",
   },
   btnNext: {
     display: "flex",
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "center",
-    position: "absolute",
-    margin: 25,
-    marginTop: 10,
-    left: 165,
-    top: 100,
-    width: "35%",
+    // position: "absolute",
+    // margin: 25,
+    // marginTop: 10,
+    // left: 165,
+    // top: 100,
+    left: -80,
+    width: 70,
     height: 25,
     borderRadius: 30,
-    borderColor: "#FFB085",
-    borderWidth: 2,
+    backgroundColor: "#F14668"
   },
   txt: {
     fontSize: "12px",
@@ -143,6 +157,8 @@ const styles = StyleSheet.create({
   },
   text:{
     fontWeight: "bold",
+    width: "20%",
+    fontSize: "11px"
   }
 });
 
