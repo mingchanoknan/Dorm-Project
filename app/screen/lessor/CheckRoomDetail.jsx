@@ -5,9 +5,10 @@ import HeaderBackground from "../../component/background/HeaderBackground";
 import RoomImageCarousel from "../../component/carousel/imageCarousel";
 import { ROOM } from "../../dummy/ROOM";
 
-const width = Dimensions.get("window").width;
-const height = Dimensions.get("window").height;
+
 const CheckRoomDetail = ({ route, navigation }) => {
+  const width = Dimensions.get("window").width;
+const height = Dimensions.get("window").height;
   const { id } = route.params;
   const [data, setData] = useState();
   useEffect(() => {
@@ -27,7 +28,7 @@ const CheckRoomDetail = ({ route, navigation }) => {
   ];
   return (
     <View style={{ flex: 1, backgroundColor: '#FDF8F4' }}>
-      <HeaderBackground/>
+      <HeaderBackground image={require("../../assets/bg_invoice.png")} style={{paddingHorizontal:50}} />
       {data && (
         <View
           style={{
@@ -47,13 +48,10 @@ const CheckRoomDetail = ({ route, navigation }) => {
             elevation: 5,
           }}
         >
-          
-
-          
           <RoomImageCarousel
             image={image}
             width={width-50}
-            height={height/3.5}
+            height={height/2.8}
             paginationColor={data.color1}
           />
         </View>
@@ -79,7 +77,7 @@ const CheckRoomDetail = ({ route, navigation }) => {
               {"เหลือ 1 ห้อง"}
             </Text>
           </View>
-          <ScrollView style={[styles.information, {borderColor:data.color1 }]}>
+          <ScrollView style={[styles.information, {borderColor:data.color1,marginTop: height / 7 }]}>
             <View style={{ height: 40 }}></View>
             <Text category="h5">Information</Text>
             <Text category="s1">
@@ -132,7 +130,6 @@ const styles = StyleSheet.create({
     width: "90%",
     paddingHorizontal: "5%",
     paddingTop: "10%",
-    marginTop: height / 7,
     backgroundColor: "white",
     borderWidth:3
     
