@@ -7,7 +7,6 @@ import {
   View,
   ScrollView,
 } from "react-native";
-import List from "../../component/List";
 import SearchBar from "../../component/search/SearchBar";
 import {
   Button,
