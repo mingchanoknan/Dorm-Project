@@ -1,11 +1,11 @@
 import { Dimensions, Image, StyleSheet, View } from "react-native";
 const height = Dimensions.get("window").height;
-const HeaderBackground = () => {
+const HeaderBackground = (props) => {
   return (
     <View style={styles.background}>
       <Image
-        source={require("../../assets/bg_invoice.png")}
-        style={{ width: "100%", resizeMode: "stretch", maxHeight:height/3.5, }}
+        source={props.image}
+        style={{ width: "100%", resizeMode: "cover", height:height/5,borderBottomLeftRadius:'50%',borderBottomRightRadius:'50%' }}
       ></Image>
     </View>
   );
@@ -13,9 +13,10 @@ const HeaderBackground = () => {
 const styles = StyleSheet.create({
   background: {
     width: "100%",
-
+    // paddingHorizontal:'5%',
     zIndex: -100,
-    position: "absolute"
+    position: "absolute",
+    
   },
 });
 export default HeaderBackground;
