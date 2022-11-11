@@ -1,11 +1,11 @@
 export const ROOM = [
     {
         id: 1,
-        type: "Big Size",
+        typeName: "Big Size",
         price: 20000,
-        color1: "#FFB4B4",
-        color2: "#FFD49E",
-        conv: [
+        bgColor: "#FFB4B4",
+        iconColor: "#FFD49E",
+        convenience: [
             "เตียงพร้อมที่นอนขนาด 5 ฟุต",
             "ตู้เสื้อผ้า",
             "โต๊ะเครื่องแป้ง",
@@ -14,11 +14,11 @@ export const ROOM = [
     },
     {
         id: 2,
-        type: "Medium Size",
+        typeName: "Medium Size",
         price: 15000,
-        color1: "#B2A4FF",
-        color2: "#8DDBFF",
-        conv: [
+        bgColor: "#B2A4FF",
+        iconColor: "#8DDBFF",
+        convenience: [
             "เตียงพร้อมที่นอนขนาด 5 ฟุต",
             "ตู้เสื้อผ้า",
             "โต๊ะเครื่องแป้ง",
@@ -27,11 +27,11 @@ export const ROOM = [
     },
     {
         id: 3,
-        type: "Small Size",
+        typeName: "Small Size",
         price: 5000,
-        color1: "#90C8AC",
-        color2: "#C4DFAA",
-        conv: [
+        bgColor: "#90C8AC",
+        iconColor: "#C4DFAA",
+        convenience: [
             "เตียงพร้อมที่นอนขนาด 5 ฟุต",
             "ตู้เสื้อผ้า",
             "โต๊ะเครื่องแป้ง",
