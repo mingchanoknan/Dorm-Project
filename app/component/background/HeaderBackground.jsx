@@ -5,7 +5,7 @@ const HeaderBackground = (props) => {
     <View style={styles.background}>
       <Image
         source={props.image}
-        style={{ width: "100%", resizeMode: "cover", height:height/5,borderBottomLeftRadius:'50%',borderBottomRightRadius:'50%' }}
+        style={{ width: "100%", resizeMode: "cover", height:height/4,borderBottomLeftRadius:'50%',borderBottomRightRadius:'50%' }}
       ></Image>
     </View>
   );
