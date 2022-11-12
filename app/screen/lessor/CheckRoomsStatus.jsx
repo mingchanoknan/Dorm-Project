@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Text,
   View,
@@ -14,14 +14,30 @@ import Search from "../../component/contract/searchBar";
 import Time from "../../component/invoice/time";
 import Modal from "react-native-modal";
 import RESERVE from "../../dummy/RESERVE";
+import axios from 'axios';
 
+const baseUrl ='http://192.168.1.117:8080';
 const CheckRoomsStatus = ({ route, navigation }) => {
+  const [user, setUser] = useState(null);
+  const [status, setStatus] = useState(null);
+  useEffect(() => {
+    
+      axios.get(`${baseUrl}/rent`)
+      .then((response) => {
+        setUser(response.data);
+        setStatus(response.data.status);
+        //console.log(status);
+      })
+      .catch(
+        (error) => console.log('error')
+      )
+  }, [status]);
 
   const renderGridItem = (itemData) => {
     return (
       <RoomGridTile
         title={itemData.item.room_number}
-        color={itemData.item.color}
+        color={itemData.item.room_status == 'unavailable' ? '#F14668' : itemData.item.room_status === 'available' ? '#48C78E' : '#3E8ED0'}
         data={itemData.item.room_status}
         onSelect={() => {
           if (itemData.item.room_status === "available") {
@@ -164,7 +180,7 @@ const CheckRoomsStatus = ({ route, navigation }) => {
         <Search />
       </View>
       <View style={styles.container}>
-        <FlatList data={RENT} renderItem={renderGridItem} numColumns={3} />
+        <FlatList data={user}  renderItem={renderGridItem} numColumns={3} />
       </View>
     </View>
   );

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   ScrollView,
   Text,
@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   FlatList,
 } from "react-native";
-import { Card, Layout, Divider } from "@ui-kitten/components";
+import { Card, Layout, Divider,  TabBar } from "@ui-kitten/components";
 import {
   Ionicons,
   MaterialCommunityIcons,
@@ -18,111 +18,188 @@ import {
 } from "@expo/vector-icons";
 import DatePicker from "../../component/contract/DatePicker";
 import { USERS } from "../../dummy/USERS";
+import axios from "axios";
 
-const UserProfile = ({ route, navigation }) => {
-    const gender = 'male';
-    const detail = USERS.filter(
-      (item) => item.room_number == 'A205'
-    );
-    console.log(detail);
+const baseUrl = "http:/192.168.1.117:8080";
+function User({ userObject, navigation }) {
+  //console.log(userObject.dorm_fee);
   return (
-    <View style={styles.view}>
-      <Image
-        source={require("../../assets/bg_invoice.png")}
-        style={styles.background}
-      ></Image>
-      <Image
-        source={gender === 'male' ? require("../../assets/male.png") : require("../../assets/female.png") }
-        style={styles.profile}
-      ></Image>
-      <Text
-        style={{
-          fontSize: 18,
-          fontWeight: "bold",
-          color: "#2C76B2",
-          position: "absolute",
-          top: "26%",
-        }}
-      >
-        {" "}
-        {detail[0].first_name}{" "}{detail[0].last_name}
-      </Text>
-      <Divider
-        style={{
-          zIndex: 110,
-          width: "80%",
-          backgroundColor: "#7ED6FF",
-          height: 2.5,
-          position: "absolute",
-          top: "33%",
-        }}
-      />
-      <Layout style={styles.container2}>
-        <Layout style={styles.layout}>
-          <Ionicons name="md-calendar-sharp" size={24} color="#f5718b" />
-          <Text style={{ fontWeight: "bold", left: 10, fontSize: "13px"}}>{detail[0].birth_date}</Text>
-        </Layout>
-
-        <Layout style={styles.layout}>
-          <MaterialCommunityIcons
-            name="gender-male-female"
-            size={24}
-            color="#f5718b"
-          />
-          <Text style={{ fontWeight: "bold", left: 10, fontSize: "13px" }}>{detail[0].sex == 'MALE' ? 'ชาย' : 'หญิง'}</Text>
-        </Layout>
-      </Layout>
-      <Layout style={[styles.container2]}>
-        <Layout
-          style={[styles.layout, { justifyContent: "flex-start", left: 23 }]}
+    <View style={styles.view2}>
+      {userObject && (
+        <Image
+          source={
+            userObject.sex === "male"
+              ? require("../../assets/male.png")
+              : require("../../assets/female.png")
+          }
+          style={styles.profile}
+        ></Image>
+      )}
+      {userObject && (
+        <Text
+          style={{
+            fontSize: 18,
+            fontWeight: "bold",
+            color: "#2C76B2",
+            alignSelf: "center",
+            top: "-8%",
+          }}
         >
-          <Ionicons name="md-location-sharp" size={24} color="#f5718b" />
-          <Text style={{ fontWeight: "bold", left: 10, fontSize: "13px" }}>{detail[0].address}</Text>
-        </Layout>
-      </Layout>
-      <Divider
+          {" "}
+          {userObject.first_name} {userObject.last_name}
+        </Text>
+      )}
+      {/* <Divider
         style={{
           zIndex: 110,
           width: "80%",
           backgroundColor: "#7ED6FF",
           height: 2.5,
+          alignSelf: "center",
           top: "-3%",
         }}
-      />
+      /> */}
+     
+      {userObject && (
+        <Layout style={[styles.container2]}>
+          <Layout style={[styles.layout]}>
+            <Ionicons name="md-calendar-sharp" size={24} color="#f5718b" />
+            <Text style={{ fontWeight: "bold", left: 10, fontSize: "13px" }}>
+              {userObject.birthdate}
+            </Text>
+          </Layout>
 
-      <Layout style={styles.container3}>
-        <Layout style={[styles.layout2]} >
-          <Feather name="phone-call" size={24} color="#f5718b" />
-          <Layout style={{ flexDirection: "column" }} >
-            <Text style={{ fontWeight: "bold", left: 10, fontSize: "13px" }}>{detail[0].phone1}</Text>
-
-            <Text style={{ fontWeight: "bold", left: 10, fontSize: "13px" }}>{detail[0].phone2}</Text>
+          <Layout style={[styles.layout]}>
+            <MaterialCommunityIcons
+              name="gender-male-female"
+              size={24}
+              color="#f5718b"
+            />
+            <Text style={{ fontWeight: "bold", left: 10, fontSize: "13px" }}>
+              {userObject.sex == "male" ? "ชาย" : "หญิง"}
+            </Text>
           </Layout>
         </Layout>
+      )}
 
-        <Layout style={styles.layout2} >
-          <MaterialIcons name="email" size={24} color="#f5718b" />
-          <Text style={{ fontWeight: "bold", left: 10, fontSize: "13px" }}>
-          {detail[0].email}
-          </Text>
+      {userObject && (
+        <Layout style={[styles.container4, { width: "76%" }]}>
+          <Layout
+            style={[
+              styles.layout,
+              { justifyContent: "flex-start", left: "18%" },
+            ]}
+          >
+            <Ionicons name="md-location-sharp" size={24} color="#f5718b" />
+            <Text
+              style={{
+                fontWeight: "bold",
+                left: 10,
+                fontSize: "13px",
+                flexWrap: "wrap",
+              }}
+            >
+              {userObject.address}
+            </Text>
+          </Layout>
         </Layout>
-      </Layout>
+      )}
       
-      <View style={{borderWidth: 2, width: "80%", height: "13%", borderRadius: 30, borderColor: "#7ED6FF", top:20, alignItems: "center", justifyContent: "center"}}>
-        <View style={{flexDirection: "row"}}>
-        <Text style={{ fontWeight: "bold", fontSize: "12px", color: "#2C76B2", marginRight: 10 }}>วันเริ่มสัญญา:</Text>
-        {/* <Text style={{ fontWeight: "bold", fontSize: "12px", backgroundColor: "#E2E4E4", width: "20%", padding: 5, borderRadius: "50%" }}></Text> */}
-        <DatePicker/>
+      {/* <Divider
+        style={{
+          zIndex: 110,
+          width: "80%",
+          backgroundColor: "#7ED6FF",
+          height: 2.5,
+          alignSelf: "center",
+          top: "8%",
+        }}
+      /> */}
+      {userObject && (
+        <Layout style={styles.container3}>
+          <Layout style={[styles.layout2]}>
+            <Feather name="phone-call" size={24} color="#f5718b" />
+            <Layout style={{ flexDirection: "column" }}>
+              <Text style={{ fontWeight: "bold", left: 10, fontSize: "13px" }}>
+                {userObject.tel_no1}
+              </Text>
+
+              <Text style={{ fontWeight: "bold", left: 10, fontSize: "13px" }}>
+                {userObject.tel_no2}
+              </Text>
+            </Layout>
+          </Layout>
+
+          <Layout style={[styles.layout2]}>
+            <MaterialIcons name="email" size={24} color="#f5718b" />
+            <Text style={{ fontWeight: "bold", left: 10, fontSize: "13px" }}>
+              {userObject.email}
+            </Text>
+          </Layout>
+        </Layout>
+      )}
+      <Text
+        style={{
+          fontWeight: "bold",
+          backgroundColor: "white",
+          padding: 3,
+          width: "30%",
+          textAlign: "center",
+          color: "#4291FF",
+          top: "13%",
+          alignSelf: "flex-start",
+          left: "20%",
+          zIndex: 100
+        }}
+      >
+        ข้อมูลสัญญาเช่า
+      </Text>
+      <View
+        style={{
+          borderWidth: 2,
+          width: "85%",
+          height: "25%",
+          borderRadius: 30,
+          borderColor: "#7ED6FF",
+          top: "10%",
+          alignItems: "center",
+          alignSelf: "center",
+          justifyContent: "center",
+        }}
+      >
+      
+        <View style={{ flexDirection: "row" }}>
+          <Text
+            style={{
+              fontWeight: "bold",
+              fontSize: "12px",
+              color: "#2C76B2",
+              marginRight: 10,
+            }}
+          >
+            วันเริ่มสัญญา:
+          </Text>
+          {/* <Text style={{ fontWeight: "bold", fontSize: "12px", backgroundColor: "#E2E4E4", width: "20%", padding: 5, borderRadius: "50%" }}></Text> */}
+          <DatePicker />
         </View>
-        <View style={{flexDirection: "row", top: 5}}>
-        <Text style={{ fontWeight: "bold", fontSize: "12px", color: "#2C76B2", marginRight: 10 }}>วันสิ้นสุดสัญญา:</Text>
-        {/* <Text style={{ fontWeight: "bold", fontSize: "12px", backgroundColor: "#E2E4E4", width: "20%", padding: 5, borderRadius: "50%" }}></Text> */}
-        <DatePicker/>
+        <View style={{ flexDirection: "row", top: 5 }}>
+          <Text
+            style={{
+              fontWeight: "bold",
+              fontSize: "12px",
+              color: "#2C76B2",
+              marginRight: 10,
+            }}
+          >
+            วันสิ้นสุดสัญญา:
+          </Text>
+          {/* <Text style={{ fontWeight: "bold", fontSize: "12px", backgroundColor: "#E2E4E4", width: "20%", padding: 5, borderRadius: "50%" }}></Text> */}
+          <DatePicker />
         </View>
       </View>
-      <Text style={{ fontWeight: "bold", backgroundColor: "white", padding: 3, width: "30%", textAlign: "center", color: "#4291FF", position: "absolute", top: "59%", alignSelf: 'flex-start', left: "20%"}}>ข้อมูลสัญญาเช่า</Text>
-
-      <View style={{borderWidth: 2, width: "80%", height: "13%", borderRadius: 30, borderColor: "#7ED6FF", top:50, alignItems: "flex-start", justifyContent: "center"}}>
+      
+      <Text style={{ fontWeight: "bold", backgroundColor: "white", padding: 3, width: "35%", textAlign: "center", color: "#4291FF", top: "15%", alignSelf: 'flex-start', left: "17%", zIndex: 100}}>ข้อมูลยานพาหนะ</Text>
+      <View style={{borderWidth: 2, width: "85%", height: "20%", borderRadius: 30, borderColor: "#7ED6FF", top:"12%", alignItems: "flex-start", justifyContent: "center", alignSelf: "center"}}>
         <View style={{flexDirection: "row", left: 20}}>
         <Text style={{ fontWeight: "bold", fontSize: "12px", color: "#2C76B2", marginRight: 10, top:15 }}>คันที่ 1</Text>
 
@@ -162,27 +239,77 @@ const UserProfile = ({ route, navigation }) => {
 
         
       </View>
-      <Text style={{ fontWeight: "bold", backgroundColor: "white", padding: 3, width: "30%", textAlign: "center", color: "#4291FF", position: "absolute", top: "76%", alignSelf: 'flex-start', left: "20%"}}>ข้อมูลยานพาหนะ</Text>
+      
+    </View>
+  );
+}
+const UserProfile = ({ route, navigation }) => {
+  // const detail = USERS.filter(
+  //   (item) => item.room_number == 'A205'
+  // );
+  // console.log(detail);
+  const { id } = route.params;
+  const { categoryTitle } = route.params;
+  const [data, setData] = useState();
+  const [invoice, setInvoice] = useState(null);
 
+  useEffect(() => {
+    // const response = axios.get(`${baseUrl}/invoices`);
+    // setInvoice(response);
+    // console.log(response);
+    const url = `${baseUrl}/getUserNum/${categoryTitle}`;
+    console.log("test");
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get(url);
+        if (response.status === 200) {
+          setInvoice(response.data);
+          console.log(response.data);
+          // console.log("1"+categoryTitle);
+          return;
+        } else {
+          throw new Error("Failed to fetch users");
+        }
+      } catch (error) {
+        console.log("Data fetching cancelled");
+      }
+    };
+    fetchUsers();
+    // console.log(invoice);
+    // let get = invoice.filter((item) => item.room_number == categoryTitle)[0];
+    // setData(get);
+    // console.log("2"+categoryTitle);
+  }, [categoryTitle]);
+  //console.log(invoice);
+  return (
+    <View style={styles.view}>
+      <Image
+        source={require("../../assets/bg_invoice.png")}
+        style={styles.background}
+      ></Image>
+
+      <User userObject={invoice} navigation={navigation} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container2: {
-    width: "80%",
-    height: "4%",
-    top: "-10%",
+    flexDirection: "row",
+    //backgroundColor: 'red',
+    justifyContent: "space-around",
+  },
+  container4: {
+    top: "2%",
     flexDirection: "row",
   },
   container3: {
-    width: "80%",
-    height: "10%",
+    height: "18%",
     flexDirection: "column",
-    top: "-1%"
+    top: "12%",
+    left: "14%",
   },
   layout: {
-    flex: 1,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
@@ -192,7 +319,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "flex-start",
     alignItems: "center",
-    left: 20
   },
   container: {
     minHeight: 128,
@@ -201,6 +327,13 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     alignItems: "center",
     height: "100%",
+    flex: 1,
+  },
+  view2: {
+    // backgroundColor: "red",
+    flex: 1,
+    width: "90%",
+    top: "-10%",
   },
   background: {
     width: "100%",
@@ -214,7 +347,8 @@ const styles = StyleSheet.create({
     borderRadius: "50%",
     zIndex: 100,
     position: "absolute",
-    top: "14%",
+    top: "-30%",
+    alignSelf: "center",
     borderWidth: 5,
     borderColor: "white",
   },

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect }  from "react";
 import {
   ScrollView,
   Text,
@@ -12,7 +12,9 @@ import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import { IndexPath, Layout, Select, SelectItem } from "@ui-kitten/components";
 import Box from "../../component/invoice/InvoiveBox";
 import { INVOICE } from "../../dummy/INVOICE";
+import axios from 'axios';
 
+const baseUrl ='http://10.111.2.109:8080';
 const Invoices = ({ route, navigation }) => {
   const ALL_ROOM = INVOICE;
   const data = ["บิลทั้งหมด", "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
@@ -20,7 +22,19 @@ const Invoices = ({ route, navigation }) => {
   const displayValue = data[selectedIndex.row];
 
   const renderOption = (title) => <SelectItem title={title} />;
+  const [user, setUser] = useState(null);
 
+  useEffect(() => {
+    
+      axios.get(`${baseUrl}/invoices`)
+      .then((response) => {
+        setUser(response.data);
+        console.log(response.data);
+      })
+      .catch(
+        (error) => console.log('error')
+      )
+  }, []);
   return (
     <View style={styles.view}>
       <Image
@@ -65,11 +79,12 @@ const Invoices = ({ route, navigation }) => {
       {/* <Text style={{position: "absolute"}}>{displayValue}</Text> */}
       <ScrollView style={[styles.box, { flex: 1 }]}>
         <View style={[{ alignItems: "center" }]}>
-          {ALL_ROOM.map((item, index) => (
+          {user && (user.map((item, index) => (
             <View key={index}>
               <Box data={item} filter={displayValue} navigation={navigation} />
             </View>
-          ))}
+          ))
+          )}
         </View>
       </ScrollView>
     </View>

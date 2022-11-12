@@ -357,7 +357,7 @@ const MyLessorsNavigator = () => {
          
         };
       }}
-      initialRouteName="Response"
+      
     >
       <LessorNavigator.Screen
         name="Main"

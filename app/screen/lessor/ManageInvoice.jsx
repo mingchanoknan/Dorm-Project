@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Text,
   View,
@@ -15,8 +15,24 @@ import Time from "../../component/invoice/time";
 import Modal from "react-native-modal";
 import RESERVE from "../../dummy/RESERVE";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import axios from 'axios';
 
+const baseUrl ='http://192.168.1.117:8080';
 const ManageInvoice = ({ route, navigation }) => {
+
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    
+      axios.get(`${baseUrl}/rent`)
+      .then((response) => {
+        setUser(response.data);
+        console.log(response.data);
+      })
+      .catch(
+        (error) => console.log('error')
+      )
+  }, []);
 
   const renderGridItem = (itemData) => {
     return (
@@ -78,7 +94,7 @@ const ManageInvoice = ({ route, navigation }) => {
 
       </View>
       <View style={styles.container}>
-        <FlatList data={RENT} renderItem={renderGridItem} numColumns={3} />
+        <FlatList data={user} renderItem={renderGridItem} numColumns={3} />
       </View>
     </View>
   );

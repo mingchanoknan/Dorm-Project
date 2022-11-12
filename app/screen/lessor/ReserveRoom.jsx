@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import {
     Text,
     View,
@@ -9,18 +10,65 @@ import {
   import { Card, Layout, Divider } from "@ui-kitten/components";
   import DatePicker from "../../component/contract/DatePicker";
   import { RESERVE } from "../../dummy/RESERVE";
+  import axios from "axios";
 
+  const baseUrl = "http://192.168.1.117:8080";
   
   const ReserveRoom = ({ route, navigation }) => {
     // const catId = route.params.categoryId
-    const detail = RESERVE.filter(
-      (item) => item.room_id == route.params.categoryId
-    );
+    // const detail = RESERVE.filter(
+    //   (item) => item.room_id == route.params.categoryId
+    // );
     
     // const displayedMeals = RESERVE.filter(
     //   (meal) => meal.room_id.indexOf(catId) >= 0
     // );
-  
+    const { categoryTitle } = route.params;
+    const [room_number, setRoom_number] = useState(categoryTitle);
+    const [first_name, setFirst_name] = useState("");
+    const [last_name, setLast_name] = useState("");
+    const [mobile, setMobile] = useState("");
+    const [reserve_date, setReserve_date] = useState("2022-02-11");
+    const [lease_date, setLease_date] = useState("2022-02-11");
+    const [status, setStatus] = useState("reserve");
+    
+    const onChangeNameHandler = (first_name) => {
+      setFirst_name(first_name);
+    };
+    const onChangeLastHandler = (last_name) => {
+      setLast_name(last_name);
+    };
+    const onChangeMobileHandler = (mobile) => {
+      setMobile(mobile);
+    };
+    const onChangeReserveHandler = (date) => {
+      setReserve_date(date);
+    };
+    
+    const onReserveFormHandler = async (event) => {
+      try {
+        const response = await axios.post(`${baseUrl}/addReserve`, {
+          room_number,
+          first_name,
+          last_name,
+          mobile,
+          reserve_date,
+          lease_date,
+          status
+        });
+       
+          const update = await axios.put(`${baseUrl}/updateStatus/${room_number}/${status}`);
+          console.log(update.response);
+        if (update.status === 201) {
+          alert("สำเร็จ");
+        } else {
+          throw new Error("An error ");
+        }
+      } catch (error) {
+        alert("An error has occurred");
+      }
+    };
+
     return (
       <ImageBackground
         source={require("../../assets/bg.png")}
@@ -47,7 +95,7 @@ import {
             >
               ชื่อผู้จอง :
             </Text>
-            <TextInput
+            <TextInput onChangeText={onChangeNameHandler}
               style={{
                 backgroundColor: "#F5F7F8",
                 width: "35%",
@@ -65,7 +113,7 @@ import {
             >
               นามสกุล
             </Text>
-            <TextInput
+            <TextInput onChangeText={onChangeLastHandler}
               style={{
                 backgroundColor: "#F5F7F8",
                 width: "33%",
@@ -84,7 +132,7 @@ import {
             >
               เบอร์โทร :
             </Text>
-            <TextInput
+            <TextInput onChangeText={onChangeMobileHandler}
               style={{
                 backgroundColor: "#F5F7F8",
                 width: "33%",
@@ -121,7 +169,7 @@ import {
                 width: 105,
               }}
             >
-              <DatePicker  />
+              {/* <DatePicker  /> */}
             </View>
           </View>
             
@@ -129,7 +177,7 @@ import {
   
           
           <View style={{ flexDirection: "row", alignSelf: "center", top: "40%" }}>
-            <TouchableOpacity style={styles.btnContract}  onPress={() => props.navigation.navigate('LeaseContract', {categoryId: itemData.item.id, categoryTitle: itemData.item.room_number})}>
+            <TouchableOpacity style={styles.btnContract}  onPress={onReserveFormHandler}>
               <Text
                 style={{
                   fontSize: "12px",
