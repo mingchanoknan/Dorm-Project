@@ -19,7 +19,8 @@ const RoomCard = (props) => {
       <Card
         style={[styles.cardContainer]}
         onPress={() =>
-          props.navigation.navigate("InvoiceDetail", { id: props.data.id })
+          props.navigation.navigate("InvoiceDetail", {  id:  props.data.id,
+              categoryTitle:  props.data.room_number })
         }
       >
         <View style={styles.build}>

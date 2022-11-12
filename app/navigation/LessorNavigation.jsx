@@ -366,6 +366,7 @@ const MyLessorsNavigator = () => {
          
         };
       }}
+
     >
       <LessorNavigator.Screen
         name="Main"

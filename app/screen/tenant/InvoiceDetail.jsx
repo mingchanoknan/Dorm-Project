@@ -12,22 +12,14 @@ import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import { IndexPath, Select, SelectItem } from "@ui-kitten/components";
 import { INVOICE } from "../../dummy/INVOICE";
 import TableInvoice from "../../component/invoice/tableInvoice";
+import axios from 'axios';
 
-const InvioveDetail = ({ route, navigation }, props) => {
-  const { id } = route.params;
-  const [data, setData] = useState();
-  useEffect(() => {
-    let get = INVOICE.filter((item) => item.id == id)[0];
-    setData(get);
-  }, [id]);
+const baseUrl ='http://10.111.2.109:8080';
+function User({userObject, navigation}) {
+  //console.log(userObject.dorm_fee);
   return (
-    <View style={styles.view}>
-      <Image
-        source={require("../../assets/bg_invoice.png")}
-        style={styles.background}
-      ></Image>
-
-      {data && (
+    <View style={styles.container1}>
+      {userObject && (
         <View style={styles.bg_money}>
           <Text
             style={{
@@ -39,7 +31,7 @@ const InvioveDetail = ({ route, navigation }, props) => {
               fontSize: "32px",
             }}
           >
-            ฿{data.total.toFixed(2)}
+            ฿{userObject.total.toFixed(2)}
           </Text>
           <Text
             style={{
@@ -57,7 +49,7 @@ const InvioveDetail = ({ route, navigation }, props) => {
         </View>
       )}
 
-      {data && (
+      {userObject && (
       <View style={styles.container}>
         <Card style={[styles.cardContainer]} disabled={true}>
           <View style={styles.build}>
@@ -78,7 +70,7 @@ const InvioveDetail = ({ route, navigation }, props) => {
               }}
             >
               {" "}
-              ห้อง {data.room_number} {data.month}/{data.year}
+              ห้อง {userObject.room_number} {userObject.month}/{userObject.year}
             </Text>
           </View>
 
@@ -112,7 +104,7 @@ const InvioveDetail = ({ route, navigation }, props) => {
                   style={[styles.txtHead, { color: "red", marginLeft: 20 }]}
                 >
                   {" "}
-                  {data.status === 'APPROVED_BILL' ? 'ชำระแล้ว' : 'ยังไม่ชำระ'}{" "}
+                  {userObject.status === 'APPROVED_BILL' ? 'ชำระแล้ว' : 'ยังไม่ชำระ'}{" "}
                 </Text>
               </View>
 
@@ -144,7 +136,7 @@ const InvioveDetail = ({ route, navigation }, props) => {
               top: "85%",
             }}
           >
-            <TableInvoice invoice={data}/>
+            <TableInvoice invoice={userObject}/>
           </View>
           <View
             style={{
@@ -165,7 +157,7 @@ const InvioveDetail = ({ route, navigation }, props) => {
             >
               <Text style={[styles.txtHead, { fontSize: "10px" }]}>
                 {" "}
-                หมายเหตุ:{" "}{data.note}
+                หมายเหตุ:{" "}{userObject.note}
               </Text>
             </View>
             <Text
@@ -179,7 +171,7 @@ const InvioveDetail = ({ route, navigation }, props) => {
           </View>
           <TouchableOpacity
             style={styles.btnLoad}
-            onPress={() => navigation.navigate("Payment", { id: data.id, total: data.total})}
+            onPress={() => navigation.navigate("Payment", { id: userObject.id, total: userObject.total})}
           >
             <Text
               style={{
@@ -195,6 +187,56 @@ const InvioveDetail = ({ route, navigation }, props) => {
         </Card>
       </View>
       )}
+    </View>
+  )
+};
+
+const InvioveDetail = ({ route, navigation }, props) => {
+  const { id } = route.params;
+  const { categoryTitle } = route.params;
+  const [data, setData] = useState();
+  const [invoice, setInvoice] = useState(null);
+  useEffect(() => {
+    // const response = axios.get(`${baseUrl}/invoices`);
+    // setInvoice(response);
+    // console.log(response);
+    const url = `${baseUrl}/getInvoiceNum/${categoryTitle}`;
+    console.log("test");
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get(url);
+        if (response.status === 200) {
+          setInvoice(response.data);
+          //console.log(response.data);
+          // console.log("1"+categoryTitle);
+          return;
+        } else {
+          throw new Error("Failed to fetch users");
+        }
+      } catch (error) {
+          console.log('Data fetching cancelled');
+      }
+      
+    };
+    fetchUsers();
+    // console.log(invoice);
+    // let get = invoice.filter((item) => item.room_number == categoryTitle)[0];
+    // setData(get);
+    // console.log("2"+categoryTitle);
+  }, [categoryTitle]);
+  console.log(invoice);
+  // useEffect(() => {
+  //   let get = INVOICE.filter((item) => item.id == id)[0];
+  //   setData(get);
+  // }, [id]);
+  return (
+    <View style={styles.view}>
+      <Image
+        source={require("../../assets/bg_invoice.png")}
+        style={styles.background}
+      ></Image>
+      <User userObject={invoice} navigation={navigation} />
+      
     </View>
   );
 };
@@ -222,8 +264,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(255, 255, 255, 0.5)",
-
-    width: "75%",
+    width: 300,
     height: "13%",
     alignSelf: "center",
   },
@@ -241,6 +282,8 @@ const styles = StyleSheet.create({
   },
   text: {
     marginBottom: 20,
+  },
+  container1: {
   },
   container: {
     width: "90%",

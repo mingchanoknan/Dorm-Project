@@ -23,7 +23,7 @@ const MainLessor = ({ route, navigation }) => {
       {/* <View style={styles.header2}>
       </View> */}
       <View style={[styles.container]}>
-        <ScrollView>
+        <ScrollView style={{ flex: 1}}>
           <View
             style={{
               // backgroundColor: 'red',
