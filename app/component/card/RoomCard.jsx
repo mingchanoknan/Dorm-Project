@@ -23,24 +23,25 @@ const RoomCard = (props) => {
   return (
     <View style={styles.container}>
       <Card
-        style={[styles.cardContainer, { backgroundColor: props.data.color1}]}
+        style={[styles.cardContainer, { backgroundColor: props.data.bgColor}]}
         footer={Footer}
         onPress={() =>
           props.navigation.navigate("CheckRoomDetail", {
             id: props.data.id,
-            name: props.data.type,
+            name: props.data.typeName,
+            editable: props.editable
           })
         }
       >
         <Text style={styles.text} category="h2">
-          {props.data.type}
+          {props.data.typeName}
         </Text>
         <Text style={[styles.text, {marginVertical:'3%'}]} category="s1">
           Start at <Text category="h6">{props.data.price}</Text> THB / month
         </Text>
       </Card>
       <Divider style={{ zIndex: 100, width: "100%", position: "absolute", bottom: 65 }} />
-      <View style={[styles.circle, { backgroundColor: props.data.color2 }]}>
+      <View style={[styles.circle, { backgroundColor: props.data.iconColor }]}>
         <FontAwesome name="hotel" size={40} color="white" />
       </View>
     </View>
@@ -49,7 +50,8 @@ const RoomCard = (props) => {
 
 const styles = StyleSheet.create({
   cardContainer: {
-    margin: 20,
+    marginBottom: 20,
+    marginHorizontal:20,
     position: "relative",
     padding: 10,
     display: "flex",

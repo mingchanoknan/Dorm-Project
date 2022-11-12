@@ -24,6 +24,7 @@ import ManageInvoice from "../screen/lessor/ManageInvoice";
 import BillInvoice from "../screen/lessor/BillInvoice";
 
 import { FontAwesome } from "@expo/vector-icons";
+import AddRoomType from "../screen/lessor/AddRoomType";
 const LessorNavigation = () => {
   const LessorNavigator = createDrawerNavigator();
 
@@ -81,6 +82,14 @@ const LessorNavigation = () => {
           options={({ route }) => {
             return {
               title: route.params.name,
+            };
+          }}
+        />
+        <RoomNavigator.Screen
+          name="Add new type room"
+          component={AddRoomType}
+          options={({ route }) => {
+            return {
             };
           }}
         />
@@ -357,7 +366,7 @@ const MyLessorsNavigator = () => {
          
         };
       }}
-      
+
     >
       <LessorNavigator.Screen
         name="Main"

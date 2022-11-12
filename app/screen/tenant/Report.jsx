@@ -35,11 +35,12 @@ const Report = () => {
   );
   return (
     <View style={{ flex: 1, alignItems: "center", backgroundColor: "#fff" }}>
-      <HeaderBackground />
+       <HeaderBackground image={require("../../assets/bg_invoice.png")} />
       <Popover
       backdropStyle={styles.backdrop}
       visible={visible}
-      anchor={renderToggleButton}
+        anchor={renderToggleButton}
+        fullWidth={true}
         onBackdropPress={() => setVisible(false)}>
         <View style={{ backgroundColor:'rgba(182, 232, 255, 1)',}}>
         <View style={styles.formReport}>

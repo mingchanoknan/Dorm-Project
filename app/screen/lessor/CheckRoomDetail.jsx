@@ -1,15 +1,23 @@
-import { Text } from "@ui-kitten/components";
+import { Text, Icon } from "@ui-kitten/components";
 import { useEffect, useState } from "react";
-import { Dimensions, ImageBackground, ScrollView, StyleSheet, View } from "react-native";
+import {
+  Dimensions,
+  ImageBackground,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import HeaderBackground from "../../component/background/HeaderBackground";
 import RoomImageCarousel from "../../component/carousel/imageCarousel";
 import { ROOM } from "../../dummy/ROOM";
 
-const width = Dimensions.get("window").width;
-const height = Dimensions.get("window").height;
 const CheckRoomDetail = ({ route, navigation }) => {
-  const { id } = route.params;
+  const width = Dimensions.get("window").width;
+  const height = Dimensions.get("window").height;
+  const { id, editable } = route.params;
   const [data, setData] = useState();
+
   useEffect(() => {
     let get = ROOM.filter((item) => item.id == id)[0];
     setData(get);
@@ -26,8 +34,11 @@ const CheckRoomDetail = ({ route, navigation }) => {
     },
   ];
   return (
-    <View style={{ flex: 1, backgroundColor: '#FDF8F4' }}>
-      <HeaderBackground/>
+    <View style={{ flex: 1, backgroundColor: "#FDF8F4" }}>
+      <HeaderBackground
+        image={require("../../assets/bg_invoice.png")}
+        style={{ paddingHorizontal: 50 }}
+      />
       {data && (
         <View
           style={{
@@ -47,61 +58,111 @@ const CheckRoomDetail = ({ route, navigation }) => {
             elevation: 5,
           }}
         >
-          
-
-          
           <RoomImageCarousel
             image={image}
-            width={width-50}
-            height={height/3.5}
-            paginationColor={data.color1}
+            width={width - 50}
+            height={height / 2.8}
+            paginationColor={data.bgColor}
           />
         </View>
       )}
-      {data && (
-        <View style={{ flex: 2, alignItems: "center", position: "relative" }}>
+      <View style={{ flex: 2, marginTop:'10%' }}>
+        {editable && (
           <View
-            style={[
-              styles.banner,
-              { backgroundColor: data.color1, marginTop: height / 15 },
-            ]}
-          ><View style={{flexDirection:'row',alignItems:'flex-end',justifyContent:'center'}}>
-              <Text category="h3" style={{ textAlign: "center" }}>
-              {data.price} THB
-            </Text>
-            <Text category="s1">/mount</Text>
+            style={{
+              flexDirection: "row",
+              justifyContent: "flex-end",
+              position: "absolute",
+              bottom: 10,
+              right: 10,
+              zIndex: 10,
+            }}
+          >
+            <TouchableOpacity
+              style={{ marginRight: 20 }}
+              onPress={() => console.log("Test")}
+            >
+              <Icon
+                fill="#000"
+                name="edit-2-outline"
+                style={{ width: "35", height: "35" }}
+              ></Icon>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Icon
+                fill="#000"
+                name="trash-2-outline"
+                style={{ width: "35", height: "35" }}
+              ></Icon>
+            </TouchableOpacity>
           </View>
-            
-            <Text category="s1" style={{ marginTop: "3%" }}>
-              {"เหมาะสำหรับประหยัดงบและอาศัย 2 คน"}
-            </Text>
-            <Text category="label" style={{ textAlign: "right",color:'red'}}>
-              {"เหลือ 1 ห้อง"}
-            </Text>
-          </View>
-          <ScrollView style={[styles.information, {borderColor:data.color1 }]}>
-            <View style={{ height: 40 }}></View>
-            <Text category="h5">Information</Text>
-            <Text category="s1">
-              ห้องพักพร้อมเข้าอยู่ บรรยากาศดี เงียบสงบ สะอาด ปลอดภัย ตั้งอยู่ใน
-              ซอยลาดกระบัง 52 (ซอยจินดาฯ) เดินทางสะดวก ใกล้สนามบินสุวรรณภูมิ
-              โรงพยาบาลลาดกระบัง
-              และสถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง
-              เหมาะสำหรับนักศึกษา, นักศึกษาฝึกงาน หรือ
-              คนทำงานย่านสนามบินสุวรรณภูมิ-ลาดกระบัง
-            </Text>
-            <Text category="h5" style={{ marginVertical: 10 }}>
-              Convinience
-            </Text>
-            {data.conv.map((item, index) => (
-              <Text category="s1" key={index}>
-                - {item}
+        )}
+        {data && (
+          <View style={{ flex: 1, alignItems: "center", position: "relative" }}>
+            <View
+              style={[
+                styles.banner,
+                { backgroundColor: data.bgColor, marginTop: 20 },
+              ]}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "flex-end",
+                  justifyContent: "center",
+                }}
+              >
+                <Text category="h3" style={{ textAlign: "center" }}>
+                  {data.price} THB
+                </Text>
+                <Text category="s1">/mount</Text>
+              </View>
+
+              <Text category="s1" style={{ marginTop: "3%" }}>
+                {"เหมาะสำหรับประหยัดงบและอาศัย 2 คน"}
               </Text>
-            ))}
-            <View style={{ height: 50 }}></View>
-          </ScrollView>
-        </View>
-      )}
+              <Text
+                category="label"
+                style={{ textAlign: "right", color: "red" }}
+              >
+                {"เหลือ 1 ห้อง"}
+              </Text>
+            </View>
+            <ScrollView
+              style={[
+                styles.information,
+                {
+                  borderColor: data.bgColor,
+                  marginTop: height / 10,
+                  marginBottom: editable ? 50 : 0,
+                },
+              ]}
+            >
+              <View style={{paddingBottom: 20}}>
+                <View style={{ height: 40 }}></View>
+                <Text category="h5">Information</Text>
+                <Text category="s1">
+                  ห้องพักพร้อมเข้าอยู่ บรรยากาศดี เงียบสงบ สะอาด ปลอดภัย
+                  ตั้งอยู่ใน ซอยลาดกระบัง 52 (ซอยจินดาฯ) เดินทางสะดวก
+                  ใกล้สนามบินสุวรรณภูมิ โรงพยาบาลลาดกระบัง
+                  และสถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง
+                  เหมาะสำหรับนักศึกษา, นักศึกษาฝึกงาน หรือ
+                  คนทำงานย่านสนามบินสุวรรณภูมิ-ลาดกระบัง
+                </Text>
+                <Text category="h5" style={{ marginVertical: 10 }}>
+                  Convinience
+                </Text>
+                {data.convenience.map((item, index) => (
+                  <Text category="s1" key={index}>
+                    - {item}
+                  </Text>
+                ))}
+                <View style={{ height: 50 }}></View>
+              </View>
+            </ScrollView>
+          </View>
+        )}
+      </View>
     </View>
   );
 };
@@ -112,7 +173,6 @@ const styles = StyleSheet.create({
     width: "80%",
     padding: "6%",
     position: "absolute",
-    top: 10,
     zIndex: 1000,
     shadowColor: "#000",
     shadowOffset: {
@@ -125,17 +185,14 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   information: {
-    flex:1,
-    borderWidth: 1,
-    borderTopLeftRadius: '45%',
-    borderTopRightRadius: '45%',
+    flex: 1,
+    borderTopLeftRadius: "45%",
+    borderTopRightRadius: "45%",
     width: "90%",
     paddingHorizontal: "5%",
     paddingTop: "10%",
-    marginTop: height / 7,
     backgroundColor: "white",
-    borderWidth:3
-    
+    borderWidth: 3,
   },
 });
 
