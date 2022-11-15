@@ -187,8 +187,6 @@ const MyLessorsNavigator = () => {
         initialRouteName="Lessors"
         screenOptions={{
           headerShown: false,
-          tabBarActiveTintColor: 'white',
-          tabBarInactiveTintColor: 'red',
       //     tabBarStyle: {
       //   backgroundColor: '#d1cfcf',
       //   borderTopColor: 'transparent',
@@ -201,7 +199,7 @@ const MyLessorsNavigator = () => {
           component={MyLessorsNavigator}
           options={{
             tabBarIcon: ({ color, size }) => {
-              return <Entypo name="home" size={24} color="color" />;
+              return <Entypo name="home" size={24} color={color} />;
             },
             tabBarLabel: () => {
               return <Text style={{fontSize: "12px"}}>หน้าหลัก</Text>;
@@ -213,7 +211,7 @@ const MyLessorsNavigator = () => {
           component={AddParcel}
           options={{
             tabBarIcon: ({ color, size }) => {
-              return <Fontisto name="bell-alt" size={24} color="color" />;
+              return <Fontisto name="bell-alt" size={24} color={color} />;
             },
             tabBarLabel: () => {
               return <Text  style={{fontSize: "12px"}}>การแจ้งเตือน</Text>;

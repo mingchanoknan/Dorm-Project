@@ -38,7 +38,7 @@ const RoomImageCarousel = (props) => {
               }}
             >
               <Image
-                source={props.image[index].src}
+                source={{uri:props.image[index]}}
                 resizeMode="cover"
                 style={{ width: null, height: null, flex: 1, borderRadius: 20 }}
               />

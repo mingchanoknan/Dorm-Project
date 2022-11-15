@@ -62,7 +62,7 @@ const MainLessor = ({ route, navigation }) => {
               </View>
 
               <View style={styles.viewCircle}>
-                <TouchableOpacity style={styles.circle} onPress={() => navigation.navigate("ManageParcel")}>
+                <TouchableOpacity style={styles.circle} onPress={() => navigation.navigate("Parcel")}>
                   <Feather name="box" size={24} color="white" />
                 </TouchableOpacity>
                 <Text style={styles.headTxt}>พัสดุ</Text>
@@ -94,7 +94,7 @@ const MainLessor = ({ route, navigation }) => {
               height: "20%",
             }}
           >
-            <TouchableOpacity style={styles.box} onPress={() => navigation.navigate("CheckRoom")}>
+            <TouchableOpacity style={styles.box} onPress={() => navigation.navigate("Room")}>
               <Image
                 source={require("../../assets/home2.png")}
                 style={{ width: "30%", height: "40%" }}
@@ -104,7 +104,7 @@ const MainLessor = ({ route, navigation }) => {
               </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.box} onPress={() => navigation.navigate("Contract")}>
+            <TouchableOpacity style={styles.box} onPress={() => navigation.navigate("CancelContract")}>
               <Image
                 source={require("../../assets/contract2.png")}
                 style={{ width: "30%", height: "40%" }}
@@ -114,7 +114,7 @@ const MainLessor = ({ route, navigation }) => {
               </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.box} onPress={() => navigation.navigate("RoomStatus")}>
+            <TouchableOpacity style={styles.box} onPress={() => navigation.navigate("Room Status")}>
               <Image
                 source={require("../../assets/room2.png")}
                 style={{ width: "30%", height: "40%" }}
@@ -135,7 +135,7 @@ const MainLessor = ({ route, navigation }) => {
               height: "20%",
             }}
           >
-            <TouchableOpacity style={styles.box} onPress={() => navigation.navigate("Meter")}>
+            <TouchableOpacity style={styles.box} onPress={() => navigation.navigate("RecordMeter")}>
               <Image
                 source={require("../../assets/faucet2.png")}
                 style={{ width: "30%", height: "40%" }}
@@ -155,7 +155,7 @@ const MainLessor = ({ route, navigation }) => {
               </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.box} onPress={() => navigation.navigate("ManageParcel")}>
+            <TouchableOpacity style={styles.box} onPress={() => navigation.navigate("Parcel")}>
               <Image
                 source={require("../../assets/box2.png")}
                 style={{ width: "30%", height: "40%" }}

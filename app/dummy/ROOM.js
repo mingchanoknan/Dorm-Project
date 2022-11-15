@@ -31,11 +31,7 @@ export const ROOM = [
         price: 5000,
         bgColor: "#90C8AC",
         iconColor: "#C4DFAA",
-        convenience: [
-            "เตียงพร้อมที่นอนขนาด 5 ฟุต",
-            "ตู้เสื้อผ้า",
-            "โต๊ะเครื่องแป้ง",
-            "ชั้นวางของ"
-        ]
+        bgColor: "#90C8AC",
+        iconColor: "#C4DFAA",
     },
 ]

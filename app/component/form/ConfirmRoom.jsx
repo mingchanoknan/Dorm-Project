@@ -59,6 +59,14 @@ const ConfirmRoom = (props) => {
           })}
         </View>
       </View>
+      <View style={{ marginVertical: 10,display:'flex',flexDirection:'row',alignItems:'center'}}>
+        <Text style={styles.text}>{"ตึก : "}</Text>
+                  <Text style={[styles.text,{marginRight:10}]}>{ props.rent.build}</Text>
+        <Text style={styles.text}>{"ชั้น : "}</Text>
+        <Text style={[styles.text,{marginRight:10}]}>{props.rent.floor}</Text>
+        <Text style={styles.text}>{"เลขห้อง : "}</Text>
+        <Text style={[styles.text,{marginRight:10}]}>{props.rent.room_number}</Text>
+      </View>
       <View style={{ marginVertical: 10 }}>
         <Text style={styles.text}>{"Image : "}</Text>
         <View
