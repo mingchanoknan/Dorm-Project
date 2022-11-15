@@ -13,13 +13,15 @@ import register from "./Register"
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-const Login = () => {
+
+
+const Login = ({ navigation }) => {
   const [username, setUsername] = useState(null);
   const [password, setPassword] = useState(null);
 
-  const login = () => {
-    setUsername(username);
-    setPassword(password);
+  const comFirmLogin = () => {
+    // setUsername(username);
+    // setPassword(password);
     console.log("login : " + username);
     console.log("login : " + password);
   };
@@ -91,7 +93,7 @@ const Login = () => {
               color: "white",
               textAlign: "center",
             }}
-            onPress={login}
+            onPress={comFirmLogin}
           >
             LOGIN
           </Text>
@@ -100,6 +102,7 @@ const Login = () => {
 
       <TouchableOpacity
         style={styles.create}
+        onPress={() => navigation.navigate('Register')}
       >
         <Text
           style={{

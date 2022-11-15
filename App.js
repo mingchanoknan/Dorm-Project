@@ -5,7 +5,9 @@ import Login from './app/screen/Login';
 import Register from './app/screen/Register';
 import ManageAccount from './app/screen/MangeAccount';
 import AnnouceNews from './app/screen/tenant/AnnouceNews';
-import { ApplicationProvider, IconRegistry, Layout } from '@ui-kitten/components';
+import NewsDetail from "./app/screen/lessor/NewsDetail";
+import CreatedPost from "./app/component/annoucenews/createdPost";
+import { ApplicationProvider, IconRegistry, Layout, Text } from '@ui-kitten/components';
 import * as eva from '@eva-design/eva';
 
 import axios from 'axios';
@@ -26,25 +28,24 @@ import axios from 'axios';
 //   (error) => console.log('error')
 // )
 
-import { EvaIconsPack } from '@ui-kitten/eva-icons';
-
-
+import { EvaIconsPack } from "@ui-kitten/eva-icons";
 
 const App = () => {
   return (
     <>
       <IconRegistry icons={EvaIconsPack} />
-    <ApplicationProvider {...eva} theme={eva.light}>
-      <NavigationContainer>
-        <LessorNavigation />
-        {/* <TenantNavigation/> */}
+      <ApplicationProvider {...eva} theme={eva.light}>
+        <NavigationContainer>
+        {/* <LoginNavigation/> */}
+        {/* <LessorNavigation /> */}
+        <TenantNavigation/>
         {/* <Login /> */}
         {/* <Register /> */}
         {/* <ManageAccount /> */}
         {/* <AnnouceNews /> */}
-      </NavigationContainer>
-    </ApplicationProvider>
+        </NavigationContainer>
+      </ApplicationProvider>
     </>
-  )
-}
+  );
+};
 export default App;

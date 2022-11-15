@@ -24,8 +24,8 @@ const AnnouceNews = ({ navigation }) => {
         onSelect={() => {
           navigation.navigate("NewsDetail",{
             title : itemData.item.title,
-            newsId: itemData.item.id,
-            data : itemData.item
+            newsId: itemData.item.text,
+            item : itemData.item,
           });
         }}
       />
@@ -39,7 +39,14 @@ const AnnouceNews = ({ navigation }) => {
         style={styles.background}
       ></Image>
 
+      <Modal />
+
       <View style={styles.newsContent}>
+        {/* <ScrollView>
+          {annNews.map((item, index) => (
+            <News data={item} navigation={navigation} />
+          ))}
+        </ScrollView> */}
         <FlatList
         data={NEWS}
         renderItem={renderGridItem}
@@ -90,7 +97,7 @@ const styles = StyleSheet.create({
   },
   newsContent: {
     width: "100%",
-    top: 50,
+    top: 150,
     position: "absolute",
     height: 600,
     paddingBottom: 50,
