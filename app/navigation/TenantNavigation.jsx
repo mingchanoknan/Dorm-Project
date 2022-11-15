@@ -176,7 +176,7 @@ const TenantNavigation = () => {
           component={AnnouceNews}
           options={({ route, navigation }) => {
             return {
-              title: "Room",
+              title: "Annouce News",
               headerLeft: () => listIconToOpenDrawer(navigation),
             };
           }}
