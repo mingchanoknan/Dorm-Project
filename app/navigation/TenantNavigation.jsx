@@ -2,9 +2,9 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import { View, Text, Image, StyleSheet, } from "react-native";
-import { Entypo } from '@expo/vector-icons';
-import { Fontisto } from '@expo/vector-icons';
+import { View, Text, Image, StyleSheet } from "react-native";
+import { Entypo } from "@expo/vector-icons";
+import { Fontisto } from "@expo/vector-icons";
 
 import InvoiceDetails from "../screen/tenant/InvoiceDetail";
 import Invoices from "../screen/tenant/Invoices";
@@ -12,6 +12,8 @@ import Parcel from "../screen/tenant/Parcel";
 import Payment from "../screen/tenant/Payment";
 import Reports from "../screen/tenant/Report";
 import MainTenant from "../screen/tenant/MainTenant";
+import AnnouceNews from "../screen/tenant/AnnouceNews";
+import NewsDetail from "../screen/tenant/NewsDetail";
 import { FontAwesome } from "@expo/vector-icons";
 
 const TenantNavigation = () => {
@@ -21,6 +23,7 @@ const TenantNavigation = () => {
 
   const TenantsFavTabNavigator = createBottomTabNavigator();
   const TenantsNavigator = createNativeStackNavigator();
+  const NewsNavigator = createNativeStackNavigator();
 
   const listIconToOpenDrawer = (navigation) => (
     <FontAwesome
@@ -32,57 +35,57 @@ const TenantNavigation = () => {
   );
 
   //Stack
-const MyTenantsNavigator = () => {
-  return (
-    <TenantsNavigator.Navigator
-      initialRouteName="MainLessor"
-      screenOptions={{
-        headerShown: false,
-        headerTintColor: "white",
-      }}
-    >
-      <TenantsNavigator.Screen
-        name="MainLessor"
-        component={MainTenant}
-        options={({ route, navigation }) => ({
-          drawerLabel: "Main",
-          title: '',
-          headerShown: true,
-          headerLeft: () => listIconToOpenDrawer(navigation),
-          headerBackground: () => (
-            <View style={{backgroundColor: '#7dd0f5', height: '100%'}}>
+  const MyTenantsNavigator = () => {
+    return (
+      <TenantsNavigator.Navigator
+        initialRouteName="MainLessor"
+        screenOptions={{
+          headerShown: false,
+          headerTintColor: "white",
+        }}
+      >
+        <TenantsNavigator.Screen
+          name="MainLessor"
+          component={MainTenant}
+          options={({ route, navigation }) => ({
+            drawerLabel: "Main",
+            title: "",
+            headerShown: true,
+            headerLeft: () => listIconToOpenDrawer(navigation),
+            headerBackground: () => (
+              <View style={{ backgroundColor: "#7dd0f5", height: "100%" }}>
                 <Image
-            source={require("../assets/logo.png")}
-            style={styles.logo}
-          ></Image>
-          </View>
-          )
-        })}
-      />
-       <TenantsNavigator.Screen
-        name="InvoiceBill"
-        component={InvoiceNavigation}
-        options={({ route }) => ({
-          // title: route.params.categoryTitle,
-        })}
-      />
-      <TenantsNavigator.Screen
-        name="Parcel"
-        component={Parcel}
-        options={({ route }) => ({
-          // title: route.params.categoryTitle,
-        })}
-      />
-      <TenantsNavigator.Screen
-        name="Reports"
-        component={Reports}
-        options={({ route }) => ({
-          // title: route.params.categoryTitle,
-        })}
-      />
-    </TenantsNavigator.Navigator>
-  );
-};
+                  source={require("../assets/logo.png")}
+                  style={styles.logo}
+                ></Image>
+              </View>
+            ),
+          })}
+        />
+        <TenantsNavigator.Screen
+          name="InvoiceBill"
+          component={InvoiceNavigation}
+          options={({ route }) => ({
+            // title: route.params.categoryTitle,
+          })}
+        />
+        <TenantsNavigator.Screen
+          name="Parcel"
+          component={Parcel}
+          options={({ route }) => ({
+            // title: route.params.categoryTitle,
+          })}
+        />
+        <TenantsNavigator.Screen
+          name="Reports"
+          component={Reports}
+          options={({ route }) => ({
+            // title: route.params.categoryTitle,
+          })}
+        />
+      </TenantsNavigator.Navigator>
+    );
+  };
 
   const MyTenantsFavTabNavigator = () => {
     return (
@@ -90,14 +93,13 @@ const MyTenantsNavigator = () => {
         initialRouteName="Tenants"
         screenOptions={{
           headerShown: false,
-          tabBarActiveTintColor: 'white',
-          tabBarInactiveTintColor: 'red',
-      //     tabBarStyle: {
-      //   backgroundColor: '#d1cfcf',
-      //   borderTopColor: 'transparent',
-      // },
+          tabBarActiveTintColor: "white",
+          tabBarInactiveTintColor: "red",
+          //     tabBarStyle: {
+          //   backgroundColor: '#d1cfcf',
+          //   borderTopColor: 'transparent',
+          // },
         }}
-        
       >
         <TenantsFavTabNavigator.Screen
           name="Tenants"
@@ -107,7 +109,7 @@ const MyTenantsNavigator = () => {
               return <Entypo name="home" size={24} color="color" />;
             },
             tabBarLabel: () => {
-              return <Text style={{fontSize: "12px"}}>หน้าหลัก</Text>;
+              return <Text style={{ fontSize: "12px" }}>หน้าหลัก</Text>;
             },
           }}
         />
@@ -119,12 +121,11 @@ const MyTenantsNavigator = () => {
               return <Fontisto name="bell-alt" size={24} color="color" />;
             },
             tabBarLabel: () => {
-              return <Text  style={{fontSize: "12px"}}>การแจ้งเตือน</Text>;
+              return <Text style={{ fontSize: "12px" }}>การแจ้งเตือน</Text>;
             },
           }}
         />
       </TenantsFavTabNavigator.Navigator>
-      
     );
   };
 
@@ -138,7 +139,7 @@ const MyTenantsNavigator = () => {
             return {
               title: "Invoices",
               headerLeft: () => listIconToOpenDrawer(navigation),
-              headerTintColor: '#47C5FC',
+              headerTintColor: "#47C5FC",
             };
           }}
         />
@@ -147,8 +148,8 @@ const MyTenantsNavigator = () => {
           component={InvoiceDetails}
           options={({ route, navigation }) => {
             return {
-              title: "Invoice Detail", 
-              headerTintColor: '#47C5FC',
+              title: "Invoice Detail",
+              headerTintColor: "#47C5FC",
             };
           }}
         />
@@ -159,11 +160,36 @@ const MyTenantsNavigator = () => {
             return {
               title: "Payment",
               // headerLeft: () => listIconToOpenDrawer(navigation),
-              headerTintColor: '#47C5FC',
+              headerTintColor: "#47C5FC",
             };
           }}
         />
       </InvoiceNavigator.Navigator>
+    );
+  };
+
+  const NewsNavigation = () => {
+    return (
+      <NewsNavigator.Navigator initialRouteName="AnnouceNews">
+        <NewsNavigator.Screen
+          name="AnnouceNews"
+          component={AnnouceNews}
+          options={({ route, navigation }) => {
+            return {
+              title: "Room",
+              headerLeft: () => listIconToOpenDrawer(navigation),
+            };
+          }}
+        />
+        <NewsNavigator.Screen
+          name="NewsDetail"
+          component={NewsDetail}
+          options={({ route }) => ({
+            title: route.params.title.toString(),
+            headerShown: true,
+          })}
+        />
+      </NewsNavigator.Navigator>
     );
   };
 
@@ -177,21 +203,27 @@ const MyTenantsNavigator = () => {
       }}
     >
       {/* <TenantNavigator.Screen name="AnnouceNews" component={AnnouceNews} /> */}
-      <TenantNavigator.Screen name="Main" component={MyTenantsFavTabNavigator}
+      <TenantNavigator.Screen
+        name="Main"
+        component={MyTenantsFavTabNavigator}
         options={({ route, navigation }) => ({
           drawerLabel: "Main",
-          title: '',
+          title: "",
           headerShown: false,
-        })} />
+        })}
+      />
       <TenantNavigator.Screen name="Invoice" component={InvoiceNavigation} />
       <TenantNavigator.Screen name="Parcel" component={Parcel} />
-      <TenantNavigator.Screen name="Reports" component={Reports}
+      <TenantNavigator.Screen
+        name="Reports"
+        component={Reports}
         options={({ route, navigation }) => {
           return {
             headerShown: true,
-          }
+          };
         }}
       />
+        <TenantNavigator.Screen name="News" component={NewsNavigation} />
     </TenantNavigator.Navigator>
   );
 };
@@ -200,7 +232,7 @@ const styles = StyleSheet.create({
     width: 160,
     height: 50,
     top: "40%",
-    alignSelf: "center"
+    alignSelf: "center",
   },
-})
+});
 export default TenantNavigation;

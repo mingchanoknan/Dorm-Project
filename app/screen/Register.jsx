@@ -23,9 +23,11 @@ const Register = () => {
   const [roomNo, setRoomNo] = React.useState("");
 
   const submit = () => {
-    setUsername(username);
-    setPassword(password);
-    setFirstname(firstname);
+    // setUsername(username);
+    // setPassword(password);
+    // setFirstname(firstname);
+    console.log("regis : " + username);
+    console.log("regis : " + password);
   };
 
   return (
@@ -240,10 +242,10 @@ const styles = StyleSheet.create({
   },
   button: {
     position: "relative",
-    width: 100,
+    // width: 120,
     borderRadius: 80,
     backgroundColor: "#90AACB",
-    padding: 10,
+    padding: 13,
     marginTop: 12,
     alignSelf: "center",
   },

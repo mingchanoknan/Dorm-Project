@@ -39,8 +39,8 @@ const MangeAccount = () => {
       <Image
         source={require("../assets/user.jpg")}
         style={{
-          width: 190,
-          height: 190,
+          width: 180,
+          height: 180,
           position: "relative",
           alignSelf: "center",
           top: -290,
@@ -61,7 +61,7 @@ const MangeAccount = () => {
         >
           <Text
             style={{
-              fontSize: 18,
+              fontSize: 13,
               fontWeight: "400",
               color: "black",
               textAlign: "center",
@@ -109,6 +109,7 @@ const MangeAccount = () => {
             {
               backgroundColor: isEditable ? "white" : "rgb(217, 217, 217)",
               paddingTop: 10,
+              fontSize:15,
             },
           ]}
           onChangeText={onChangeAddress}
@@ -118,7 +119,7 @@ const MangeAccount = () => {
           keyboardType="default"
           multiline={true}
           editable={isEditable}
-          numberOfLines={5}
+          numberOfLines={3}
           height={70}
         />
 
@@ -141,7 +142,7 @@ const MangeAccount = () => {
         <TouchableOpacity style={[styles.button, { marginTop: 10 }]}>
           <Text
             style={{
-              fontSize: 22,
+              fontSize: 16,
               fontWeight: "500",
               color: "white",
               textAlign: "center",
@@ -187,7 +188,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255, 255, 255, 0.8)",
     justifyContent: "flex-start",
     alignItems: "center",
-    top: 290,
+    top: 280,
     zIndex: 1,
   },
   button: {
@@ -208,10 +209,10 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderRadius: 20,
     padding: 10,
-    fontSize: 18,
+    fontSize: 15,
   },
   text: {
-    fontSize: 18,
+    fontSize: 15,
     alignSelf: "flex-start",
     paddingLeft: 30,
     marginTop: 5,
