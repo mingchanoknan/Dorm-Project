@@ -12,6 +12,7 @@ import { Divider } from "@ui-kitten/components";
 import register from "./Register"
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import axios from "axios";
 
 
 
@@ -19,11 +20,20 @@ const Login = ({ navigation }) => {
   const [username, setUsername] = useState(null);
   const [password, setPassword] = useState(null);
 
+
   const comFirmLogin = () => {
     // setUsername(username);
     // setPassword(password);
+
     console.log("login : " + username);
     console.log("login : " + password);
+    try {
+      const result = await axios.get("http://192.168.1.10:8080/login?username=gotenlnwZa2&password=goteneiei")
+      console.log(result.data)
+    }
+    catch (e) {
+      console.log(e.message)
+    }
   };
 
   return (

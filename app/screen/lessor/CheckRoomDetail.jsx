@@ -1,5 +1,7 @@
+import { useFocusEffect } from "@react-navigation/native";
 import { Text, Icon } from "@ui-kitten/components";
-import { useEffect, useState } from "react";
+import axios from "axios";
+import { useCallback, useEffect, useState } from "react";
 import {
   Dimensions,
   ImageBackground,
@@ -10,18 +12,31 @@ import {
 } from "react-native";
 import HeaderBackground from "../../component/background/HeaderBackground";
 import RoomImageCarousel from "../../component/carousel/imageCarousel";
-import { ROOM } from "../../dummy/ROOM";
-
+const baseUrl = "http://192.168.1.10:8080";
 const CheckRoomDetail = ({ route, navigation }) => {
   const width = Dimensions.get("window").width;
   const height = Dimensions.get("window").height;
   const { id, editable } = route.params;
   const [data, setData] = useState();
 
-  useEffect(() => {
-    let get = ROOM.filter((item) => item.id == id)[0];
-    setData(get);
-  }, [id]);
+
+  useFocusEffect(
+    useCallback(() => {
+    
+      axios
+        .get(`${baseUrl}/room/getbyid`, {
+          params: {
+            id : id
+        } })
+        .then((response) => {
+          console.log(response.data);
+          setData(response.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }, [])
+  );
   const image = [
     {
       src: require("../../assets/1.jpg"),
@@ -59,14 +74,14 @@ const CheckRoomDetail = ({ route, navigation }) => {
           }}
         >
           <RoomImageCarousel
-            image={image}
+            image={data.image}
             width={width - 50}
             height={height / 2.8}
             paginationColor={data.bgColor}
           />
         </View>
       )}
-      <View style={{ flex: 2, marginTop:'10%' }}>
+      <View style={{ flex: 2, marginTop: "10%" }}>
         {editable && (
           <View
             style={{
@@ -108,18 +123,26 @@ const CheckRoomDetail = ({ route, navigation }) => {
               <View
                 style={{
                   flexDirection: "row",
-                  alignItems: "flex-end",
+                  
                   justifyContent: "center",
                 }}
               >
-                <Text category="h3" style={{ textAlign: "center" }}>
+                <View style={{display:'flex' ,justifyContent: "center",}}>
+                    <Text category="s1" style={{ textAlign: "center"}}>
+                  Start at
+                </Text>
+                </View>
+               
+                <Text category="h3" style={{ textAlign: "center",marginHorizontal:10 }}>
                   {data.price} THB
                 </Text>
-                <Text category="s1">/mount</Text>
+                <View style={{display:'flex' ,justifyContent: "flex-end",}}>
+                  <Text category="s1">/mount</Text>
+                  </View>
               </View>
 
               <Text category="s1" style={{ marginTop: "3%" }}>
-                {"เหมาะสำหรับประหยัดงบและอาศัย 2 คน"}
+                {data.suggestion}
               </Text>
               <Text
                 category="label"
@@ -138,16 +161,11 @@ const CheckRoomDetail = ({ route, navigation }) => {
                 },
               ]}
             >
-              <View style={{paddingBottom: 20}}>
+              <View style={{ paddingBottom: 20 }}>
                 <View style={{ height: 40 }}></View>
                 <Text category="h5">Information</Text>
                 <Text category="s1">
-                  ห้องพักพร้อมเข้าอยู่ บรรยากาศดี เงียบสงบ สะอาด ปลอดภัย
-                  ตั้งอยู่ใน ซอยลาดกระบัง 52 (ซอยจินดาฯ) เดินทางสะดวก
-                  ใกล้สนามบินสุวรรณภูมิ โรงพยาบาลลาดกระบัง
-                  และสถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง
-                  เหมาะสำหรับนักศึกษา, นักศึกษาฝึกงาน หรือ
-                  คนทำงานย่านสนามบินสุวรรณภูมิ-ลาดกระบัง
+                {data.information}
                 </Text>
                 <Text category="h5" style={{ marginVertical: 10 }}>
                   Convinience

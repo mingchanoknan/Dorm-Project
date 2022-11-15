@@ -1,8 +1,8 @@
-import { Button, Text, View } from "react-native";
+import { Button, View } from "react-native";
 import ColorPicker from "react-native-wheel-color-picker";
 import { useEffect, useRef, useState } from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { Input } from "@ui-kitten/components";
+import { Input, Text } from "@ui-kitten/components";
 import RoomCard from "../card/RoomCard";
 const ManageRoomDetailForm = (props) => {
   const colorPicker = useRef();
@@ -59,7 +59,7 @@ const ManageRoomDetailForm = (props) => {
             onPress={() => setToggleBackground(!toggleColorPickerBackground)}
           >
             <Text>
-              {!toggleColorPickerBackground ? "เลือกสีพื้นหลัง" : "ปิดเลือกสี"}
+              {!toggleColorPickerBackground ? "เลือกสีพื้นหลัง" : "ปิดเลือกสีพื้นหลัง"}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -80,7 +80,7 @@ const ManageRoomDetailForm = (props) => {
             }}
           >
             <Text>
-              {!toggleColorPickerIcon ? "เลือกสีไอคอน" : "ปิดเลือกสี"}
+              {!toggleColorPickerIcon ? "เลือกสีไอคอน" : "ปิดเลือกสีไอคอน"}
             </Text>
           </TouchableOpacity>
         </View>
@@ -147,8 +147,25 @@ const ManageRoomDetailForm = (props) => {
             />
           </View>
         )}
-          </View>
+      </View>
+      <View style={{ display: 'flex', margin: '5%', borderColor: 'black', borderWidth: 1, paddingBottom: '5%' }}>
+        <View style={{backgroundColor:'rgba(71, 197, 252, 0.5)',shadowColor: "#000",
+shadowOffset: {
+	width: 0,
+	height: 1,
+},
+shadowOpacity: 0.20,
+shadowRadius: 1.41,
+
+elevation: 2,}}>
+          <Text category='h6' style={{ textAlign: "left",marginLeft:20,marginVertical:10, }}>ตัวอย่างการแสดงผล</Text>
+        </View>
+        
+        <View style={{ alignItems: 'center',marginTop:'3%'}}>
           <RoomCard data={props.allData} />
+        </View>
+      </View>
+         
     </View>
   );
 };

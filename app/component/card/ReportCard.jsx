@@ -168,9 +168,9 @@ const ReportCard = (props) => {
         <Text category="s1" style={{ padding: 10, textAlign: "center" }}>
           {item.item.content}
         </Text>
-        {item.item.image.length > 0 &&
+        {/* {item.item.image.length > 0 &&
           <RoomImageCarousel image={item.item.image} width={widthOfView - 50} height={300} paginationColor={"#84E6E3" } />
-       }
+       } */}
           
        
         <View style={{ display: "flex", alignItems: "flex-end" }}>
@@ -214,6 +214,7 @@ export default ReportCard;
 
 const styles = StyleSheet.create({
   container: {
+    flex:1,
     paddingHorizontal: 20,
     backgroundColor: "rgba(144, 170, 203, 0)",
   },

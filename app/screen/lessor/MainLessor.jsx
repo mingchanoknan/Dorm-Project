@@ -66,10 +66,12 @@ const MainLessor = ({ route, navigation }) => {
               </View>
 
               <View style={styles.viewCircle}>
+
                 <TouchableOpacity
                   style={styles.circle}
                   onPress={() => navigation.navigate("ManageParcel")}
                 >
+
                   <Feather name="box" size={24} color="white" />
                 </TouchableOpacity>
                 <Text style={styles.headTxt}>พัสดุ</Text>
@@ -101,10 +103,12 @@ const MainLessor = ({ route, navigation }) => {
               height: "20%",
             }}
           >
+
             <TouchableOpacity
               style={styles.box}
               onPress={() => navigation.navigate("CheckRoom")}
             >
+
               <Image
                 source={require("../../assets/home2.png")}
                 style={{ width: "30%", height: "40%" }}
@@ -113,6 +117,7 @@ const MainLessor = ({ route, navigation }) => {
                 ประเภทห้อง
               </Text>
             </TouchableOpacity>
+
 
             <TouchableOpacity
               style={styles.box}
@@ -127,10 +132,11 @@ const MainLessor = ({ route, navigation }) => {
               </Text>
             </TouchableOpacity>
 
+
             <TouchableOpacity
               style={styles.box}
               onPress={() => navigation.navigate("RoomStatus")}
-            >
+
               <Image
                 source={require("../../assets/room2.png")}
                 style={{ width: "30%", height: "40%" }}
@@ -151,10 +157,12 @@ const MainLessor = ({ route, navigation }) => {
               height: "20%",
             }}
           >
+
             <TouchableOpacity
               style={styles.box}
               onPress={() => navigation.navigate("Meter")}
             >
+
               <Image
                 source={require("../../assets/faucet2.png")}
                 style={{ width: "30%", height: "40%" }}
@@ -176,6 +184,7 @@ const MainLessor = ({ route, navigation }) => {
                 ใบแจ้งหนี้
               </Text>
             </TouchableOpacity>
+
 
             <TouchableOpacity
               style={styles.box}
