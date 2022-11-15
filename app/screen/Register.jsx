@@ -23,9 +23,11 @@ const Register = () => {
   const [roomNo, setRoomNo] = React.useState("");
 
   const submit = () => {
-    setUsername(username);
-    setPassword(password);
-    setFirstname(firstname);
+    // setUsername(username);
+    // setPassword(password);
+    // setFirstname(firstname);
+    console.log("regis : " + username);
+    console.log("regis : " + password);
   };
 
   return (
@@ -36,7 +38,7 @@ const Register = () => {
       ></Image>
 
       <Image
-        source={require("../assets/user.jpg")}
+        source={require("../assets/user.png")}
         style={{
           width: 160,
           height: 160,
@@ -209,7 +211,7 @@ const styles = StyleSheet.create({
   },
   background: {
     width: "100%",
-    height: "35%",
+    height: "30%",
     alignSelf: "center",
     borderBottomLeftRadius: 60,
     borderBottomRightRadius: 60,
@@ -217,11 +219,11 @@ const styles = StyleSheet.create({
   scroll: {
     height: 500,
     borderWidth: 1,
-    borderRadius: 50,
+    borderRadius: 30,
     borderColor: "rgba(255, 255, 255, 0.4)",
     backgroundColor: "rgba(255, 255, 255, 0.6)",
     position: "absolute",
-    top: 260,
+    top: 190,
     padding: 10,
   },
   input: {
@@ -240,10 +242,9 @@ const styles = StyleSheet.create({
   },
   button: {
     position: "relative",
-    width: 100,
     borderRadius: 80,
     backgroundColor: "#90AACB",
-    padding: 10,
+    padding: 13,
     marginTop: 12,
     alignSelf: "center",
   },

@@ -5,31 +5,23 @@ import {
   View,
   Text,
   Image,
-  TouchableOpacity,
+  TouchableOpacity, TextInput
 } from "react-native";
 import { Card, Layout, Divider } from "@ui-kitten/components";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import { IndexPath, Select, SelectItem } from "@ui-kitten/components";
 import { INVOICE } from "../../dummy/INVOICE";
 import TableBill from "../../component/invoice/tableBill";
+import {baseUrl} from "@env"
+import axios from 'axios';
 
-const BillInvoice = ({ route, navigation }, props) => {
-  const { categoryTitle } = route.params;
-  const [data, setData] = useState();
-  useEffect(() => {
-    let get = INVOICE.filter((item) => item.room_number == categoryTitle)[0];
-    setData(get);
-  }, [categoryTitle]);
+
+function User({userObject}) {
+  //console.log(userObject.dorm_fee);
   return (
-    <View style={styles.view}>
-      <Image
-        source={require("../../assets/bg_invoice.png")}
-        style={styles.background}
-      ></Image>
-
-      {data && (
-        <View style={styles.container}>
-          <Card style={[styles.cardContainer]} disabled={true}>
+    <View style={styles.container}>
+    { userObject && (
+      <Card style={[styles.cardContainer]} disabled={true}>
             <View style={styles.build}>
               <FontAwesome name="building" size={24} color="black" />
               <FontAwesome
@@ -48,7 +40,7 @@ const BillInvoice = ({ route, navigation }, props) => {
                 }}
               >
                 {" "}
-                ห้อง E205 05/2022
+                ห้อง {userObject.room_number} 05/2022
               </Text>
             </View>
 
@@ -112,9 +104,41 @@ const BillInvoice = ({ route, navigation }, props) => {
                 width: "105%",
                 alignSelf: "center",
                 top: "78%",
+                height: "120%",
+                //backgroundColor: 'red'
               }}
             >
-              <TableBill invoice={data} />
+              {/* <TableBill invoice={userObject} /> */}
+              <View style={{backgroundColor: '#e3effa', height: '13%', borderRadius: "10%", flexDirection: "row", justifyContent: "space-around", alignItems: "center",}}>
+                  <View>
+                  <Text style={{fontSize: "12px",fontWeight: "bold"}}>รายการ</Text>
+                  </View>
+                  <View>
+                  <Text  style={{fontSize: "12px",fontWeight: "bold"}}>จำนวนเงิน</Text>
+                  </View>
+              </View>
+              <View style={{ backgroundColor: '#f6f8fa', height: '90%', top: "-5%", zIndex: -100, flexDirection: "row", }}>
+                  <View style={{  flexDirection: "column",  height: "100%", width: "50%", zIndex: 100, justifyContent: "space-around", padding: 10, paddingTop: "5%"}}>
+                    <Text style={{fontSize: "12px",fontWeight: "bold"}}>ค่าเช่าห้อง(Room rate)</Text>
+                    <Text style={{fontSize: "12px",fontWeight: "bold"}}>ค่าน้ำ(Water rate)</Text> 
+                    <Text style={{fontSize: "12px",fontWeight: "bold"}}>ค่าไฟฟ้า(Electrical rate)</Text>
+                    <Text style={{fontSize: "12px",fontWeight: "bold"}}>ค่าส่วนกลาง(dorm free)</Text>
+                    <Text style={{fontSize: "12px",fontWeight: "bold"}}>ค่าใช้จ่ายเพิ่มเติม</Text>
+                    <Text style={{fontSize: "12px",fontWeight: "bold"}}>เงินรวมก่อนภาษี</Text>
+                    <Text style={{fontSize: "12px",fontWeight: "bold"}}>ภาษีมูลค่าเพิ่ม 7 %</Text>
+                    <Text style={{fontSize: "12px",fontWeight: "bold"}}>รวมสุทธิ</Text>
+                  </View>
+                  <View style={{  flexDirection: "column",  height: "100%", width: "50%", zIndex: 100, justifyContent: "space-around", padding: 10, paddingTop: "6%"}}>
+                      <TextInput keyboardType="numeric" style={styles.txtInput}>฿ {userObject.dorm_fee}</TextInput>
+                      <TextInput keyboardType="numeric" style={styles.txtInput}>฿ {""}</TextInput>
+                      <TextInput keyboardType="numeric"  style={styles.txtInput}>฿ {""}</TextInput>
+                      <TextInput keyboardType="numeric" style={styles.txtInput}>฿ {""}</TextInput>
+                      <TextInput keyboardType="numeric" style={styles.txtInput}>฿{""}</TextInput>
+                      <TextInput keyboardType="numeric" style={styles.txtInput}>฿ {""}</TextInput>
+                      <TextInput keyboardType="numeric" style={styles.txtInput}>฿ {""}</TextInput>
+                      <TextInput keyboardType="numeric" style={styles.txtInput}>฿ {""}</TextInput>
+                  </View>
+              </View>
             </View>
             <View
               style={{
@@ -128,15 +152,17 @@ const BillInvoice = ({ route, navigation }, props) => {
                 style={{
                   position: "absolute",
                   backgroundColor: "#EEEEEE",
-                  padding: 15,
+                  padding: 10,
                   borderRadius: 15,
                   width: "106%",
+                  flexDirection: "row"
                 }}
               >
                 <Text style={[styles.txtHead, { fontSize: "10px" }]}>
                   {" "}
                   หมายเหตุ:{" "}
                 </Text>
+                <TextInput style={{fontSize: "10px", padding: 2, paddingLeft: 5, top:-4, width: "80%", height: 25}} placeholder="กรอกข้อความที่นี่(ถ้ามี)"></TextInput>
               </View>
             </View>
             <TouchableOpacity
@@ -155,8 +181,65 @@ const BillInvoice = ({ route, navigation }, props) => {
               </Text>
             </TouchableOpacity>
           </Card>
+    )}
+          
         </View>
-      )}
+  );
+}
+
+const BillInvoice = ({ route, navigation }, props) => {
+  const { categoryTitle } = route.params;
+  const [data, setData] = useState();
+  const [user, setUser] = useState(null);
+  const [invoice, setInvoice] = useState(null);
+  useEffect(() => {
+    // const response = axios.get(`${baseUrl}/invoices`);
+    // setInvoice(response);
+    // console.log(response);
+    const url = `${baseUrl}/getInvoiceNum/${categoryTitle}`;
+    console.log("test");
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get(url);
+        if (response.status === 200) {
+          setInvoice(response.data);
+          //console.log(response.data);
+          // console.log("1"+categoryTitle);
+          return;
+        } else {
+          throw new Error("Failed to fetch users bill");
+        }
+      } catch (error) {
+          console.log('Data fetching cancelled bill');
+      }
+      
+    };
+    fetchUsers();
+    // console.log(invoice);
+    // let get = invoice.filter((item) => item.room_number == categoryTitle)[0];
+    // setData(get);
+    // console.log("2"+categoryTitle);
+  }, [categoryTitle]);
+  console.log(invoice);
+  // useEffect(() => {
+    
+  //     axios.get(`${baseUrl}/invoices`)
+  //     .then((response) => {
+  //       setUser(response.data[0]);
+  //       console.log(response.data[0]);
+  //     })
+  //     .catch(
+  //       (error) => console.log('error')
+  //     )
+  // }, []);
+  return (
+    <View style={styles.view}>
+      <Image
+        source={require("../../assets/bg_invoice.png")}
+        style={styles.background}
+      ></Image>
+       <User userObject={invoice} />
+      
     </View>
   );
 };
@@ -299,5 +382,8 @@ const styles = StyleSheet.create({
     width: "100%",
     top: -9,
   },
+  txtInput: {
+    borderWidth:1, padding: 3, paddingLeft: 5, borderRadius: 5,  borderColor: "#bedefa", width: "60%", height: 30, fontSize: "11px", fontWeight: 'bold', color: '#2D83FC'
+  }
 });
 export default BillInvoice;

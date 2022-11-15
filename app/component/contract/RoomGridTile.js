@@ -11,7 +11,7 @@ const RoomGridTile = (props) => {
       
     >
        <Text style={styles.title} numberOfLines={1}>
-          {props.title}
+          {props.title} 
         </Text>
       <View
         style={{ ...styles.container, ...{ backgroundColor: props.color } }}
@@ -28,9 +28,9 @@ const RoomGridTile = (props) => {
 
 const styles = StyleSheet.create({
   gridItem: {
-    flex: 1,
+    flex: 0.33,
     margin: 10,
-    width: 80,
+    // width: 80,
     height: 120,
   },
   container: {

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, Alert } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, Alert,Te } from "react-native";
 import { Table, TableWrapper, Row, Cell, Rows, Col } from "react-native-table-component";
 
 export default class TableInvoice extends Component {
@@ -21,17 +21,18 @@ export default class TableInvoice extends Component {
       ],
     };
   }
-
+  // style={{ ...styles.container, ...{ backgroundColor: props.color } }}
   render() {
     const state = this.state;
 
     return (
-        <View style={styles.container}>
+        <View style={{...styles.container}}>
         <Table >
-          <Row data={state.tableHead} flexArr={[1,1]} style={styles.head} textStyle={styles.textHead}/>
-          <TableWrapper style={styles.wrapper}>
-            <Col data={state.tableTitle} style={styles.title} heightArr={[35,35]} textStyle={styles.textTiltle}/>
-            <Rows data={state.tableData} flexArr={[1]} style={styles.row} textStyle={styles.text}/>
+          <Row data={state.tableHead} flexArr={[1,1]} style={{...styles.head}} textStyle={{...styles.textHead}}/>
+          <TableWrapper style={{...styles.wrapper}}>
+          <Col data={state.tableTitle} style={{...styles.title}} heightArr={[35,35]} textStyle={{...styles.textTiltle}}/>
+          <Rows data={state.tableData}  flexArr={[1]} style={{...styles.row}} textStyle={{...styles.text}}>
+          </Rows>
           </TableWrapper>
         </Table>
       </View>

@@ -2,12 +2,12 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import { View, Text, Image, StyleSheet, } from "react-native";
+import { View, Text, Image, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { Entypo } from '@expo/vector-icons';
-import { Fontisto } from '@expo/vector-icons';
+import { Entypo } from "@expo/vector-icons";
+import { Fontisto } from "@expo/vector-icons";
 
-import MainLessor from '../screen/lessor/MainLessor'
+import MainLessor from "../screen/lessor/MainLessor";
 import AddParcel from "../screen/lessor/AddParcel";
 import CancelContract from "../screen/lessor/CancelContract";
 import CheckRoomDetail from "../screen/lessor/CheckRoomDetail";
@@ -22,6 +22,8 @@ import ReserveRoom from "../screen/lessor/ReserveRoom";
 import UserProfile from "../screen/lessor/UserProfile";
 import ManageInvoice from "../screen/lessor/ManageInvoice";
 import BillInvoice from "../screen/lessor/BillInvoice";
+import AnnouceNews from "../screen/lessor/AnnouceNews";
+import NewsDetail from "../screen/lessor/NewsDetail";
 
 import { FontAwesome } from "@expo/vector-icons";
 import AddRoomType from "../screen/lessor/AddRoomType";
@@ -36,7 +38,8 @@ const LessorNavigation = () => {
   const LessorsFavTabNavigator = createBottomTabNavigator();
   const MainTabNavigator = createNativeStackNavigator();
   const LessorsNavigator = createNativeStackNavigator();
-  
+  const NewsNavigator = createNativeStackNavigator();
+
   const listIconToOpenDrawer = (navigation) => (
     <FontAwesome
       name="bars"
@@ -89,97 +92,92 @@ const LessorNavigation = () => {
           name="Add new type room"
           component={AddRoomType}
           options={({ route }) => {
-            return {
-            };
+            return {};
           }}
         />
       </RoomNavigator.Navigator>
     );
   };
 
-  
-//Stack
-const MyLessorsNavigator = () => {
-  return (
-    <LessorsNavigator.Navigator
-      initialRouteName="MainLessor"
-      screenOptions={{
-        headerShown: false,
-        headerTintColor: "white",
-      }}
-    >
-      <LessorsNavigator.Screen
-        name="MainLessor"
-        component={MainLessor}
-        options={({ route, navigation }) => ({
-          drawerLabel: "Main",
-          title: '',
-          headerShown: true,
-          headerLeft: () => listIconToOpenDrawer2(navigation),
-          headerBackground: () => (
-            <View style={{backgroundColor: '#7dd0f5', height: '100%'}}>
+  //Stack
+  const MyLessorsNavigator = () => {
+    return (
+      <LessorsNavigator.Navigator
+        initialRouteName="MainLessor"
+        screenOptions={{
+          headerShown: false,
+          headerTintColor: "white",
+        }}
+      >
+        <LessorsNavigator.Screen
+          name="MainLessor"
+          component={MainLessor}
+          options={({ route, navigation }) => ({
+            drawerLabel: "Main",
+            title: "",
+            headerShown: true,
+            headerLeft: () => listIconToOpenDrawer2(navigation),
+            headerBackground: () => (
+              <View style={{ backgroundColor: "#7dd0f5", height: "100%" }}>
                 <Image
-            source={require("../assets/logo.png")}
-            style={styles.logo}
-          ></Image>
-          </View>
-          )
-        })}
-      />
-      <LessorsNavigator.Screen
-        name="Invoices"
-        component={ManageInvoiceNavigation}
-        options={({ route }) => ({
-          // title: route.params.categoryTitle,
-        })}
-      />
-      <LessorsNavigator.Screen
-        name="ManageParcel"
-        component={ManageParcel}
-        options={({ route }) => ({
-          // title: route.params.categoryTitle,
-        })}
-      />
+                  source={require("../assets/logo.png")}
+                  style={styles.logo}
+                ></Image>
+              </View>
+            ),
+          })}
+        />
+        <LessorsNavigator.Screen
+          name="Invoices"
+          component={ManageInvoiceNavigation}
+          options={({ route }) => ({
+            // title: route.params.categoryTitle,
+          })}
+        />
+        <LessorsNavigator.Screen
+          name="ManageParcel"
+          component={ManageParcel}
+          options={({ route }) => ({
+            // title: route.params.categoryTitle,
+          })}
+        />
 
-      <LessorsNavigator.Screen
-        name="CheckRoom"
-        component={RoomNavigation}
-        options={({ route }) => ({
-          // title: route.params.categoryTitle,
-        })}
-      />
-      <LessorsNavigator.Screen
-        name="Contract"
-        component={CancelContract}
-        options={({ route, navigation }) => ({
-          // title: route.params.categoryTitle,
-          title: 'Contract',
-          headerStyle: { backgroundColor: 'transparent'},
-          headerTintColor : 'white',
-          headerShown: true
+        <LessorsNavigator.Screen
+          name="CheckRoom"
+          component={RoomNavigation}
+          options={({ route }) => ({
+            // title: route.params.categoryTitle,
+          })}
+        />
+        <LessorsNavigator.Screen
+          name="Contract"
+          component={CancelContract}
+          options={({ route, navigation }) => ({
+            // title: route.params.categoryTitle,
+            title: "Contract",
+            headerStyle: { backgroundColor: "transparent" },
+            headerTintColor: "white",
+            headerShown: true,
+          })}
+        />
+        <LessorsNavigator.Screen
+          name="RoomStatus"
+          component={ContractNavigation}
+          options={({ route }) => ({
+            // title: route.params.mealTitle,
+          })}
+        />
 
-        })}
-      />
-      <LessorsNavigator.Screen
-        name="RoomStatus"
-        component={ContractNavigation}
-        options={({ route }) => ({
-          // title: route.params.mealTitle,
-          
-        })}
-      />
-
-      <LessorsNavigator.Screen
-        name="Meter"
-        component={RecordMeter}
-        options={({ route }) => ({
-          // title: route.params.categoryTitle,
-        })}
-      />
-    </LessorsNavigator.Navigator>
-  );
-};
-
+        <LessorsNavigator.Screen
+          name="Meter"
+          component={RecordMeter}
+          options={({ route }) => ({
+            // title: route.params.categoryTitle,
+          })}
+        />
+      </LessorsNavigator.Navigator>
+    );
+  };
 
   const MyLessorsFavTabNavigator = () => {
     return (
@@ -187,12 +185,15 @@ const MyLessorsNavigator = () => {
         initialRouteName="Lessors"
         screenOptions={{
           headerShown: false,
-      //     tabBarStyle: {
-      //   backgroundColor: '#d1cfcf',
-      //   borderTopColor: 'transparent',
-      // },
+
+          tabBarActiveTintColor: "white",
+          tabBarInactiveTintColor: "red",
+          //     tabBarStyle: {
+          //   backgroundColor: '#d1cfcf',
+          //   borderTopColor: 'transparent',
+          // },
+
         }}
-        
       >
         <LessorsFavTabNavigator.Screen
           name="Lessors"
@@ -202,7 +203,7 @@ const MyLessorsNavigator = () => {
               return <Entypo name="home" size={24} color={color} />;
             },
             tabBarLabel: () => {
-              return <Text style={{fontSize: "12px"}}>หน้าหลัก</Text>;
+              return <Text style={{ fontSize: "12px" }}>หน้าหลัก</Text>;
             },
           }}
         />
@@ -214,12 +215,11 @@ const MyLessorsNavigator = () => {
               return <Fontisto name="bell-alt" size={24} color={color} />;
             },
             tabBarLabel: () => {
-              return <Text  style={{fontSize: "12px"}}>การแจ้งเตือน</Text>;
+              return <Text style={{ fontSize: "12px" }}>การแจ้งเตือน</Text>;
             },
           }}
         />
       </LessorsFavTabNavigator.Navigator>
-      
     );
   };
 
@@ -253,16 +253,16 @@ const MyLessorsNavigator = () => {
   const ContractNavigation = () => {
     return (
       <ContractNavigator.Navigator>
-      <ContractNavigator.Screen
-         name="CheckRoomsStatus"
-        component={CheckRoomsStatus}
-        options={({ route, navigation }) => {
-          return {
-            title: "Room Status",
-            headerShown: true,
-            headerLeft: () => listIconToOpenDrawer2(navigation),
-          };
-        }}
+        <ContractNavigator.Screen
+          name="CheckRoomsStatus"
+          component={CheckRoomsStatus}
+          options={({ route, navigation }) => {
+            return {
+              title: "Room Status",
+              headerShown: true,
+              headerLeft: () => listIconToOpenDrawer2(navigation),
+            };
+          }}
         />
         <ContractNavigator.Screen
           name="ReserveRoom"
@@ -270,7 +270,7 @@ const MyLessorsNavigator = () => {
           options={({ route, navigation }) => {
             return {
               title: "ห้อง " + route.params.categoryTitle,
-              headerTintColor: '#47C5FC',
+              headerTintColor: "#47C5FC",
             };
           }}
         />
@@ -280,7 +280,7 @@ const MyLessorsNavigator = () => {
           options={({ route, navigation }) => {
             return {
               title: "ห้อง " + route.params.categoryTitle,
-              headerTintColor: '#47C5FC',
+              headerTintColor: "#47C5FC",
             };
           }}
         />
@@ -293,19 +293,18 @@ const MyLessorsNavigator = () => {
             };
           }}
         />
-        <ContractNavigator.Screen 
+        <ContractNavigator.Screen
           name="UserProfile"
           component={UserProfile}
           options={({ route, navigation }) => {
             return {
               title: "ห้อง " + route.params.categoryTitle,
               headerShown: true,
-              headerStyle: { backgroundColor: 'transparent'},
-              headerTintColor : 'white',
+              headerStyle: { backgroundColor: "transparent" },
+              headerTintColor: "white",
             };
           }}
         />
-
       </ContractNavigator.Navigator>
     );
   };
@@ -313,25 +312,27 @@ const MyLessorsNavigator = () => {
   const ManageInvoiceNavigation = () => {
     return (
       <BillNavigator.Navigator>
-      <BillNavigator.Screen
-         name="ManageInvoice"
-        component={ManageInvoice}
-        options={({ route, navigation }) => {
-          return {
-            title: "Manage Invoice",
-            headerShown: true,
-            headerLeft: () => listIconToOpenDrawer2(navigation),
-          };
-        }}
-        />
-        <BillNavigator.Screen name="BillInvoice" component={BillInvoice}
-        options={({ route, navigation }) => {
+        <BillNavigator.Screen
+          name="ManageInvoice"
+          component={ManageInvoice}
+          options={({ route, navigation }) => {
             return {
-              title: "ห้อง " + route.params.categoryTitle,
-              headerTintColor: '#47C5FC',
+              title: "Manage Invoice",
+              headerShown: true,
+              headerLeft: () => listIconToOpenDrawer2(navigation),
             };
           }}
-         />
+        />
+        <BillNavigator.Screen
+          name="BillInvoice"
+          component={BillInvoice}
+          options={({ route, navigation }) => {
+            return {
+              title: "ห้อง " + route.params.categoryTitle,
+              headerTintColor: "#47C5FC",
+            };
+          }}
+        />
       </BillNavigator.Navigator>
     );
   };
@@ -354,14 +355,39 @@ const MyLessorsNavigator = () => {
     );
   };
 
+  const NewsNavigation = () => {
+    return (
+      <NewsNavigator.Navigator initialRouteName="AnnouceNews">
+        <NewsNavigator.Screen
+          name="AnnouceNews"
+          component={AnnouceNews}
+          options={({ route, navigation }) => {
+            return {
+              title: "Annouce News",
+              headerLeft: () => listIconToOpenDrawer(navigation),
+            };
+          }}
+        />
+        <NewsNavigator.Screen
+          name="NewsDetail"
+          component={NewsDetail}
+          options={({ route }) => ({
+            title: route.params.title.toString(),
+            headerShown: true,
+          })}
+        />
+      </NewsNavigator.Navigator>
+    );
+  };
+
   return (
-    <LessorNavigator.Navigator initialRouteName="Main"
+    <LessorNavigator.Navigator
+      initialRouteName="Main"
       screenOptions={({ route, navigation }) => {
         return {
           headerShown: false,
           // headerStyle: { backgroundColor: '#47C5FC'},
           // headerTintColor : 'white',
-         
         };
       }}
     >
@@ -370,7 +396,7 @@ const MyLessorsNavigator = () => {
         component={MyLessorsFavTabNavigator}
         options={({ route, navigation }) => ({
           drawerLabel: "Main",
-          title: '',
+          title: "",
           headerShown: false,
         })}
       />
@@ -383,8 +409,8 @@ const MyLessorsNavigator = () => {
           return {
             title: "Contract",
             headerShown: true,
-            headerStyle: { backgroundColor: 'transparent'},
-            headerTintColor : 'white',
+            headerStyle: { backgroundColor: "transparent" },
+            headerTintColor: "white",
             headerLeft: () => listIconToOpenDrawer3(navigation),
           };
         }}
@@ -400,7 +426,10 @@ const MyLessorsNavigator = () => {
           };
         }}
       /> */}
-      <LessorNavigator.Screen name="Room Status" component={ContractNavigation} />
+      <LessorNavigator.Screen
+        name="Room Status"
+        component={ContractNavigation}
+      />
       <LessorNavigator.Screen
         name="RecordMeter"
         component={RecordMeter}
@@ -412,8 +441,9 @@ const MyLessorsNavigator = () => {
           };
         }}
       />
-      <LessorNavigator.Screen name="ManageInvoices" component={ManageInvoiceNavigation} 
-       
+      <LessorNavigator.Screen
+        name="ManageInvoices"
+        component={ManageInvoiceNavigation}
       />
       <LessorNavigator.Screen name="Parcel" component={ParcelNavigation} />
       <LessorNavigator.Screen
@@ -427,15 +457,18 @@ const MyLessorsNavigator = () => {
           };
         }}
       />
+      <LessorNavigator.Screen name="News" component={NewsNavigation} />
+      
     </LessorNavigator.Navigator>
   );
 };
+
 const styles = StyleSheet.create({
   logo: {
     width: 160,
     height: 50,
     top: "40%",
-    alignSelf: "center"
+    alignSelf: "center",
   },
-})
+});
 export default LessorNavigation;

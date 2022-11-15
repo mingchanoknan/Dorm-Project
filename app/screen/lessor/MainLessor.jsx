@@ -23,7 +23,8 @@ const MainLessor = ({ route, navigation }) => {
       {/* <View style={styles.header2}>
       </View> */}
       <View style={[styles.container]}>
-        <ScrollView>
+        <ScrollView style={{ flex: 1 }}>
+  
           <View
             style={{
               // backgroundColor: 'red',
@@ -55,14 +56,22 @@ const MainLessor = ({ route, navigation }) => {
               }}
             >
               <View style={styles.viewCircle}>
-                <TouchableOpacity style={styles.circle}  onPress={() => navigation.navigate("ManageInvoices")}>
+                <TouchableOpacity
+                  style={styles.circle}
+                  onPress={() => navigation.navigate("ManageInvoices")}
+                >
                   <Ionicons name="document-text" size={24} color="white" />
                 </TouchableOpacity>
                 <Text style={styles.headTxt}>บิลค่าเช่า</Text>
               </View>
 
               <View style={styles.viewCircle}>
-                <TouchableOpacity style={styles.circle} onPress={() => navigation.navigate("Parcel")}>
+
+                <TouchableOpacity
+                  style={styles.circle}
+                  onPress={() => navigation.navigate("ManageParcel")}
+                >
+
                   <Feather name="box" size={24} color="white" />
                 </TouchableOpacity>
                 <Text style={styles.headTxt}>พัสดุ</Text>
@@ -94,7 +103,12 @@ const MainLessor = ({ route, navigation }) => {
               height: "20%",
             }}
           >
-            <TouchableOpacity style={styles.box} onPress={() => navigation.navigate("Room")}>
+
+            <TouchableOpacity
+              style={styles.box}
+              onPress={() => navigation.navigate("CheckRoom")}
+            >
+
               <Image
                 source={require("../../assets/home2.png")}
                 style={{ width: "30%", height: "40%" }}
@@ -104,7 +118,11 @@ const MainLessor = ({ route, navigation }) => {
               </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.box} onPress={() => navigation.navigate("CancelContract")}>
+
+            <TouchableOpacity
+              style={styles.box}
+              onPress={() => navigation.navigate("Contract")}
+            >
               <Image
                 source={require("../../assets/contract2.png")}
                 style={{ width: "30%", height: "40%" }}
@@ -114,7 +132,11 @@ const MainLessor = ({ route, navigation }) => {
               </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.box} onPress={() => navigation.navigate("Room Status")}>
+
+            <TouchableOpacity
+              style={styles.box}
+              onPress={() => navigation.navigate("RoomStatus")}
+
               <Image
                 source={require("../../assets/room2.png")}
                 style={{ width: "30%", height: "40%" }}
@@ -135,7 +157,12 @@ const MainLessor = ({ route, navigation }) => {
               height: "20%",
             }}
           >
-            <TouchableOpacity style={styles.box} onPress={() => navigation.navigate("RecordMeter")}>
+
+            <TouchableOpacity
+              style={styles.box}
+              onPress={() => navigation.navigate("Meter")}
+            >
+
               <Image
                 source={require("../../assets/faucet2.png")}
                 style={{ width: "30%", height: "40%" }}
@@ -145,7 +172,10 @@ const MainLessor = ({ route, navigation }) => {
               </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.box} onPress={() => navigation.navigate("Invoices")}>
+            <TouchableOpacity
+              style={styles.box}
+              onPress={() => navigation.navigate("Invoices")}
+            >
               <Image
                 source={require("../../assets/bill4.png")}
                 style={{ width: "30%", height: "40%" }}
@@ -155,7 +185,11 @@ const MainLessor = ({ route, navigation }) => {
               </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.box} onPress={() => navigation.navigate("Parcel")}>
+
+            <TouchableOpacity
+              style={styles.box}
+              onPress={() => navigation.navigate("ManageParcel")}
+            >
               <Image
                 source={require("../../assets/box2.png")}
                 style={{ width: "30%", height: "40%" }}
@@ -254,6 +288,7 @@ const MainLessor = ({ route, navigation }) => {
             </View>
           </View>
           {/* <Divider style={{zIndex: 100, width: "100%", backgroundColor: '#d9d9d9', top: "5%"}} /> */}
+          <View></View>
           <View
             style={{
               backgroundColor: "white",
@@ -261,50 +296,118 @@ const MainLessor = ({ route, navigation }) => {
               top: "5%",
               shadowColor: "gray",
               shadowOffset: {
-	width: 0,
-	height: 1,
-},
-shadowOpacity: 0.22,
-shadowRadius: 2.22,
+                width: 0,
+                height: 1,
+              },
+              shadowOpacity: 0.22,
+              shadowRadius: 2.22,
 
-elevation: 3,
+              elevation: 3,
             }}
           >
-            <Text style={{ fontSize: "15px", fontWeight: "bold" }}>รายรับ เดือน พฤศจิกายน 2565</Text>
+            <Text style={{ fontSize: "15px", fontWeight: "bold" }}>
+              รายรับ เดือน พฤศจิกายน 2565
+            </Text>
           </View>
-          <View  style={{
-             
+          <View
+            style={{
               flexDirection: "row",
               padding: 10,
-              top: "8%"}}>
-              <View style={{width: "50%"}}>
-            <Text  style={{ fontSize: "13px", fontWeight: "bold" }}>ผู้เช่าชำระใบแจ้งหนี้</Text></View>
-            <View style={{width: "50%"}}>
-            <Text  style={{ fontSize: "16px", fontWeight: "bold", textAlign: "right", color: "#ffc014" }}>฿10,000</Text></View>
+              top: "8%",
+            }}
+          >
+            <View style={{ width: "50%" }}>
+              <Text style={{ fontSize: "13px", fontWeight: "bold" }}>
+                ผู้เช่าชำระใบแจ้งหนี้
+              </Text>
+            </View>
+            <View style={{ width: "50%" }}>
+              <Text
+                style={{
+                  fontSize: "16px",
+                  fontWeight: "bold",
+                  textAlign: "right",
+                  color: "#ffc014",
+                }}
+              >
+                ฿10,000
+              </Text>
+            </View>
           </View>
-          <Divider style={{zIndex: 100, width: "100%", backgroundColor: '#d9d9d9', top: "7%"}} />
-          <View  style={{
-             
-             flexDirection: "row",
-             padding: 10,
-             top: "10%"}}>
-             <View style={{width: "50%"}}>
-           <Text  style={{ fontSize: "13px", fontWeight: "bold" }}>ค่าน้ำที่ใช้ในเดือนนี้</Text></View>
-           <View style={{width: "50%"}}>
-           <Text  style={{ fontSize: "16px", fontWeight: "bold", textAlign: "right", color: "#ffc014" }}>฿10,000</Text></View>
-         </View>
-         <Divider style={{zIndex: 100, width: "100%", backgroundColor: '#d9d9d9', top: "9%"}} />
-         <View  style={{
-             
-             flexDirection: "row",
-             padding: 10,
-             top: "13%"}}>
-             <View style={{width: "50%"}}>
-           <Text  style={{ fontSize: "13px", fontWeight: "bold" }}>ค่าไฟที่ใช้ในเดือนนี้</Text></View>
-           <View style={{width: "50%"}}>
-           <Text  style={{ fontSize: "16px", fontWeight: "bold", textAlign: "right", color: "#ffc014" }}>฿10,000</Text></View>
-         </View>
-         <Divider style={{zIndex: 100, width: "100%", backgroundColor: '#d9d9d9', top: "11%"}} />
+          <Divider
+            style={{
+              zIndex: 100,
+              width: "100%",
+              backgroundColor: "#d9d9d9",
+              top: "7%",
+            }}
+          />
+          <View
+            style={{
+              flexDirection: "row",
+              padding: 10,
+              top: "10%",
+            }}
+          >
+            <View style={{ width: "50%" }}>
+              <Text style={{ fontSize: "13px", fontWeight: "bold" }}>
+                ค่าน้ำที่ใช้ในเดือนนี้
+              </Text>
+            </View>
+            <View style={{ width: "50%" }}>
+              <Text
+                style={{
+                  fontSize: "16px",
+                  fontWeight: "bold",
+                  textAlign: "right",
+                  color: "#ffc014",
+                }}
+              >
+                ฿10,000
+              </Text>
+            </View>
+          </View>
+          <Divider
+            style={{
+              zIndex: 100,
+              width: "100%",
+              backgroundColor: "#d9d9d9",
+              top: "9%",
+            }}
+          />
+          <View
+            style={{
+              flexDirection: "row",
+              padding: 10,
+              top: "13%",
+            }}
+          >
+            <View style={{ width: "50%" }}>
+              <Text style={{ fontSize: "13px", fontWeight: "bold" }}>
+                ค่าไฟที่ใช้ในเดือนนี้
+              </Text>
+            </View>
+            <View style={{ width: "50%" }}>
+              <Text
+                style={{
+                  fontSize: "16px",
+                  fontWeight: "bold",
+                  textAlign: "right",
+                  color: "#ffc014",
+                }}
+              >
+                ฿10,000
+              </Text>
+            </View>
+          </View>
+          <Divider
+            style={{
+              zIndex: 100,
+              width: "100%",
+              backgroundColor: "#d9d9d9",
+              top: "11%",
+            }}
+          />
         </ScrollView>
       </View>
     </View>
