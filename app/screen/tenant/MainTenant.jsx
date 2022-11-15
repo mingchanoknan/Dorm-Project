@@ -18,10 +18,29 @@ import RoomGridTile from "../../component/contract/RoomGridTile";
 import { RENT } from "../../dummy/RENT";
 import { FontAwesome } from "@expo/vector-icons";
 import { NEWS } from "../../dummy/NEWS";
-import News from "../../component/card/newstenant";
+import News from "../../component/annoucenews/news";
+import AnnouceNews from "./AnnouceNews";
 const MainTenant = ({ route, navigation }) => {
   const annNews = NEWS;
   const [text, setText] = React.useState("");
+
+  const renderGridItem = (itemData) => {
+    console.log(itemData);
+    return (
+      <News
+        item={itemData}
+        width={150}
+        numberOfLines={2}
+        onSelect={() => {
+          navigation.navigate("NewsDetail",{
+            title : itemData.item.title,
+            newsId: itemData.item.id,
+            data : itemData.item
+          });
+        }}
+      />
+    );
+  };
   return (
     <View style={styles.view}>
       {/* <View style={styles.header2}>
@@ -30,7 +49,7 @@ const MainTenant = ({ route, navigation }) => {
         <ScrollView>
           <View
             style={{
-            //   backgroundColor: "red",
+              //   backgroundColor: "red",
               width: "100%",
               height: "10%",
               alignItems: "center",
@@ -59,21 +78,30 @@ const MainTenant = ({ route, navigation }) => {
               }}
             >
               <View style={styles.viewCircle}>
-                <TouchableOpacity style={styles.circle} onPress={() => navigation.navigate("InvoiceBill")}>
+                <TouchableOpacity
+                  style={styles.circle}
+                  onPress={() => navigation.navigate("InvoiceBill")}
+                >
                   <Ionicons name="document-text" size={24} color="white" />
                 </TouchableOpacity>
                 <Text style={styles.headTxt}>บิลค่าเช่า</Text>
               </View>
 
               <View style={styles.viewCircle}>
-                <TouchableOpacity style={styles.circle} onPress={() => navigation.navigate("Parcel")}>
+                <TouchableOpacity
+                  style={styles.circle}
+                  onPress={() => navigation.navigate("Parcel")}
+                >
                   <Feather name="box" size={24} color="white" />
                 </TouchableOpacity>
                 <Text style={styles.headTxt}>พัสดุ</Text>
               </View>
 
               <View style={styles.viewCircle}>
-                <TouchableOpacity style={styles.circle} onPress={() => navigation.navigate("Reports")}>
+                <TouchableOpacity
+                  style={styles.circle}
+                  onPress={() => navigation.navigate("Reports")}
+                >
                   <AntDesign name="notification" size={24} color="white" />
                 </TouchableOpacity>
                 <Text style={styles.headTxt}>แจ้งเรื่อง</Text>
@@ -88,15 +116,19 @@ const MainTenant = ({ route, navigation }) => {
             </View>
           </View>
 
-          
-          
-            <ScrollView style={{top: "2%"}}>
-            {annNews.map((item, index) => (
-                  <News data={item} key={index} navigation={navigation} />
-                ))}
-                </ScrollView>
-        
-        {/* <ScrollView style={{ flex: 1 }}>
+          {/* <ScrollView style={{ top: "2%" }}> */}
+            <View style={styles.newsContent}>
+              <FlatList
+                data={NEWS}
+                renderItem={renderGridItem}
+                numColumns={2}
+                keyExtractor={(item) => item.id}
+                navigation={navigation}
+              />
+            </View>
+          {/* </ScrollView> */}
+
+          {/* <ScrollView style={{ flex: 1 }}>
         <View style={[{ alignItems: "center" }]}>
           {annNews.map((item, index) => (
             <View key={index}>
@@ -105,7 +137,6 @@ const MainTenant = ({ route, navigation }) => {
           ))}
         </View>
       </ScrollView> */}
-          
         </ScrollView>
       </View>
     </View>
@@ -237,5 +268,11 @@ const styles = StyleSheet.create({
   //     height: 600,
   //     paddingBottom: 50,
   //   },
+  newsContent: {
+    width: "100%",
+    height: 600,
+    paddingBottom: 50,
+    alignItems: "center",
+  },
 });
 export default MainTenant;
