@@ -40,11 +40,6 @@ const AnnouceNews = ({ navigation }) => {
       ></Image>
 
       <View style={styles.newsContent}>
-        {/* <ScrollView>
-          {annNews.map((item, index) => (
-            <News data={item} navigation={navigation} />
-          ))}
-        </ScrollView> */}
         <FlatList
         data={NEWS}
         renderItem={renderGridItem}
