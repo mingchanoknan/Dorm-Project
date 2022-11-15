@@ -3,9 +3,9 @@ import { Button, View, TouchableOpacity,Text } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { AntDesign } from "@expo/vector-icons";
 
-const Example = () => {
+const Example = (props) => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [date, setDate] = React.useState(new Date());
+  const [date, setDate] = useState(new Date());
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -18,6 +18,8 @@ const Example = () => {
   const handleConfirm = (date) => {
     //console.warn("A date has been picked: ", date);
     setDate(date);
+    props.onReserve(date.toISOString().slice(0, 10))
+    console.log(date.toISOString().slice(0, 10));
     hideDatePicker();
   };
 

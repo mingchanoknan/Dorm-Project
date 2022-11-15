@@ -1,22 +1,16 @@
-import { NavigationContainer } from "@react-navigation/native";
-import LessorNavigation from "./app/navigation/LessorNavigation";
-import TenantNavigation from "./app/navigation/TenantNavigation";
-import LoginNavigation from "./app/navigation/LoginNavigation";
-import Login from "./app/screen/Login";
-import Register from "./app/screen/Register";
-import ManageAccount from "./app/screen/MangeAccount";
-import AnnouceNews from "./app/screen/lessor/AnnouceNews";
+import { NavigationContainer } from '@react-navigation/native';
+import LessorNavigation from './app/navigation/LessorNavigation';
+import TenantNavigation from './app/navigation/TenantNavigation';
+import Login from './app/screen/Login';
+import Register from './app/screen/Register';
+import ManageAccount from './app/screen/MangeAccount';
+import AnnouceNews from './app/screen/tenant/AnnouceNews';
 import NewsDetail from "./app/screen/lessor/NewsDetail";
 import CreatedPost from "./app/component/annoucenews/createdPost";
-import {
-  ApplicationProvider,
-  IconRegistry,
-  Layout,
-  Text,
-} from "@ui-kitten/components";
-import * as eva from "@eva-design/eva";
+import { ApplicationProvider, IconRegistry, Layout, Text } from '@ui-kitten/components';
+import * as eva from '@eva-design/eva';
 
-import axios from "axios";
+import axios from 'axios';
 
 // const baseUrl = 'https://reqres.in'
 

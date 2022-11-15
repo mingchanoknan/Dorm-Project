@@ -1,6 +1,7 @@
 import React from "react";
 import { TouchableOpacity, View, Text, StyleSheet } from "react-native";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 const BillGridTile = (props) => {
   return (
@@ -18,7 +19,8 @@ const BillGridTile = (props) => {
         style={{ ...styles.container, ...{ backgroundColor: props.color } }}
       >
         {/* <Text>{itemData.item.title}</Text> */}
-        <MaterialCommunityIcons name="email-newsletter" size={45} color="#fafae1" />
+        { props.status === 'unavailable' && (<MaterialCommunityIcons name="email-newsletter" size={45} color="#fafae1" />)}
+        { props.status != 'unavailable' && (<FontAwesome5 name="user-alt-slash" size={35} color="#fafae1" />)}
       </View>
     </TouchableOpacity>
   );
@@ -26,7 +28,7 @@ const BillGridTile = (props) => {
 
 const styles = StyleSheet.create({
   gridItem: {
-    flex: 1,
+    flex: 0.33,
     margin: 10,
     width: 80,
     height: 120,

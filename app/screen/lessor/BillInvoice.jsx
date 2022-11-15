@@ -12,9 +12,10 @@ import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import { IndexPath, Select, SelectItem } from "@ui-kitten/components";
 import { INVOICE } from "../../dummy/INVOICE";
 import TableBill from "../../component/invoice/tableBill";
+import {baseUrl} from "@env"
 import axios from 'axios';
 
-const baseUrl ='http://192.168.1.117:8080';
+
 function User({userObject}) {
   //console.log(userObject.dorm_fee);
   return (
@@ -128,14 +129,14 @@ function User({userObject}) {
                     <Text style={{fontSize: "12px",fontWeight: "bold"}}>รวมสุทธิ</Text>
                   </View>
                   <View style={{  flexDirection: "column",  height: "100%", width: "50%", zIndex: 100, justifyContent: "space-around", padding: 10, paddingTop: "6%"}}>
-                      <TextInput style={styles.txtInput}>฿ {userObject.dorm_fee}</TextInput>
-                      <TextInput style={styles.txtInput}>฿ {""}</TextInput>
-                      <TextInput style={styles.txtInput}>฿ {""}</TextInput>
-                      <TextInput style={styles.txtInput}>฿ {""}</TextInput>
-                      <TextInput style={styles.txtInput}>฿{""}</TextInput>
-                      <TextInput style={styles.txtInput}>฿ {""}</TextInput>
-                      <TextInput style={styles.txtInput}>฿ {""}</TextInput>
-                      <TextInput style={styles.txtInput}>฿ {""}</TextInput>
+                      <TextInput keyboardType="numeric" style={styles.txtInput}>฿ {userObject.dorm_fee}</TextInput>
+                      <TextInput keyboardType="numeric" style={styles.txtInput}>฿ {""}</TextInput>
+                      <TextInput keyboardType="numeric"  style={styles.txtInput}>฿ {""}</TextInput>
+                      <TextInput keyboardType="numeric" style={styles.txtInput}>฿ {""}</TextInput>
+                      <TextInput keyboardType="numeric" style={styles.txtInput}>฿{""}</TextInput>
+                      <TextInput keyboardType="numeric" style={styles.txtInput}>฿ {""}</TextInput>
+                      <TextInput keyboardType="numeric" style={styles.txtInput}>฿ {""}</TextInput>
+                      <TextInput keyboardType="numeric" style={styles.txtInput}>฿ {""}</TextInput>
                   </View>
               </View>
             </View>
@@ -206,10 +207,10 @@ const BillInvoice = ({ route, navigation }, props) => {
           // console.log("1"+categoryTitle);
           return;
         } else {
-          throw new Error("Failed to fetch users");
+          throw new Error("Failed to fetch users bill");
         }
       } catch (error) {
-          console.log('Data fetching cancelled');
+          console.log('Data fetching cancelled bill');
       }
       
     };
