@@ -6,7 +6,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 const TimePicker = () => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [time, setTime] = useState(new Date(Date.now()));
-
+  console.log(time.toLocaleTimeString('en-US'));
   const showDatePicker = () => {
     setDatePickerVisibility(true);
   };

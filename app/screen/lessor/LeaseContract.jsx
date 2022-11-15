@@ -1,18 +1,107 @@
-import React, {useState} from "react";
-import { StyleSheet, View, TextInput, ScrollView, Alert, } from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, View, TextInput, ScrollView, Alert } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Card, Layout, Text, Divider } from "@ui-kitten/components";
 import DatePicker from "../../component/contract/DatePicker";
-import { FontAwesome } from "@expo/vector-icons";
 import { Checkbox } from "react-native-paper";
+import { baseUrl } from "@env";
+import axios from "axios";
 
 const LeaseContract = ({ route, navigation }) => {
   const [checked, setChecked] = useState(false);
+  const { categoryId, categoryTitle, reserveFname, reserveLname } = route.params;
+  const [lease_date, setLeaseDate] = useState(new Date());
+  const [first_name, setFirst_name] = useState(reserveFname);
+  const [last_name, setLast_name] = useState(reserveLname);
+  const [address, setAddress] = useState("");
+  const [phone, setPhone] = useState("");
+  const [start_date, setStart_date] = useState("");
+  const [end_date, setEnd_date] = useState("");
+  const [room_price, setRoom_price] = useState(0);
+  const [room_number, setRoom_number] = useState("");
+  const [room_type, setRoom_type] = useState("");
+  const [room, setRoom] = useState(null);
+  const [status, setStatus] = useState("rent");
+  const [statusUpdate, setStatusUpdate] = useState("unavailable");
+  const [rentStatus, setRentStatus] = useState("rent");
+
+  useEffect(() => {
+    const url = `${baseUrl}/getRoomNum/${categoryTitle}`;
+
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get(url);
+        if (response.status === 200) {
+          setRoom(response.data);
+          setRoom_price(response.data.room_price);
+          setRoom_type(response.data.room_type);
+          setRoom_number(response.data.room_number);
+          // console.log(response.data.room_price);
+          
+          return;
+        } else {
+          throw new Error("Failed to fetch users");
+        }
+      } catch (error) {
+        console.log("Data fetching cancelled detail");
+      }
+    };
+    fetchUsers();
+  }, [categoryTitle]);
+  
+  const onChangeLeaseHandler = (date) => {
+    setLeaseDate(date);
+  };
+
+  const onStart_dateHandler = (date) => {
+    setStart_date(date);
+    // console.log("----------");
+    // console.log(start_date);
+  };
+
+  const onEnd_dateHandler = (date) => {
+    setEnd_date(date);
+  };
+
+  const onContractFormHandler = async (event) => {
+    try {
+      const response = await axios.post(`${baseUrl}/addContract`, {
+        first_name,
+        last_name,
+        address,
+        phone,
+        start_date,
+        end_date,
+        room_price,
+        room_number,
+        room_type,
+        lease_date,
+        status,
+      });
+
+      const update = await axios.put(
+        `${baseUrl}/updateStatus/${categoryTitle}/${statusUpdate}`
+      );
+
+      const cancle = await axios.put(`${baseUrl}/updateStatusReserve/${categoryId}/${rentStatus}`);
+      
+      if (update.status === 200 && response.status === 200 && cancle.status === 200) {
+        alert("ทำสัญญาสำเร็จ");
+        // navigation.dispatch(
+        //   StackActions.replace("DetailReserve", { categoryTitle: room_number })
+        // );
+      } else {
+        throw new Error("An error ");
+      }
+    } catch (error) {
+      alert(error);
+    }
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.container2}>
-        <ScrollView style={{ flex: 1}}>
+        <ScrollView style={{ flex: 1 }}>
           <View
             style={{
               marginRight: 8,
@@ -22,11 +111,11 @@ const LeaseContract = ({ route, navigation }) => {
             }}
           >
             <View style={{ display: "flex", flexDirection: "row", top: 5 }}>
-              <Text style={[styles.text, {top: 5}]}> วันที่ : </Text>
+              <Text style={[styles.text, { top: 5 }]}> วันที่ : </Text>
               <View
                 style={{ backgroundColor: "white", borderRadius: 50, top: 2 }}
               >
-                <DatePicker />
+                <DatePicker onReserve={onChangeLeaseHandler} />
               </View>
             </View>
             <View style={{ marginVertical: 20 }}>
@@ -41,19 +130,24 @@ const LeaseContract = ({ route, navigation }) => {
             </View>
             <View style={{ flexDirection: "row" }}>
               <Text style={styles.text}>คุณ </Text>
-              <TextInput style={[styles.text, styles.txtInput]}>
-                Somsak
+              <TextInput
+                style={[styles.text, styles.txtInput]}
+                value={first_name}
+                onChangeText={setFirst_name}
+              ></TextInput>
+              <TextInput style={[styles.text, styles.txtInput]} value={last_name}
+                onChangeText={setLast_name}>
               </TextInput>
-              <TextInput style={[styles.text, styles.txtInput]}>
-                Deena
-              </TextInput>
+            </View>
+            <View style={{ flexDirection: "row", marginTop: 10 }}>
+              <Text style={styles.text}>เบอร์โทร </Text>
+              <TextInput keyboardType="numeric" style={[styles.text, styles.txtInput, {width: "50%"}]} value={phone}
+                onChangeText={setPhone}></TextInput>
             </View>
             <View style={{ flexDirection: "row", marginVertical: 10 }}>
               <Text style={styles.text}>ที่อยู่ </Text>
-              <TextInput style={[styles.text, styles.txtAdress]}>
-                {" "}
-                กรุงเทพ{" "}
-              </TextInput>
+              <TextInput style={[styles.text, styles.txtAdress]} value={address}
+                onChangeText={setAddress}></TextInput>
             </View>
             <Text style={[styles.text, { textAlign: "justify" }]}>
               ซึ่งต่อไปในสัญญานี้จะเรียกว่า "ผู้เช่า" อีกฝ่ายหนึ่ง
@@ -72,27 +166,27 @@ const LeaseContract = ({ route, navigation }) => {
                     style={[styles.text, styles.txtInput, { width: 60 }]}
                   >
                     {" "}
-                    E205{" "}
+                    {categoryTitle}{" "}
                   </TextInput>
                 </View>
 
-                <View style={{ flexDirection: "row", top: 5, marginLeft: 10 }}>
+                <View style={{ flexDirection: "row",marginLeft: 10 }}>
                   <Text style={styles.text}> ชั้นที่ </Text>
                   <TextInput
                     style={[styles.text, styles.txtInput, { width: 30 }]}
                   >
                     {" "}
-                    2{" "}
+                    {categoryTitle.slice(1, 2)}{" "}
                   </TextInput>
                 </View>
 
-                <View style={{ flexDirection: "row", top: 5, marginLeft: 10 }}>
+                <View style={{ flexDirection: "row",xmarginLeft: 10 }}>
                   <Text style={styles.text}> ตึกที่ </Text>
                   <TextInput
                     style={[styles.text, styles.txtInput, { width: 30 }]}
                   >
                     {" "}
-                    E{" "}
+                    {categoryTitle.slice(0, 1)}{" "}
                   </TextInput>
                 </View>
               </View>
@@ -111,21 +205,21 @@ const LeaseContract = ({ route, navigation }) => {
                   { justifyContent: "justify", marginVertical: 10 },
                 ]}
               >
-                ในอัตราค่าเช่าเดือนละ {""}5000{""} บาท
+                ประเภทห้อง {room_type} ในอัตราค่าเช่าเดือนละ {""}{room_price}{""} บาท
                 ค่าเช่านี้ไม่รวมถึงค่าไฟฟ้า ค่าน้ำประปา ค่าส่วนกลาง
                 ค่าใช้จ่ายเพิ่มเติม
                 ซึ่งผู้เช่าต้องชำระแก่ผู้ให้เช่าตามอัตราที่กำหนดไว้ในสัญญาข้อ 4{" "}
               </Text>
             </View>
             <Text style={[styles.text]}>
-              ข้อ 2 ผู้เช่าตกลงเช่าห้องพักอาศัยตามสัญญาข้อ 1 มีกำหนดเวลา ... ปี
+              ข้อ 2 ผู้เช่าตกลงเช่าห้องพักอาศัยตามสัญญาข้อ 1 มีกำหนดเวลา
             </Text>
             <View
-              style={{ marginTop: 10, flexDirection: "row", flexWrap: "wrap" }}
+              style={{ marginTop: 0, flexDirection: "row", flexWrap: "wrap" }}
             >
               <View style={{ flexDirection: "row" }}>
                 <Text style={[styles.text]}>นับตั้งแต่วันที่ </Text>
-                <DatePicker />
+                <DatePicker onReserve={onStart_dateHandler} />
                 <View style={{ flexDirection: "row", marginLeft: 5 }}>
                   <Text style={[styles.text]}>ถึงวันที่ </Text>
                   <View
@@ -135,13 +229,13 @@ const LeaseContract = ({ route, navigation }) => {
                       width: 105,
                     }}
                   >
-                    <DatePicker />
+                    <DatePicker onReserve={onEnd_dateHandler}/>
                   </View>
                 </View>
               </View>
             </View>
 
-            <View style={{flexWrap: "wrap", flexDirection: "row"}}>
+            <View style={{ flexWrap: "wrap", flexDirection: "row" }}>
               <Text
                 style={[styles.text, { textAlign: "justify", marginTop: 10 }]}
               >
@@ -177,7 +271,7 @@ const LeaseContract = ({ route, navigation }) => {
               </Text>
 
               <Text
-                style={[styles.text, { textAlign: "justify", marginTop: 10,}]}
+                style={[styles.text, { textAlign: "justify", marginTop: 10 }]}
               >
                 ข้อ 5 ผู้เช่าต้องชำระค่าไฟฟ้า ค่าน้ำประปา ค่าส่วนกลาง
                 ตามจำนวนหน่วยที่ใช้ในแต่ละเดือนและต้องชำระพร้อมกับการชำระค่าเช่าของเดือนถัดไป
@@ -219,24 +313,26 @@ const LeaseContract = ({ route, navigation }) => {
                 ถือว่าเป็นการผิดสัญญานี้ด้วยและโดยนัยเดียวกัน
                 การผิดสัญญานี้ย่อมถือเป็นการผิดสัญญาเช่าเครื่องเรือนด้วย
               </Text>
-              
-              <View style={[styles.checkboxContainer, {flexWrap: "wrap", flexDirection: "row", width: "100%"}]}>
-                
-                <Checkbox.Android 
-                  status={checked ? 'checked' : 'unchecked'}
+
+              <View
+                style={[
+                  styles.checkboxContainer,
+                  { flexWrap: "wrap", flexDirection: "row", width: "100%" },
+                ]}
+              >
+                <Checkbox.Android
+                  status={checked ? "checked" : "unchecked"}
                   onPress={() => {
-                  setChecked(!checked);
+                    setChecked(!checked);
                   }}
-                  />
-                  <View style={{width: "80%"}}>
-                  <Text
-                    style={[styles.text, {  marginTop: 5}]}
-                  >
+                />
+                <View style={{ width: "80%" }}>
+                  <Text style={[styles.text, { marginTop: 5 }]}>
                     คู่สัญญาได้อ่านและเข้าใจข้อความในสัญญานี้
                     โดยตลอดแล้วเห็นว่าถูกต้อง
-                  </Text></View>
+                  </Text>
+                </View>
               </View>
-
             </View>
           </View>
         </ScrollView>
@@ -277,19 +373,20 @@ const LeaseContract = ({ route, navigation }) => {
             borderRadius: "50%",
             backgroundColor: "#47C5FC",
           }}
-          onPress={()=> {
-            if(!checked){
+          onPress={() => {
+            if (!checked) {
               Alert.alert("กดยินยอมรับเงื่อนไข", "ตามสัญญาที่กล่าวมา", [
-              { text: "OK", onPress: () => console.log("OK Pressed") },
-            ]);
-            }
+                { text: "OK", onPress: () => console.log("OK Pressed") },
+              ]);
+            }else{
+            onContractFormHandler()}
           }}
         >
-            <Text
-              style={{ fontSize: "12px", fontWeight: "bold", color: "white" }}
-            >
-              ทำสัญญา
-            </Text>
+          <Text
+            style={{ fontSize: "12px", fontWeight: "bold", color: "white" }}
+          >
+            ทำสัญญา
+          </Text>
         </TouchableOpacity>
       </View>
     </View>

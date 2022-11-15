@@ -5,7 +5,7 @@ import Login from './app/screen/Login';
 import Register from './app/screen/Register';
 import ManageAccount from './app/screen/MangeAccount';
 import AnnouceNews from './app/screen/tenant/AnnouceNews';
-import { ApplicationProvider, IconRegistry, Layout, Text } from '@ui-kitten/components';
+import { ApplicationProvider, IconRegistry, Layout } from '@ui-kitten/components';
 import * as eva from '@eva-design/eva';
 
 import axios from 'axios';

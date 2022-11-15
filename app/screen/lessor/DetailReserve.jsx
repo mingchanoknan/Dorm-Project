@@ -10,11 +10,33 @@ import {
 import { Card, Layout, Divider } from "@ui-kitten/components";
 import DatePicker from "../../component/contract/DatePicker";
 import { RESERVE } from "../../dummy/RESERVE";
+import {baseUrl} from "@env";
 import axios from "axios";
+import { StackActions } from "@react-navigation/native";
 
-const baseUrl = "http://192.168.1.117:8080";
-function User({ userObject, navigation }) {
-  //console.log(userObject.dorm_fee);
+function User({ roomNumber, userObject, navigation }) {
+  const [status, setStatus] = useState("available");
+  const [cancleStatus, setCancleStatus] = useState("cancle");
+  const  onCancleFormHandler = async (event) => {
+    try {
+      const cancle = await axios.put(`${baseUrl}/updateStatusReserve/${userObject._id}/${cancleStatus}`);
+        // console.log(cancleReserve);
+        // console.log(status);
+        // console.log(userObject._id);
+        const update =await axios.put(`${baseUrl}/updateStatus/${roomNumber}/${status}`);
+        //console.log(reserve_date.toISOString().slice(0, 9));
+
+      if (update.status === 200 && cancle.status === 200) {
+        alert("ยกเลิกการจองสำเร็จ");
+        navigation.dispatch(StackActions.replace("CheckRoomsStatus", {categoryTitle: roomNumber}))
+      } else {
+        throw new Error("An error cancle");
+      }
+    } catch (error) {
+      alert(error);
+    }
+  };
+
   return (
     <View>
     {userObject && (
@@ -22,25 +44,19 @@ function User({ userObject, navigation }) {
         <Text style={{ fontSize: "12px", fontWeight: "bold", marginRight: 7 }}>
           ชื่อผู้จอง :
         </Text>
-        <TextInput
-          editable={false}
-          style={{
-            backgroundColor: "#F5F7F8",
+        <View style={{ backgroundColor: "#F5F7F8",
             width: "35%",
             padding: 5,
             borderRadius: 50,
             paddingLeft: 20,
-            marginRight: 10,
-          }}
-        >
-          <Text style={{ fontSize: "12.5px" }}>{userObject.first_name}</Text>
-        </TextInput>
+            marginRight: 10,}}>
+          <Text style={{ fontSize: "12.5px",color: "#8f8d8d"}}>{userObject.first_name}</Text>
+        </View>
 
         <Text style={{ fontSize: "12px", fontWeight: "bold", marginRight: 7 }}>
           นามสกุล
         </Text>
-        <TextInput
-          editable={false}
+        <View
           style={{
             backgroundColor: "#F5F7F8",
             width: "33%",
@@ -49,8 +65,8 @@ function User({ userObject, navigation }) {
             paddingLeft: 20,
           }}
         >
-          <Text style={{ fontSize: "12.5px" }}>{userObject.last_name}</Text>
-        </TextInput>
+          <Text style={{ fontSize: "12.5px", color: "#8f8d8d" }}>{userObject.last_name}</Text>
+        </View>
       </View>
       )}
 
@@ -59,8 +75,7 @@ function User({ userObject, navigation }) {
         <Text style={{ fontSize: "12px", fontWeight: "bold", marginRight: 7 }}>
           เบอร์โทร :
         </Text>
-        <TextInput
-          editable={false}
+        <View
           style={{
             backgroundColor: "#F5F7F8",
             width: "33%",
@@ -70,8 +85,8 @@ function User({ userObject, navigation }) {
             marginRight: 10,
           }}
         >
-          <Text style={{ fontSize: "12.5px" }}>{userObject.mobile}</Text>
-        </TextInput>
+          <Text style={{ fontSize: "12.5px", color: "#8f8d8d" }}>{userObject.mobile}</Text>
+        </View>
       </View>
       )}
 
@@ -80,7 +95,7 @@ function User({ userObject, navigation }) {
         <Text style={{ fontSize: "12px", fontWeight: "bold", marginRight: 7 }}>
           วันเข้านัดทำสัญญา :
         </Text>
-        <TextInput editable={true}
+        <View editable={true}
           style={{
             backgroundColor: "#F5F7F8",
             width: "35%",
@@ -90,18 +105,9 @@ function User({ userObject, navigation }) {
             marginRight: 10,
           }}
         >
-          <Text style={{ fontSize: "12.5px" }}>{userObject.lease_date}</Text>
-        </TextInput>
-        {/* <View
-            style={{
-              backgroundColor: "white",
-              borderRadius: 50,
-              top: -5,
-              width: 105,
-            }}
-          >
-            <DatePicker data={detail[0].lease_date} />
-          </View> */}
+          <Text style={{ fontSize: "12.5px", color: "#8f8d8d" }}>{userObject.lease_date}</Text>
+        </View>
+
       </View>
       )}
 
@@ -111,8 +117,10 @@ function User({ userObject, navigation }) {
           style={styles.btnContract}
           onPress={() => {
             navigation.navigate("LeaseContract", {
-              // categoryId: itemData.item.id,
-              // categoryTitle: itemData.item.room_number,
+              categoryId: userObject._id,
+              categoryTitle: userObject.room_number,
+              reserveFname: userObject.first_name,
+              reserveLname: userObject.last_name,
             });
           }}
         >
@@ -128,7 +136,7 @@ function User({ userObject, navigation }) {
             ทำสัญญา{" "}
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.btnCancle, { marginLeft: 5 }]}>
+        <TouchableOpacity style={[styles.btnCancle, { marginLeft: 5 }]} onPress={onCancleFormHandler}>
           <Text
             style={{
               fontSize: "12px",
@@ -147,46 +155,30 @@ function User({ userObject, navigation }) {
   );
 }
 const DetailReserve = ({ route, navigation }) => {
-  // const catId = route.params.categoryId
-  // const detail = RESERVE.filter(
-  //   (item) => item.room_id == route.params.categoryId
-  // );
-  // console.log(detail[0].first_name);
-  // const displayedMeals = RESERVE.filter(
-  //   (meal) => meal.room_id.indexOf(catId) >= 0
-  // );
-  const { id } = route.params;
-  const { categoryTitle } = route.params;
-  const [data, setData] = useState();
-  const [invoice, setInvoice] = useState(null);
+  const { categoryTitle , categoryId} = route.params;
+  const [reserve, setReserve] = useState(null);
+
   useEffect(() => {
-    // const response = axios.get(`${baseUrl}/invoices`);
-    // setInvoice(response);
-    // console.log(response);
     const url = `${baseUrl}/getReserveNum/${categoryTitle}`;
-    console.log("test");
+    console.log("DetailReserve");
+    console.log(url);
     const fetchUsers = async () => {
       try {
         const response = await axios.get(url);
         if (response.status === 200) {
-          setInvoice(response.data);
-          console.log(response.data);
-          // console.log("1"+categoryTitle);
+          setReserve(response.data[0]);
           return;
         } else {
           throw new Error("Failed to fetch users");
         }
       } catch (error) {
-        console.log("Data fetching cancelled");
+        console.log("Data fetching cancelled detail");
       }
     };
     fetchUsers();
-    // console.log(invoice);
-    // let get = invoice.filter((item) => item.room_number == categoryTitle)[0];
-    // setData(get);
-    // console.log("2"+categoryTitle);
+
   }, [categoryTitle]);
-  console.log(invoice);
+  //console.log(reserve);
 
   return (
     <ImageBackground
@@ -208,7 +200,7 @@ const DetailReserve = ({ route, navigation }) => {
       </View>
 
       <Card style={styles.card}>
-        <User userObject={invoice} navigation={navigation} />
+        <User userObject={reserve} navigation={navigation} roomNumber={categoryTitle} />
       </Card>
     </ImageBackground>
   );
