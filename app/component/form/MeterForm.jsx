@@ -1,12 +1,34 @@
 import { Button, Input, Text, Modal } from "@ui-kitten/components";
+import axios from "axios";
 import { useState } from "react";
 import { Alert, StyleSheet, View } from "react-native";
 import DatePicker from "react-native-modern-datepicker";
-
+import { baseUrl } from "@env";
+let consumptionWater = 14;
+let consumptionElec = 6;
 const MeterForm = (props) => {
   const [roomNoValue, setRoomNoValue] = useState("");
   const [unit, setUnit] = useState("");
-  const [month, setMonth] = useState();
+  const [monthYear, setMonthYear] = useState();
+  class meter {
+    constructor() {
+      this.room_number = "";
+      this.utilities_type = props.type;
+      this.monthAndYear = "";
+      this.consumption =0;
+      this.used_unit = "";
+      this.sum = 0;
+    }
+    room_number;
+    utilities_type;
+    monthAndYear;
+    consumption;
+    used_unit;
+    sum;
+    
+  }
+  
+  
   const months = [
     "January",
     "February",
@@ -24,8 +46,33 @@ const MeterForm = (props) => {
 
   useState(() => {
     let currentDate = new Date();
-    setMonth(months[currentDate.getMonth()]);
+    let m = months[currentDate.getMonth()]
+    let y= currentDate.getFullYear()
+    setMonthYear(m.concat(" ",y));
   }, []);
+
+  const saveMeter = (async() => {
+    let record = new meter();
+    record.monthAndYear = monthYear
+    record.room_number = roomNoValue
+    record.used_unit = parseInt(unit) 
+    if (props.type == "water") {
+      record.consumption = consumptionWater
+      record.sum = record.used_unit * record.consumption
+    }
+    else {
+      record.consumption = consumptionElec
+      record.sum = record.used_unit * record.consumption
+    }
+    const res = await axios.post(`${baseUrl}/meter/add`,record)
+    Alert.alert(res.data, undefined, [
+      {
+        text: "Yes", onPress: () => {
+          setUnit("")
+        setRoomNoValue("")}
+      },
+    ])
+  })
   return (
     <View style={styles.container}>
       <View
@@ -39,7 +86,7 @@ const MeterForm = (props) => {
         <Input
           placeholder="Place your Text"
           label={"Month"}
-          value={month}
+          value={monthYear}
           disabled={true}
         />
         <Input
@@ -74,7 +121,11 @@ const MeterForm = (props) => {
                 onPress: () => console.log("Cancel Pressed"),
                 style: "cancel",
               },
-              { text: "Yes", onPress: () => console.log("OK Pressed") },
+              {
+                text: "Yes", onPress: () => {
+                  setUnit("")
+                setRoomNoValue("")}
+              },
             ])
           }
         >
@@ -84,6 +135,10 @@ const MeterForm = (props) => {
           style={{ paddingHorizontal: 23 }}
           appearance="filled"
           status="success"
+          onPress={() => {
+            saveMeter()
+            
+          }}
         >
           SAVE
         </Button>
