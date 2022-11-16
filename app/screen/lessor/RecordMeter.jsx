@@ -93,10 +93,11 @@ const RecordMeter = () => {
           )}
           {/* if meter is water and display is table */}
           {selectedMeter == 0 && selectedType == 1 &&
-            <MeterDisplay/>}
+            <MeterDisplay  type={'water'}
+            />}
           {selectedMeter == 1 && selectedType == 0 && (
             <MeterForm
-              type="elec"
+              type="electricity"
               onChangeRoom={setRoomElec}
               onChangeMeter={setMeterElec}
               onChangeMonthly={setMonthlyElec}
@@ -106,7 +107,7 @@ const RecordMeter = () => {
             />
           )}
           {/* if meter is elec and display is table */}
-          {selectedMeter == 1 && selectedType == 1 && <MeterDisplay/>}
+          {selectedMeter == 1 && selectedType == 1 && <MeterDisplay type={'electricity'}/>}
         </View>
         <View style={{ flex: 0.2, justifyContent: "flex-end" }}>
           <BottomNavigation

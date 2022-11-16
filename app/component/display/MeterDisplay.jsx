@@ -21,17 +21,44 @@ import {
   DrawerItem,
   Tooltip,
 } from "@ui-kitten/components";
-
-const MeterDisplay = () => {
+import axios from "axios";
+import { baseUrl } from "@env";
+import { useFocusEffect } from "@react-navigation/native";
+const MeterDisplay = (props) => {
   const [searchPhrase, setSearchPhrase] = useState("");
   const [clicked, setClicked] = useState(false);
   const [fakeData, setFakeData] = useState();
   const [date, setDate] = useState("2022");
   const [visible, setVisible] = React.useState(false);
-  const [all, setAll] = useState(false);
+  const [allInfo, setAllInfo] = useState([]);
   const [lastest, setLastest] = useState(false);
   const [listBy, setListBy] = useState("All Meter Data");
+  const [infoBySelect, setInfoBySelect] = useState([]);
 
+  useEffect(() => {
+    const getInfoMeter = async () => {
+      console.log("Hello")
+      let info = await axios.get(`${baseUrl}/meter/getbytype/${props.type}`);
+      setAllInfo(info.data)
+      setInfoBySelect(info.data)
+    };
+    getInfoMeter();
+  }, []);
+
+  useEffect(() => {
+    const changeList = async() => {
+      if (listBy == "All Meter Data") {
+        setInfoBySelect(allInfo)
+      }
+      else {
+        const res = await axios.get(`${baseUrl}/meter/getbymonthandyear/${listBy}/${props.type}`)
+        console.log(res.data)
+        setInfoBySelect(res.data)
+  
+      }
+    }
+    changeList()
+  }, [listBy])
   const formatedDate = (yearAndMonth) => {
     let array = yearAndMonth.split(" ");
     const months = [
@@ -52,13 +79,14 @@ const MeterDisplay = () => {
     setListBy(months[parseInt(array[1]) - 1] + " " + array[0]);
   };
 
-  const SmartphoneIcon = (props) => <Icon {...props} name="home-outline" />;
+  const Home = (props) => <Icon {...props} name="home-outline" />;
 
   const BrowserIcon = (props) => <Icon {...props} name="browser-outline" />;
 
   const ColorPaletteIcon = (props) => (
     <Icon {...props} name="color-palette-outline" />
   );
+
 
   const StarIcon = (props) => <Icon {...props} name="star" />;
   const [selectedIndex, setSelectedIndex] = React.useState(null);
@@ -78,7 +106,7 @@ const MeterDisplay = () => {
       >
         <View style={{ flex: 1, width: 350, height: 350 }}>
           <DatePicker
-            style={{borderRadius:'30%'}}
+            style={{ borderRadius: "30%" }}
             mode="monthYear"
             selectorStartingYear={2000}
             current={date}
@@ -98,7 +126,6 @@ const MeterDisplay = () => {
         }}
       >
         <View style={{ marginHorizontal: "3%" }}>
-     
           <Button
             style={styles.btn}
             onPress={() => setVisible(true)}
@@ -129,8 +156,9 @@ const MeterDisplay = () => {
           {listBy}
         </Text>
       </View>
-        <Drawer
-          style={{ borderColor: "#C3DCE3",
+      <Drawer
+        style={{
+          borderColor: "#C3DCE3",
           borderRadius: "30%",
           padding: 10,
           shadowColor: "#000",
@@ -141,184 +169,48 @@ const MeterDisplay = () => {
           shadowOpacity: 0.3,
           shadowRadius: 4.65,
 
-          elevation: 8, marginBottom:'4%'}}
-          selectedIndex={selectedIndex}
-          onSelect={(index) => {
-            let temp = { ...index };
-            if (temp.section != undefined) {
-              temp.row = temp.section;
-            }
-            temp.section = undefined;
-            setSelectedIndex(temp);
-          }}
-        >
+          elevation: 8,
+          marginBottom: "4%",
+        }}
+        selectedIndex={selectedIndex}
+        onSelect={(index) => {
+          let temp = { ...index };
+          if (temp.section != undefined) {
+            temp.row = temp.section;
+          }
+          temp.section = undefined;
+          setSelectedIndex(temp);
+        }}
+      >
+        {infoBySelect.map((info) => (
           <DrawerGroup
-            title={(evaProps) => (
-              <View {...evaProps}>
-                <View
-                  style={{
-                    flex: 1,
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems:'center'
-                  }}
-                >
-                  <View style={{display: "flex"}}>
-                    <Text category='label'>A101</Text>
-                  </View>
-                  <View style={{display: "flex"}}>
-                    <Text category='label'>TOTAL 120  THB</Text>
-                  </View>
-                  
+          title={(evaProps) => (
+            <View {...evaProps}>
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <View style={{ display: "flex" }}>
+                  <Text category="label">{info.room_number}</Text>
+                </View>
+                <View style={{ display: "flex" }}>
+                  <Text category="label">TOTAL {info.sum} THB</Text>
                 </View>
               </View>
-            )}
-            accessoryLeft={SmartphoneIcon}
-          >
-           
-            <DrawerItem title=" จำนวนหน่อยที่ใช้ 106 unit" />
-            <DrawerItem title="ราคาต่อหน่วย 6 THB" />
-          </DrawerGroup>
-          <DrawerGroup  title={(evaProps) => (
-              <View {...evaProps}>
-                <View
-                  style={{
-                    flex: 1,
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems:'center'
-                  }}
-                >
-                  <View style={{display: "flex"}}>
-                    <Text category='label'>A101</Text>
-                  </View>
-                  <View style={{display: "flex"}}>
-                    <Text category='label'>TOTAL 120  THB</Text>
-                  </View>
-                  
-                </View>
-              </View>
-            )} accessoryLeft={SmartphoneIcon}>
-            <DrawerItem title=" จำนวนหน่อยที่ใช้ 106 unit" />
-            <DrawerItem title="ราคาต่อหน่วย 6 THB" />
-          </DrawerGroup>
-          <DrawerGroup  title={(evaProps) => (
-              <View {...evaProps}>
-                <View
-                  style={{
-                    flex: 1,
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems:'center'
-                  }}
-                >
-                  <View style={{display: "flex"}}>
-                    <Text category='label'>A101</Text>
-                  </View>
-                  <View style={{display: "flex"}}>
-                    <Text category='label'>TOTAL 120  THB</Text>
-                  </View>
-                  
-                </View>
-              </View>
-            )} accessoryLeft={SmartphoneIcon}>
-            <DrawerItem title=" จำนวนหน่อยที่ใช้ 106 unit" />
-            <DrawerItem title="ราคาต่อหน่วย 6 THB" />
-          </DrawerGroup>
-          <DrawerGroup  title={(evaProps) => (
-              <View {...evaProps}>
-                <View
-                  style={{
-                    flex: 1,
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems:'center'
-                  }}
-                >
-                  <View style={{display: "flex"}}>
-                    <Text category='label'>A101</Text>
-                  </View>
-                  <View style={{display: "flex"}}>
-                    <Text category='label'>TOTAL 120  THB</Text>
-                  </View>
-                  
-                </View>
-              </View>
-            )} accessoryLeft={SmartphoneIcon}>
-            <DrawerItem title=" จำนวนหน่อยที่ใช้ 106 unit" />
-            <DrawerItem title="ราคาต่อหน่วย 6 THB" />
-          </DrawerGroup>
-          <DrawerGroup  title={(evaProps) => (
-              <View {...evaProps}>
-                <View
-                  style={{
-                    flex: 1,
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems:'center'
-                  }}
-                >
-                  <View style={{display: "flex"}}>
-                    <Text category='label'>A101</Text>
-                  </View>
-                  <View style={{display: "flex"}}>
-                    <Text category='label'>TOTAL 120  THB</Text>
-                  </View>
-                  
-                </View>
-              </View>
-            )} accessoryLeft={SmartphoneIcon}>
-
-            <DrawerItem title=" จำนวนหน่อยที่ใช้ 106 unit" />
-            <DrawerItem title="ราคาต่อหน่วย 6 THB" />
-          </DrawerGroup>
-          <DrawerGroup  title={(evaProps) => (
-              <View {...evaProps}>
-                <View
-                  style={{
-                    flex: 1,
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems:'center'
-                  }}
-                >
-                  <View style={{display: "flex"}}>
-                    <Text category='label'>A101</Text>
-                  </View>
-                  <View style={{display: "flex"}}>
-                    <Text category='label'>TOTAL 120  THB</Text>
-                  </View>
-                  
-                </View>
-              </View>
-            )} accessoryLeft={SmartphoneIcon}>
-            <DrawerItem title=" จำนวนหน่อยที่ใช้ 106 unit" />
-            <DrawerItem title="ราคาต่อหน่วย 6 THB" />
-          </DrawerGroup>
-          <DrawerGroup  title={(evaProps) => (
-              <View {...evaProps}>
-                <View
-                  style={{
-                    flex: 1,
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems:'center'
-                  }}
-                >
-                  <View style={{display: "flex"}}>
-                    <Text category='label'>A101</Text>
-                  </View>
-                  <View style={{display: "flex"}}>
-                    <Text category='label'>TOTAL 120  THB</Text>
-                  </View>
-                  
-                </View>
-              </View>
-            )} accessoryLeft={SmartphoneIcon}>
-            <DrawerItem title=" จำนวนหน่อยที่ใช้ 106 unit" />
-            <DrawerItem title="ราคาต่อหน่วย 6 THB" />
-          </DrawerGroup>
-        </Drawer>
+            </View>
+          )}
+          accessoryLeft={Home}
+        >
+          <DrawerItem title={`จำนวนหน่อยที่ใช้ ${info.used_unit} unit`} />
+          <DrawerItem title={`ราคาต่อหน่วย ${info.consumption} THB`} />
+        </DrawerGroup>
+        ))}
+        
+      </Drawer>
     </View>
   );
 };
