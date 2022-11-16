@@ -21,7 +21,7 @@ const Login = ({ navigation }) => {
   const [password, setPassword] = useState(null);
 
 
-  const comFirmLogin = () => {
+  const comFirmLogin = async() => {
     // setUsername(username);
     // setPassword(password);
 

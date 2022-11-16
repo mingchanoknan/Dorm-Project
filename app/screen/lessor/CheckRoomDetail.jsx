@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import HeaderBackground from "../../component/background/HeaderBackground";
 import RoomImageCarousel from "../../component/carousel/imageCarousel";
-const baseUrl = "http://192.168.1.10:8080";
+import {baseUrl} from "@env"
 const CheckRoomDetail = ({ route, navigation }) => {
   const width = Dimensions.get("window").width;
   const height = Dimensions.get("window").height;

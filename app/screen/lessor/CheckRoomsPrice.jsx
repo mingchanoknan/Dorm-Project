@@ -13,7 +13,7 @@ import React from "react";
 import axios from "axios";
 import { Toggle, Button, Text, Icon } from "@ui-kitten/components";
 import { useFocusEffect } from "@react-navigation/native";
-const baseUrl = "http://192.168.1.10:8080";
+import {baseUrl} from "@env"
 const CheckRoomPrice = ({ route, navigation }) => {
   const [ROOMS, setROOMS] = useState([]);
   useFocusEffect(

@@ -135,12 +135,12 @@ const MainLessor = ({ route, navigation }) => {
 
             <TouchableOpacity
               style={styles.box}
-              onPress={() => navigation.navigate("RoomStatus")}
+              onPress={() => navigation.navigate("RoomStatus")}>
 
               <Image
                 source={require("../../assets/room2.png")}
                 style={{ width: "30%", height: "40%" }}
-              ></Image>
+              />
               <Text style={{ fontWeight: "bold", top: 5, fontSize: "12px" }}>
                 สถานะห้องพัก
               </Text>

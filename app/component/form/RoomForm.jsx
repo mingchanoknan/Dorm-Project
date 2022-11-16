@@ -11,7 +11,7 @@ import AddRoomType from "../../screen/lessor/AddRoomType";
 import Spinner from 'react-native-loading-spinner-overlay';
 import axios from "axios";
 import * as FileSystem from "expo-file-system";
-const baseUrl = "http://192.168.1.10:8080";
+import {baseUrl} from "@env"
 const secondIndicatorStyles = {
   stepIndicatorSize: 30,
   currentStepIndicatorSize: 40,
@@ -244,7 +244,7 @@ export default function RoomForm({ navigation, route, screen }) {
     };
     try {
       const re = await axios.post(
-        "http://192.168.1.10:8080/file/upload",
+        `${baseUrl}/file/upload`,
         formData,
         config
       );
