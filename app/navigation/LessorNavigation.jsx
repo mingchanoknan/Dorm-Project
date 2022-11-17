@@ -24,6 +24,7 @@ import ManageInvoice from "../screen/lessor/ManageInvoice";
 import BillInvoice from "../screen/lessor/BillInvoice";
 import AnnouceNews from "../screen/lessor/AnnouceNews";
 import NewsDetail from "../screen/lessor/NewsDetail";
+import BillRoomInvoice from "../component/invoice/BillRoomInvoice";
 
 import { FontAwesome } from "@expo/vector-icons";
 import AddRoomType from "../screen/lessor/AddRoomType";
@@ -330,6 +331,23 @@ const LessorNavigation = () => {
               headerTintColor: "#47C5FC",
             };
           }}
+        />
+        <BillNavigator.Screen
+          name="BillRoomInvoice"
+          component={BillRoomInvoice}
+          options={({ route, navigation }) => {
+            return {
+              title: "ห้อง " + route.params.categoryTitle,
+              headerTintColor: "#47C5FC",
+            };
+          }}
+        />
+         <BillNavigator.Screen
+          name="Meter"
+          component={RecordMeter}
+          options={({ route }) => ({
+            // title: route.params.categoryTitle,
+          })}
         />
       </BillNavigator.Navigator>
     );

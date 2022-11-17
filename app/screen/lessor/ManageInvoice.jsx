@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import {
-  
   View,
   StyleSheet,
   TouchableOpacity,
@@ -14,17 +13,27 @@ import Search from "../../component/contract/searchBar";
 import Time from "../../component/invoice/time";
 import RESERVE from "../../dummy/RESERVE";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Text, IndexPath, Layout, Select, SelectItem,  Modal, Button, } from "@ui-kitten/components";
+import {
+  Text,
+  IndexPath,
+  Layout,
+  Select,
+  SelectItem,
+  Modal,
+  Button,
+} from "@ui-kitten/components";
 import { baseUrl } from "@env";
 import axios from "axios";
 import DatePicker from "react-native-modern-datepicker";
 
 // const baseUrl ='http://192.168.1.117:8080';
 const ManageInvoice = ({ route, navigation }) => {
+  constructor (
+
+  );
   const [room, setRoom] = useState(null);
   const [all, setAll] = useState(null);
-  
-  
+
   const data = ["ชั้น", "ชั้นที่ 2", "ชั้นที่ 3"];
   const [selectedFloor, setSelectedFloor] = React.useState(new IndexPath(0));
   const displayValue = data[selectedFloor.row];
@@ -33,35 +42,33 @@ const ManageInvoice = ({ route, navigation }) => {
   const [selectedBuild, setSelectedBuild] = React.useState(new IndexPath(0));
   const displayBuild = build[selectedBuild.row];
 
-  const [listBy, setListBy] = useState("เลือกรอบบิล");
+  
   const [date, setDate] = useState("2022");
   const [visible, setVisible] = React.useState(false);
 
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
+  const [invoices, setInvoices] = useState("");
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
 
-  const formatedDate = (yearAndMonth) => {
-    let array = yearAndMonth.split(" ");
-    const months = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ];
-    setDate(array[0] + "-" + array[1] + "-01");
-    setListBy(months[parseInt(array[1]) - 1] + " " + array[0]);
-    setMonth(months[parseInt(array[1]) - 1]);
-    console.log(month);
-    setYear(array[0]);
-  };
+    let currentDate = new Date();
+    let m = months[currentDate.getMonth()]
+    let y= currentDate.getFullYear()
+  const [monthYear, setMonthYear] = useState("")
+  const [listBy, setListBy] = useState(m.concat(" ",y));
 
   // console.log(listBy);
 
@@ -91,19 +98,17 @@ const ManageInvoice = ({ route, navigation }) => {
 
     const urlAllRoom = `${baseUrl}/rent`;
 
-    
     // console.log("test");
     // console.log(categoryTitle);
     const fetchrooms = async () => {
       try {
         const room = await axios.get(urlAllRoom);
         // const user = await axios.get(urlUser);
-        if (
-          room.status === 200 
-        ) {
+        if (room.status === 200) {
           setRoom(room.data);
           setAll(room.data);
-          console.log(room.data)
+          //console.log(room.data);
+          //console.log(listBy);
           // setUser(user.data);
           //console.log(response.data);
           //console.log(contract.data[0]);
@@ -119,35 +124,75 @@ const ManageInvoice = ({ route, navigation }) => {
       }
     };
     fetchrooms();
-
   }, []);
 
-  const getInvoice = (selectedDate) => {
-    formatedDate(selectedDate);
-    setVisible(false);
-    // if (month != "" && year != "") {
-    // const url = `${baseUrl}/getRoomInvoice/${month}/${year}`;
+  const formatedDate = (yearAndMonth) => {
+    let array = yearAndMonth.split(" ");
+    const months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    setMonthYear(array[0] + "/" + array[1] + "/01");
+    setListBy(months[parseInt(array[1]) - 1] + " " + array[0]);
+    setMonth(months[parseInt(array[1]) - 1]);
+    setYear(array[0]);
+  };
 
-    // const fetchUsers = async () => {
-    //   try {
-    //     const response = await axios.get(url);
-    //     if (response.status === 200) {
-    //       setVisible(false);
-    //       setDate("");
-    //       console.log(response.data);
-    //       // setReserve(response.data[0]);
-    //       return;
-    //     } else {
-    //       throw new Error("Failed to fetch invoices");
-    //     }
-    //   } catch (error) {
-    //     console.log("Data fetching cancelled invoices");
-    //   }
-    // };
-    // fetchUsers();
-    // }
-    
-  }
+  // const getInvoice = (selectedDate) => {
+  //   const formatedDate = (yearAndMonth) => {
+  //     let array = yearAndMonth.split(" ");
+  //     const months = [
+  //       "January",
+  //       "February",
+  //       "March",
+  //       "April",
+  //       "May",
+  //       "June",
+  //       "July",
+  //       "August",
+  //       "September",
+  //       "October",
+  //       "November",
+  //       "December",
+  //     ];
+  //     setDate(array[0] + "/" + array[1] + "/01");
+  //     setListBy(months[parseInt(array[1]) - 1] + " " + array[0]);
+
+  //     const fetchUsers = async () => {
+  //       const url = `${baseUrl}/getRoomInvoice/${
+  //         months[parseInt(array[1]) - 1]
+  //       }/${array[0]}`;
+  //       try {
+  //         const response = await axios.get(url);
+  //         if (response.status === 200) {
+  //           setVisible(false);
+  //           setMonth(months[parseInt(array[1]) - 1]);
+  //           setYear(array[0]);
+  //           setInvoices(response.data);
+  //           //console.log(response.data);
+  //           // setReserve(response.data[0]);
+  //           return;
+  //         } else {
+  //           throw new Error("Failed to fetch invoices");
+  //         }
+  //       } catch (error) {
+  //         console.log("Data fetching cancelled invoices");
+  //       }
+  //     };
+  //     fetchUsers();
+  //   };
+  //   formatedDate(selectedDate);
+  // };
   const renderGridItem = (itemData) => {
     return (
       <>
@@ -158,20 +203,28 @@ const ManageInvoice = ({ route, navigation }) => {
               title={itemData.item.room_number}
               status={itemData.item.room_status}
               color={
-                itemData.item.room_status === "unavailable" 
+                itemData.item.room_status === "unavailable"
                   ? "#7dd4ca"
-                  :"#c0b7c7"
+                  : "#c0b7c7"
               }
               onSelect={() => {
-                if (itemData.item.room_status === "unavailable") {
-                  navigation.navigate("BillInvoice", {
-                    id: itemData.item.id,
-                    categoryTitle: itemData.item.room_number,
-                  });
+                if (listBy === "เลือกรอบบิล") {
+                  Alert.alert("กรุณาเลือกรอบบิล", "", [
+                      { text: "OK", onPress: () => console.log("OK Pressed") },
+                    ]);
                 } else {
-                  Alert.alert("ยังไม่มีผู้เช่า", "ในห้องนี้", [
-                    { text: "OK", onPress: () => console.log("OK Pressed") },
-                  ]);
+                  if (itemData.item.room_status === "unavailable") {
+                    navigation.navigate("BillInvoice", {
+                      id: itemData.item.id,
+                      categoryTitle: itemData.item.room_number,
+                      month: month,
+                      year: year
+                    });
+                  } else {
+                    Alert.alert("ยังไม่มีผู้เช่า", "ในห้องนี้", [
+                      { text: "OK", onPress: () => console.log("OK Pressed") },
+                    ]);
+                  }
                 }
               }}
             />
@@ -222,32 +275,36 @@ const ManageInvoice = ({ route, navigation }) => {
             ))}
           </Select>
         </Layout>
-        
+
         <Modal
-        visible={visible}
-        backdropStyle={styles.backdrop}
-        onBackdropPress={() => setVisible(false)}
-      >
-        <View style={{ flex: 1, width: 350, height: 350 }}>
-          <DatePicker
-            style={{borderRadius:'30%'}}
-            mode="monthYear"
-            selectorStartingYear={2000}
-            current={date}
-            onMonthYearChange={(selectedDate) => {
-              getInvoice(selectedDate);
-            }}
-          />
-        </View>
-      </Modal>
-          <Button
-            style={styles.btn}
-            onPress={() => setVisible(true)}
-            size="small"
-          >
-            Select Month
-          </Button>
-          <Text category="s1" style={{textAlign: "right", marginRight: 5}}>{listBy}</Text>
+          visible={visible}
+          backdropStyle={styles.backdrop}
+          onBackdropPress={() => setVisible(false)}
+        >
+          <View style={{ flex: 1, width: 350, height: 350 }}>
+            <DatePicker
+              style={{ borderRadius: "30%" }}
+              mode="monthYear"
+              selectorStartingYear={2000}
+              current={monthYear}
+              onMonthYearChange={(selectedDate) => {
+                // getInvoice(selectedDate);
+                formatedDate(selectedDate)
+                setVisible(false);
+              }}
+            />
+          </View>
+        </Modal>
+        <Button
+          style={styles.btn}
+          onPress={() => setVisible(true)}
+          size="small"
+        >
+          Select Month
+        </Button>
+        <Text category="s1" style={{ textAlign: "right", marginRight: 5 }}>
+          {listBy}
+        </Text>
       </View>
 
       <View style={styles.header2}>
@@ -267,7 +324,11 @@ const ManageInvoice = ({ route, navigation }) => {
       </View>
       <View style={styles.container}>
         {room != null && (
-          <FlatList data={room} renderItem={renderGridItem} numColumns={3} />
+          <FlatList
+            data={room}
+            renderItem={renderGridItem}
+            numColumns={3}
+          />
         )}
       </View>
     </View>
@@ -371,7 +432,7 @@ const styles = StyleSheet.create({
     borderColor: "#f57f95",
     width: "50%",
     alignSelf: "center",
-    borderRadius: "50%"
+    borderRadius: "50%",
   },
   backdrop: {
     backgroundColor: "rgba(237, 239, 240,0.8)",

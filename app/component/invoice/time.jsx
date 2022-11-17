@@ -3,7 +3,7 @@ import { Button, View, Text, TouchableOpacity } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { MaterialIcons } from "@expo/vector-icons";
 
-const TimePicker = () => {
+const TimePicker = (props) => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [time, setTime] = useState(new Date(Date.now()));
   console.log(time.toLocaleTimeString('en-US'));
@@ -15,9 +15,10 @@ const TimePicker = () => {
     setDatePickerVisibility(false);
   };
 
-  const handleConfirm = (date) => {
+  const handleConfirm = (time) => {
     // console.warn("A date has been picked: ", date);
-    setTime(date);
+    setTime(time);
+    props.onTime(time.toISOString().slice(0, 10))
     hideDatePicker();
   };
 
