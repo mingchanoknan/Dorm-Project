@@ -50,13 +50,13 @@ const ReportCard = (props) => {
                 { backgroundColor: "rgba(130, 219, 150, 0.6)" },
               ]}
             >
-              <Text category="s2">{item.item.room} </Text>
+              <Text category="s2">{item.item.room_number} </Text>
             </View>
           </View>
         </View>
         <View
           style={{
-            backgroundColor: !item.item.isFix ? "#F14668" : "#48C78E",
+            backgroundColor: item.item.status ?  "#48C78E" :"#F14668",
             padding: 10,
             borderRadius: 50,
             display: "flex",
@@ -67,7 +67,7 @@ const ReportCard = (props) => {
           }}
         >
           <Text style={{ color: "white" }}>
-            {item.item.isFix ? "ซ่อมแล้ว" : "ยังไม่ซ่อม"}
+            {item.item.status? "ซ่อมแล้ว" : "ยังไม่ซ่อม"}
           </Text>
         </View>
       </View>
@@ -108,8 +108,8 @@ const ReportCard = (props) => {
               <Text category="label">SAVE</Text>
             </TouchableOpacity>
           </View>
-          {item.item.comment.length > 0 &&
-            item.item.comment.map((item, index) => (
+          {item.item.comments.length > 0 &&
+            item.item.comments.map((item, index) => (
               <View key={index}>
                 <Card style={styles.card}>
                   <View
@@ -168,9 +168,9 @@ const ReportCard = (props) => {
         <Text category="s1" style={{ padding: 10, textAlign: "center" }}>
           {item.item.content}
         </Text>
-        {/* {item.item.image.length > 0 &&
+        {item.item.image.length > 0 &&
           <RoomImageCarousel image={item.item.image} width={widthOfView - 50} height={300} paginationColor={"#84E6E3" } />
-       } */}
+       }
           
        
         <View style={{ display: "flex", alignItems: "flex-end" }}>

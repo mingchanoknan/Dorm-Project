@@ -23,7 +23,7 @@ import {
 } from "@ui-kitten/components";
 import axios from "axios";
 import { baseUrl } from "@env";
-import { useFocusEffect } from "@react-navigation/native";
+import Spinner from 'react-native-loading-spinner-overlay';
 const MeterDisplay = (props) => {
   const [searchPhrase, setSearchPhrase] = useState("");
   const [clicked, setClicked] = useState(false);
@@ -34,31 +34,58 @@ const MeterDisplay = (props) => {
   const [lastest, setLastest] = useState(false);
   const [listBy, setListBy] = useState("All Meter Data");
   const [infoBySelect, setInfoBySelect] = useState([]);
+  const [lists, setLists] = useState([]);
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
+    setLoading(true)
     const getInfoMeter = async () => {
-      console.log("Hello")
       let info = await axios.get(`${baseUrl}/meter/getbytype/${props.type}`);
-      setAllInfo(info.data)
+      
       setInfoBySelect(info.data)
+      setLists(info.data)
+      setLoading(false)
     };
     getInfoMeter();
   }, []);
 
   useEffect(() => {
+    setLoading(true)
     const changeList = async() => {
       if (listBy == "All Meter Data") {
-        setInfoBySelect(allInfo)
+        const res = await axios.get(`${baseUrl}/meter/getbytype/${props.type}`);
+        setLists(res.data)
+        setInfoBySelect(res.data)
       }
       else {
         const res = await axios.get(`${baseUrl}/meter/getbymonthandyear/${listBy}/${props.type}`)
-        console.log(res.data)
         setInfoBySelect(res.data)
-  
+        setLists(res.data)
       }
+      setLoading(false)
     }
     changeList()
+    setSearchPhrase("")
   }, [listBy])
+
+  useEffect(() => {
+    
+
+    const checkSearh = (item) => {
+      if (searchPhrase.toUpperCase().trim().replace(/\s/g, "") == "") {
+        return lists;
+      }
+      else {
+        return item.room_number.toUpperCase().includes(searchPhrase.toUpperCase().trim().replace(/\s/g, ""))
+      }
+    }
+    let t = lists.filter((item) => {
+      return checkSearh(item)
+    })
+setInfoBySelect(t)
+    
+  },[searchPhrase])
+
   const formatedDate = (yearAndMonth) => {
     let array = yearAndMonth.split(" ");
     const months = [
@@ -81,17 +108,14 @@ const MeterDisplay = (props) => {
 
   const Home = (props) => <Icon {...props} name="home-outline" />;
 
-  const BrowserIcon = (props) => <Icon {...props} name="browser-outline" />;
-
-  const ColorPaletteIcon = (props) => (
-    <Icon {...props} name="color-palette-outline" />
-  );
-
-
-  const StarIcon = (props) => <Icon {...props} name="star" />;
   const [selectedIndex, setSelectedIndex] = React.useState(null);
   return (
     <View style={{ flex: 1 }}>
+      <Spinner
+          visible={loading}
+          textContent={'Loading...'}
+          textStyle={{color: '#FFF'}}
+        />
       <SearchBar
         searchPhrase={searchPhrase}
         setSearchPhrase={setSearchPhrase}
@@ -182,8 +206,8 @@ const MeterDisplay = (props) => {
           setSelectedIndex(temp);
         }}
       >
-        {infoBySelect.map((info) => (
-          <DrawerGroup
+        {infoBySelect.map((info,index) => (
+          <DrawerGroup key={index}
           title={(evaProps) => (
             <View {...evaProps}>
               <View
