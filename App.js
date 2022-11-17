@@ -37,8 +37,8 @@ const App = () => {
       <ApplicationProvider {...eva} theme={eva.light}>
         <NavigationContainer>
         {/* <LoginNavigation/> */}
-        <LessorNavigation />
-        {/* <TenantNavigation/> */}
+        {/* <LessorNavigation /> */}
+        <TenantNavigation/>
         {/* <Login /> */}
         {/* <Register /> */}
         {/* <ManageAccount /> */}

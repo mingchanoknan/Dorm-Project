@@ -6,9 +6,7 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import RoomCard from "../../component/card/RoomCard";
-import { ROOM } from "../../dummy/ROOM";
 import React from "react";
 import axios from "axios";
 import { Toggle, Button, Text, Icon } from "@ui-kitten/components";
