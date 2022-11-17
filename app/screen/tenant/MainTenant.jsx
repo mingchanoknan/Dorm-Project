@@ -13,6 +13,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
+import { FontAwesome5 } from '@expo/vector-icons';
 import { Card, Layout, Divider } from "@ui-kitten/components";
 import RoomGridTile from "../../component/contract/RoomGridTile";
 import { RENT } from "../../dummy/RENT";
@@ -20,6 +21,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { NEWS } from "../../dummy/NEWS";
 import News from "../../component/annoucenews/news";
 import AnnouceNews from "./AnnouceNews";
+
 const MainTenant = ({ route, navigation }) => {
   const annNews = NEWS;
   const [text, setText] = React.useState("");
@@ -29,8 +31,7 @@ const MainTenant = ({ route, navigation }) => {
     return (
       <News
         item={itemData}
-        width={150}
-        numberOfLines={2}
+        width={"90%"}
         onSelect={() => {
           navigation.navigate("NewsDetail",{
             title : itemData.item.title,
@@ -41,39 +42,34 @@ const MainTenant = ({ route, navigation }) => {
       />
     );
   };
+
   return (
     <View style={styles.view}>
-      {/* <View style={styles.header2}>
-      </View> */}
+        <Image
+        source={require("../../assets/bg_login.jpg")}
+        style={styles.background}
+      ></Image>
       <View style={[styles.container]}>
-        <ScrollView>
           <View
             style={{
-              //   backgroundColor: "red",
+              // backgroundColor: "red",
               width: "100%",
-              height: "10%",
+              height: "20%",
               alignItems: "center",
               justifyContent: "center",
+              alignItems: 'center'
             }}
           >
             <View
               style={{
-                backgroundColor: "#d6ddea",
                 width: "90%",
-                height: "80%",
+                height: "100%",
                 borderRadius: "10%",
                 padding: 20,
-                shadowColor: "gray",
-                shadowOffset: {
-                  width: 0,
-                  height: 6,
-                },
-                shadowOpacity: 0.39,
-                shadowRadius: 8.3,
-
                 elevation: 13,
                 flexDirection: "row",
                 justifyContent: "space-around",
+                alignSelf: "center",
                 alignItems: "center",
               }}
             >
@@ -82,9 +78,10 @@ const MainTenant = ({ route, navigation }) => {
                   style={styles.circle}
                   onPress={() => navigation.navigate("InvoiceBill")}
                 >
-                  <Ionicons name="document-text" size={24} color="white" />
+                  <FontAwesome5 name="file-invoice-dollar" size={36} color="white" />
+                  <Text style={styles.headTxt}>บิลค่าเช่า</Text>
                 </TouchableOpacity>
-                <Text style={styles.headTxt}>บิลค่าเช่า</Text>
+               
               </View>
 
               <View style={styles.viewCircle}>
@@ -92,9 +89,10 @@ const MainTenant = ({ route, navigation }) => {
                   style={styles.circle}
                   onPress={() => navigation.navigate("Parcel")}
                 >
-                  <Feather name="box" size={24} color="white" />
+                  <FontAwesome5 name="box" size={36} color="white" />
+                  <Text style={styles.headTxt}>พัสดุ</Text>
                 </TouchableOpacity>
-                <Text style={styles.headTxt}>พัสดุ</Text>
+                
               </View>
 
               <View style={styles.viewCircle}>
@@ -102,43 +100,21 @@ const MainTenant = ({ route, navigation }) => {
                   style={styles.circle}
                   onPress={() => navigation.navigate("Reports")}
                 >
-                  <AntDesign name="notification" size={24} color="white" />
+                  <Ionicons name="megaphone" size={36} color="white" />
+                  <Text style={styles.headTxt}>แจ้งเรื่อง</Text>
                 </TouchableOpacity>
-                <Text style={styles.headTxt}>แจ้งเรื่อง</Text>
-              </View>
-
-              <View style={styles.viewCircle}>
-                <TouchableOpacity style={styles.circle}>
-                  <Ionicons name="newspaper-outline" size={24} color="white" />
-                </TouchableOpacity>
-                <Text style={styles.headTxt}>ข่าวสาร</Text>
+                
               </View>
             </View>
           </View>
-
-          {/* <ScrollView style={{ top: "2%" }}> */}
-            <View style={styles.newsContent}>
               <FlatList
-                data={NEWS}
-                renderItem={renderGridItem}
-                numColumns={2}
-                keyExtractor={(item) => item.id}
-                navigation={navigation}
-              />
+              data={NEWS}
+              renderItem={renderGridItem}
+              numColumns={1}
+              keyExtractor={item => item.id}
+              navigation={navigation}
+            />
             </View>
-          {/* </ScrollView> */}
-
-          {/* <ScrollView style={{ flex: 1 }}>
-        <View style={[{ alignItems: "center" }]}>
-          {annNews.map((item, index) => (
-            <View key={index}>
-              <News data={item} navigation={navigation} />
-            </View>
-          ))}
-        </View>
-      </ScrollView> */}
-        </ScrollView>
-      </View>
     </View>
   );
 };
@@ -147,7 +123,7 @@ const styles = StyleSheet.create({
   view: {
     flex: 1,
     backgroundColor: "white",
-    flexDirection: "column",
+    flexDirection: "column"
   },
   header: {
     margin: 10,
@@ -174,29 +150,30 @@ const styles = StyleSheet.create({
   },
   container: {
     margin: 10,
-    height: "95%",
-    // backgroundColor: "#F4ECEC",
-    shadowColor: "#D9D9D9",
-    shadowOffset: {
-      width: 0,
-      height: 5,
-    },
-    shadowOpacity: 0.36,
-    shadowRadius: 6.68,
-
-    elevation: 11,
+    alignItems: "center",
+    flex: 1
   },
   circle: {
-    backgroundColor: "#333b5f",
-    width: 40,
-    height: 40,
-    borderRadius: "50%",
+    backgroundColor: "rgba(242, 247, 247, 0.5)",
+    borderColor: "white",
+    borderWidth: 0.3,
+    width: 90,
+    height: 80,
+    borderRadius: "20%",
     justifyContent: "center",
     alignItems: "center",
+    
   },
   viewCircle: {
     flexDirection: "column",
     justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+   
+  },
+  newsContent: {
+    width: "100%",
+    paddingBottom: 50,
     alignItems: "center",
   },
   box: {
@@ -222,7 +199,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     top: 5,
     fontSize: "12px",
-    color: "#646262",
+    color: "white",
   },
   container1: {
     // justifyContent: "space-between",
@@ -233,10 +210,12 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   background: {
+    height: "60%",
     width: "100%",
-    height: "29%",
-    borderBottomLeftRadius: 60,
-    borderBottomRightRadius: 60,
+    borderRadius: "50px",
+    position: "absolute",
+    zIndex: -100,
+    top: -150
   },
   input: {
     height: 60,

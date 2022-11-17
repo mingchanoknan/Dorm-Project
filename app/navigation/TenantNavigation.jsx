@@ -34,6 +34,14 @@ const TenantNavigation = () => {
     />
   );
 
+  const listIconToOpenDrawer2 = (navigation) => (
+    <FontAwesome
+      name="bars"
+      size={24}
+      color="white"
+      onPress={() => navigation.openDrawer()}
+    />
+  );
   //Stack
   const MyTenantsNavigator = () => {
     return (
@@ -42,6 +50,7 @@ const TenantNavigation = () => {
         screenOptions={{
           headerShown: false,
           headerTintColor: "white",
+          headerStyle: { backgroundColor: "transparent" },
         }}
       >
         <TenantsNavigator.Screen
@@ -49,17 +58,18 @@ const TenantNavigation = () => {
           component={MainTenant}
           options={({ route, navigation }) => ({
             drawerLabel: "Main",
-            title: "",
+            title: "Home",
             headerShown: true,
-            headerLeft: () => listIconToOpenDrawer(navigation),
-            headerBackground: () => (
-              <View style={{ backgroundColor: "#7dd0f5", height: "100%" }}>
-                <Image
-                  source={require("../assets/logo.png")}
-                  style={styles.logo}
-                ></Image>
-              </View>
-            ),
+            headerLeft: () => listIconToOpenDrawer2(navigation),
+            headerStyle: { backgroundColor: "transparent" },
+            // headerBackground: () => (
+            //   <View style={{ backgroundColor: "#7dd0f5", height: "100%" }}>
+            //     <Image
+            //       source={require("../assets/logo.png")}
+            //       style={styles.logo}
+            //     ></Image>
+            //   </View>
+            // ),
           })}
         />
         <TenantsNavigator.Screen
@@ -81,6 +91,16 @@ const TenantNavigation = () => {
           component={Reports}
           options={({ route }) => ({
             // title: route.params.categoryTitle,
+            headerShown: true,
+          })}
+        />
+        <TenantsNavigator.Screen
+          name="NewsDetail"
+          component={NewsDetail}
+          options={({ route }) => ({
+            title: route.params.title.toString(),
+            headerShown: true,
+            headerStyle: { backgroundColor: "transparent" },
           })}
         />
       </TenantsNavigator.Navigator>
@@ -93,8 +113,7 @@ const TenantNavigation = () => {
         initialRouteName="Tenants"
         screenOptions={{
           headerShown: false,
-          tabBarActiveTintColor: "white",
-          tabBarInactiveTintColor: "red",
+          tabBarActiveTintColor: "#71d4d9"
           //     tabBarStyle: {
           //   backgroundColor: '#d1cfcf',
           //   borderTopColor: 'transparent',
@@ -106,10 +125,10 @@ const TenantNavigation = () => {
           component={MyTenantsNavigator}
           options={{
             tabBarIcon: ({ color, size }) => {
-              return <Entypo name="home" size={24} color="color" />;
+              return <Entypo name="home" size={24} color={color} />;
             },
-            tabBarLabel: () => {
-              return <Text style={{ fontSize: "12px" }}>หน้าหลัก</Text>;
+            tabBarLabel: ({ color, size }) => {
+              return <Text style={{ fontSize: "12px", }}>หน้าหลัก</Text>;
             },
           }}
         />
@@ -118,7 +137,7 @@ const TenantNavigation = () => {
           component={Parcel}
           options={{
             tabBarIcon: ({ color, size }) => {
-              return <Fontisto name="bell-alt" size={24} color="color" />;
+              return <Fontisto name="bell-alt" size={24} color={color} />;
             },
             tabBarLabel: () => {
               return <Text style={{ fontSize: "12px" }}>การแจ้งเตือน</Text>;
@@ -138,8 +157,9 @@ const TenantNavigation = () => {
           options={({ route, navigation }) => {
             return {
               title: "Invoices",
-              headerLeft: () => listIconToOpenDrawer(navigation),
-              headerTintColor: "#47C5FC",
+              headerLeft: () => listIconToOpenDrawer2(navigation),
+              headerTintColor: "white",
+              headerStyle: { backgroundColor: "transparent" },
             };
           }}
         />
@@ -149,7 +169,8 @@ const TenantNavigation = () => {
           options={({ route, navigation }) => {
             return {
               title: "Invoice Detail",
-              headerTintColor: "#47C5FC",
+              headerTintColor: "white",
+              headerStyle: { backgroundColor: "transparent" },
             };
           }}
         />
@@ -195,7 +216,7 @@ const TenantNavigation = () => {
 
   return (
     <TenantNavigator.Navigator
-      initialRouteName="Reports"
+      initialRouteName="Main"
       screenOptions={({ route, navigation }) => {
         return {
           headerShown: false,
@@ -223,7 +244,7 @@ const TenantNavigation = () => {
           };
         }}
       />
-        <TenantNavigator.Screen name="News" component={NewsNavigation} />
+        {/* <TenantNavigator.Screen name="News" component={NewsNavigation} /> */}
     </TenantNavigator.Navigator>
   );
 };

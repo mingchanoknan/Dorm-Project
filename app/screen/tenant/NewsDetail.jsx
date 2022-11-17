@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
     height: "60%",
     borderBottomLeftRadius: 60,
     borderBottomRightRadius: 60,
+    top: -100
   },
   card: {
     flex: 1,

@@ -80,7 +80,7 @@ const news = ({ item, width, numberOfLines, onSelect }) => {
 
   return (
     <View style={[styles.shadow]}>
-      <Card style={[styles.card, { width}]} header={Header} footer={Footer}>
+      <Card style={[styles.card, {width}]} header={Header} footer={Footer}>
         <Text numberOfLines={numberOfLines}>{text}</Text>
       </Card>
 
@@ -134,11 +134,11 @@ const news = ({ item, width, numberOfLines, onSelect }) => {
 
 const styles = StyleSheet.create({
   card: {
-    flex: 1,
-    margin: 7,
     marginBottom: 10,
+    marginTop: 20,
     borderRadius:15,
     backgroundColor: "rgba(230, 248, 253, 0.9)",
+    alignSelf: "center"
   },
   footerContainer: {
     flexDirection: "row",
@@ -149,6 +149,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   shadow:{
+    flex: 1,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,

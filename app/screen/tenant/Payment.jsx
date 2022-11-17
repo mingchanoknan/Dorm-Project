@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState} from "react";
 import { Text, View, TextInput, FlatList, ScrollView } from "react-native";
 import {
   Image,
@@ -17,6 +17,23 @@ import Date from "../../component/invoice/date";
 
 const Payment = ({ route, navigation }) => {
   const { total } = route.params;
+  const [ totalPay, setTotalPay] = useState(0);
+  const [ date, setDate] = useState("");
+  const [ time, setTime] = useState("");
+  const [note, setNote] = useState("");
+
+  console.log(totalPay);
+  const onChangeDateHandler = (date) => {
+    setDate(date);
+    console.log(date)
+    // console.log(reserve_date.toISOString());
+  };
+  const onChangeTimeHandler = (time) => {
+    setTime(time);
+    console.log(time)
+    // console.log(reserve_date.toISOString());
+  };
+
   return (
     <View style={styles.view}>
       <View style={styles.bg_money}>
@@ -86,7 +103,7 @@ const Payment = ({ route, navigation }) => {
           แจ้งหลักฐานการโอนเงิน
         </Text>
         <Text style={[styles.txt, { left: "4%" }]}>จำนวนเงิน</Text>
-        <TextInput
+        <TextInput onChangeText={(totalPay) => setTotalPay(totalPay)}
           style={[styles.inputInfo, { width: "80%", paddingLeft: "5%" }]}
           keyboardType="numeric"
         ></TextInput>
@@ -96,7 +113,7 @@ const Payment = ({ route, navigation }) => {
             วันที่โอนเงิน
           </Text>
           {/* <TextInput style={[styles.inputInfo, {position: 'absolute', top: '10%', right: '12.5%', width: '33%', marginLeft: '13%'}]}></TextInput> */}
-          <DatepickerAccessoriesShowcase />
+          <DatepickerAccessoriesShowcase onDate={onChangeDateHandler} />
           <Text
             style={[
               styles.txt,
@@ -106,10 +123,10 @@ const Payment = ({ route, navigation }) => {
             เวลาที่โอนเงิน
           </Text>
           {/* <TextInput style={[styles.inputInfo, {position: 'absolute', top: '10%', right: '12.5%', width: '33%', marginLeft: '13%'}]}></TextInput> */}
-          <TimePicker />
+          <TimePicker  onTime={onChangeTimeHandler} />
 
           <Text style={[styles.txt, { marginTop: 72 }]}>หมายเหตุ(ถ้ามี)</Text>
-          <TextInput
+          <TextInput onChangeText={(note) => setNote(note)}
             style={[
               styles.inputInfo,
               {
@@ -179,31 +196,17 @@ const Payment = ({ route, navigation }) => {
   );
 };
 
-const CalendarIcon = (props) => (
-  <AntDesign name="calendar" size={18} color="#65778E" />
-);
-
-const TimeIcon = (props) => (
-  <MaterialIcons name="access-time" size={18} color="#65778E" />
-);
-
-const DatepickerAccessoriesShowcase = () => {
+const DatepickerAccessoriesShowcase = ({onDate}) => {
   const [date, setDate] = React.useState(new Date());
 
   return (
     <Layout style={[styles.date, {}]} level="1">
-      {/* <Datepicker
-        placeholder="Pick Date"
-        date={date}
-        onSelect={(nextDate) => setDate(nextDate)}
-        accessoryRight={CalendarIcon}
-      /> */}
-      <Date />
+      <Date onDate={onDate} />
     </Layout>
   );
 };
 
-const TimePicker = () => {
+const TimePicker = ({onTime}) => {
   const [date, setDate] = React.useState(new Date());
 
   return (
@@ -211,7 +214,7 @@ const TimePicker = () => {
       style={[styles.date, { left: "42%", marginRight: "55%" }]}
       level="1"
     >
-      <Time />
+      <Time onTime={onTime}/>
     </Layout>
   );
 };

@@ -12,12 +12,22 @@ import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import { IndexPath, Layout, Select, SelectItem } from "@ui-kitten/components";
 import Box from "../../component/invoice/InvoiveBox";
 import { INVOICE } from "../../dummy/INVOICE";
+import {baseUrl} from "@env"
 import axios from 'axios';
 
-const baseUrl ='http://10.111.2.109:8080';
 const Invoices = ({ route, navigation }) => {
-  const ALL_ROOM = INVOICE;
-  const data = ["บิลทั้งหมด", "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
+  const data = ["AllBill",  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December"];
   const [selectedIndex, setSelectedIndex] = React.useState(new IndexPath(0));
   const displayValue = data[selectedIndex.row];
 
@@ -25,15 +35,26 @@ const Invoices = ({ route, navigation }) => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    
-      axios.get(`${baseUrl}/invoices`)
-      .then((response) => {
-        setUser(response.data);
-        console.log(response.data);
-      })
-      .catch(
-        (error) => console.log('error')
-      )
+    const url = `${baseUrl}/invoices`;
+
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get(url);
+
+        if (response.status === 200) {
+          
+              setUser(response.data);
+              console.log(response.data);
+          return; 
+        } else {
+          throw new Error("Failed to fetch users invoice user");
+        }
+      } catch (error) {
+          console.log('Data fetching cancelled invoice user');
+      }
+      
+    };
+    fetchUsers();
   }, []);
   return (
     <View style={styles.view}>
@@ -42,24 +63,6 @@ const Invoices = ({ route, navigation }) => {
         style={styles.background}
       ></Image>
       
-      {/* <Layout style={{position: "absolute", width: "35%", borderRadius: "50%", top: "12%", left: "10%"}} level='1'>
-      <Select  size='meduim'
-        selectedIndex={selectedIndex}
-        onSelect={index => setSelectedIndex(index)}>
-        <SelectItem title='Option 1'/>
-        <SelectItem title='Option 2'/>
-        <SelectItem title='Option 3'/>
-      </Select>
-    </Layout> */}
-      {/* <TouchableOpacity style={[styles.bill, { position: "absolute" }]}>
-        <Text
-          style={{ color: "#5099FF", fontWeight: "bold", fontSize: "14px" }}
-        >
-          รอบบิล
-        </Text>
-        <AntDesign name="down" size={20} color="#9E9E9E" />
-      </TouchableOpacity> */}
-
       <Layout style={styles.bill1} level="1">
         <Select 
           style={{ width: "100%", borderRadius: "50%"}}
@@ -69,14 +72,12 @@ const Invoices = ({ route, navigation }) => {
           onSelect={(index) => setSelectedIndex(index)}
         >
           {data.map((title, index) => (
-            
             <SelectItem key={index} title={title} />
-            
           ))}
           {/* {data.map(renderOption)} */}
         </Select>
       </Layout>
-      {/* <Text style={{position: "absolute"}}>{displayValue}</Text> */}
+    
       <ScrollView style={[styles.box, { flex: 1 }]}>
         <View style={[{ alignItems: "center" }]}>
           {user && (user.map((item, index) => (
@@ -102,7 +103,10 @@ const styles = StyleSheet.create({
   },
   background: {
     width: "100%",
+    height: "50%",
+    position: "absolute",
     zIndex: -100,
+    top: -150
     //   borderRadius: "50px",
     //   borderBottomEndRadius: "0px",
     //   borderBottomLeftRadius: "0px",
@@ -128,19 +132,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "flex-start",
     backgroundColor: "white",
-    position: "absolute",
     width: "35%",
     borderRadius: 50,
-    top: "10%",
+    marginTop: "10%",
     marginLeft: 50,
+    marginBottom: 10,
     borderRadius: 4,
     margin: 2,
-    padding: 6,
-    backgroundColor: 'pink',
-    
   },
   box: {
-    top: -145,
     zIndex: 100,
   },
 });
