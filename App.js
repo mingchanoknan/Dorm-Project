@@ -1,6 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import LessorNavigation from './app/navigation/LessorNavigation';
 import TenantNavigation from './app/navigation/TenantNavigation';
+import LoginNavigation from './app/navigation/LoginNavigation';
 import Login from './app/screen/Login';
 import Register from './app/screen/Register';
 import ManageAccount from './app/screen/MangeAccount';
@@ -36,13 +37,13 @@ const App = () => {
       <IconRegistry icons={EvaIconsPack} />
       <ApplicationProvider {...eva} theme={eva.light}>
         <NavigationContainer>
-        {/* <LoginNavigation/> */}
-        {/* <LessorNavigation /> */}
-        <TenantNavigation/>
+        {/* <LessorNavigation /> */}   
         {/* <Login /> */}
+        <LessorNavigation />
+        {/* <TenantNavigation/> */}
+        {/* <LoginNavigation /> */}
         {/* <Register /> */}
         {/* <ManageAccount /> */}
-        {/* <AnnouceNews /> */}
         </NavigationContainer>
       </ApplicationProvider>
     </>

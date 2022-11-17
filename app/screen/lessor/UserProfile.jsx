@@ -10,16 +10,9 @@ import {
   FlatList,
 } from "react-native";
 import {
-  Button,
   Divider,
   Layout,
-  Modal,
-  Popover,
-  Icon,
-  Drawer,
-  DrawerGroup,
-  DrawerItem,
-  Tooltip,
+  Modal
 } from "@ui-kitten/components";
 import {
   Ionicons,
@@ -34,9 +27,6 @@ import axios from "axios";
 import { StackActions } from "@react-navigation/native";
 
 function User({ userObject, navigation, contract, roomNumber, vehicle }) {
-  const SmartphoneIcon = (props) => (
-    <FontAwesome5 name="car" size={16} color={"#415e80"} />
-  );
   const [selectedIndex, setSelectedIndex] = React.useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [addVehicle, setAddVehicle] = useState(false);
@@ -945,8 +935,7 @@ const UserProfile = ({ route, navigation }) => {
     const urlContract = `${baseUrl}/getContractNum/${categoryTitle}`;
 
     const urlVehicle = `${baseUrl}/getVehicleNum/${categoryTitle}`;
-    // console.log("test");
-    // console.log(categoryTitle);
+
     const fetchUsers = async () => {
       try {
         const response = await axios.get(url);

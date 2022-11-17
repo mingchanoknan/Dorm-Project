@@ -12,14 +12,14 @@ import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import { IndexPath, Select, SelectItem } from "@ui-kitten/components";
 import { INVOICE } from "../../dummy/INVOICE";
 import TableInvoice from "../../component/invoice/tableInvoice";
+import {baseUrl} from "@env"
 import axios from 'axios';
 
-const baseUrl ='http://10.111.2.109:8080';
-function User({userObject, navigation}) {
+function User({userObject, navigation, userInfo}) {
   //console.log(userObject.dorm_fee);
   return (
     <View style={styles.container1}>
-      {userObject && (
+      {userObject && userInfo && (
         <View style={styles.bg_money}>
           <Text
             style={{
@@ -44,146 +44,15 @@ function User({userObject, navigation}) {
               top: 6,
             }}
           >
-            วันครบกำหนดชำระ 10 พ.ศ. 2022
+            วันครบกำหนดชำระ 10 {userObject.month} {userObject.year}
           </Text>
         </View>
       )}
 
-      {userObject && (
+      {userObject && userInfo && (
       <View style={styles.container}>
         <Card style={[styles.cardContainer]} disabled={true}>
-          <View style={styles.build}>
-            <FontAwesome name="building" size={24} color="black" />
-            <FontAwesome
-              style={{ left: "-5%", top: 3.5 }}
-              name="building"
-              size={18}
-              color="black"
-            />
-          </View>
-          <View style={styles.head}>
-            <Text
-              style={{
-                fontSize: "13px",
-                fontWeight: "bold",
-                color: "white",
-              }}
-            >
-              {" "}
-              ห้อง {userObject.room_number} {userObject.month}/{userObject.year}
-            </Text>
-          </View>
-
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              left: "-7%",
-              marginVertical: 60,
-            }}
-          >
-            <View
-              style={{
-                backgroundColor: "#EEEEEE",
-                padding: 15,
-                borderRadius: 20,
-                width: "50%",
-              }}
-            >
-              <Text style={styles.txtHead}> รายละเอียดหัวบิล </Text>
-              <Text style={styles.txtHead}> ชื่อ คุณ Somsak </Text>
-              <Text style={styles.txtHead}> เบอร์โทร : 0622108493 </Text>
-              <Text style={styles.txtHead}> เบอร์โทรสำรอง : </Text>
-            </View>
-
-            <View style={styles.status}>
-              <View style={styles.conStatus}>
-                <Text style={styles.txtHead}> สถานะบิล</Text>
-                <Text
-                  style={[styles.txtHead, { color: "red", marginLeft: 20 }]}
-                >
-                  {" "}
-                  {userObject.status === 'APPROVED_BILL' ? 'ชำระแล้ว' : 'ยังไม่ชำระ'}{" "}
-                </Text>
-              </View>
-
-              <View style={styles.send}>
-                <View style={styles.conSend}>
-                  <Text style={[styles.txtHead]}>
-                    {" "}
-                    บิลจะถูกส่งไปให้ผู้เช่า{" "}
-                  </Text>
-                </View>
-                <Text style={[styles.txtHead, { fontSize: "10px" }]}>
-                  {" "}
-                  Somsak Deena
-                </Text>
-                <Text style={[styles.txtHead, { fontSize: "10px" }]}>
-                  {" "}
-                  0622108493{" "}
-                </Text>
-              </View>
-            </View>
-          </View>
-
-          <View
-            style={{
-              position: "absolute",
-              zIndex: 100,
-              width: "105%",
-              alignSelf: "center",
-              top: "85%",
-            }}
-          >
-            <TableInvoice invoice={userObject}/>
-          </View>
-          <View
-            style={{
-              position: "absolute",
-              width: "100%",
-              marginLeft: 12,
-              top: "208ssssssssssssssss%",
-            }}
-          >
-            <View
-              style={{
-                position: "absolute",
-                backgroundColor: "#EEEEEE",
-                padding: 15,
-                borderRadius: 15,
-                width: "106%",
-              }}
-            >
-              <Text style={[styles.txtHead, { fontSize: "10px" }]}>
-                {" "}
-                หมายเหตุ:{" "}{userObject.note}
-              </Text>
-            </View>
-            <Text
-              style={[
-                styles.txtHead,
-                { fontSize: "10px", color: "#F26565", top: 50, left: 20 },
-              ]}
-            >
-              *หากชำระล่าช้าจะถูกทบในเดือนถัดไป{" "}
-            </Text>
-          </View>
-          <TouchableOpacity
-            style={styles.btnLoad}
-            onPress={() => navigation.navigate("Payment", { id: userObject.id, total: userObject.total})}
-          >
-            <Text
-              style={{
-                fontSize: "10px",
-                fontWeight: "bold",
-                color: "white",
-              }}
-            >
-              {" "}
-              ชำระบิล{" "}
-            </Text>
-          </TouchableOpacity>
+            <TableInvoice invoice={userObject} userInfo={userInfo} navigation={navigation}/>
         </Card>
       </View>
       )}
@@ -191,24 +60,27 @@ function User({userObject, navigation}) {
   )
 };
 
-const InvioveDetail = ({ route, navigation }, props) => {
+const InvioveDetail = ({ route, navigation }) => {
   const { id } = route.params;
-  const { categoryTitle } = route.params;
+  const { categoryTitle, month, year } = route.params;
   const [data, setData] = useState();
   const [invoice, setInvoice] = useState(null);
+  const [user, setUser] = useState(null);
+
   useEffect(() => {
-    // const response = axios.get(`${baseUrl}/invoices`);
-    // setInvoice(response);
-    // console.log(response);
-    const url = `${baseUrl}/getInvoiceNum/${categoryTitle}`;
+    const url = `${baseUrl}/getInvoice/${categoryTitle}/${month}/${year}`;
+    const urlUser = `${baseUrl}/getUserNum/${categoryTitle}`;
+
     console.log("test");
     const fetchUsers = async () => {
       try {
         const response = await axios.get(url);
-        if (response.status === 200) {
+        const resUser = await axios.get(urlUser);
+        if (response.status === 200 && resUser.status === 200) {
           setInvoice(response.data);
+          setUser(resUser.data);
           //console.log(response.data);
-          // console.log("1"+categoryTitle);
+          console.log(resUser.data);
           return;
         } else {
           throw new Error("Failed to fetch users");
@@ -219,24 +91,17 @@ const InvioveDetail = ({ route, navigation }, props) => {
       
     };
     fetchUsers();
-    // console.log(invoice);
-    // let get = invoice.filter((item) => item.room_number == categoryTitle)[0];
-    // setData(get);
-    // console.log("2"+categoryTitle);
+  
   }, [categoryTitle]);
   console.log(invoice);
-  // useEffect(() => {
-  //   let get = INVOICE.filter((item) => item.id == id)[0];
-  //   setData(get);
-  // }, [id]);
+
   return (
     <View style={styles.view}>
       <Image
         source={require("../../assets/bg_invoice.png")}
         style={styles.background}
       ></Image>
-      <User userObject={invoice} navigation={navigation} />
-      
+      <User userObject={invoice} userInfo={user} navigation={navigation} />
     </View>
   );
 };
@@ -249,6 +114,7 @@ const styles = StyleSheet.create({
   },
   background: {
     width: "100%",
+    top: -90,
     zIndex: -100,
   },
   box: {
@@ -258,14 +124,14 @@ const styles = StyleSheet.create({
 
   bg_money: {
     zIndex: 100,
-    top: -255,
+    top: -280,
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(255, 255, 255, 0.5)",
-    width: 300,
-    height: "13%",
+    width: 360,
+    height: "10%",
     alignSelf: "center",
   },
   cardContainer: {
@@ -273,8 +139,8 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "flex-start",
     zIndex: 100,
-    width: "100%",
-    height: "90%",
+    width: "95%",
+    height: "78%",
     position: "relative",
     padding: 10,
     display: "flex",
@@ -286,9 +152,10 @@ const styles = StyleSheet.create({
   container1: {
   },
   container: {
-    width: "90%",
+    width: "95%",
+    height: "100%",
     paddingVertical: 10,
-    top: -250,
+    top: -283,
     zIndex: 100,
     alignItems: "center",
   },

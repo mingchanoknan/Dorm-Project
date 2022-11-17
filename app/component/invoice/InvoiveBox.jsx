@@ -2,9 +2,10 @@ import { StyleSheet, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Card, Layout, Text, Divider } from "@ui-kitten/components";
 import { FontAwesome } from "@expo/vector-icons";
+import { AntDesign } from '@expo/vector-icons';
 import React from "react";
 
-const RoomCard = (props) => {
+const InvoiceBox = (props) => {
   // const color2 = props.status;
   // const colorStatus = color2.equals("UNAPPROVED_BILL") ? '#4291FF' : '#F26565';
   //const { id } = route.params;
@@ -15,12 +16,12 @@ const RoomCard = (props) => {
   // }, [id]);
   return (
     <View style={styles.container}>
-    {props.filter === 'บิลทั้งหมด' && (
+    {props.filter === 'AllBill' && (
       <Card
         style={[styles.cardContainer]}
         onPress={() =>
           props.navigation.navigate("InvoiceDetail", {  id:  props.data.id,
-              categoryTitle:  props.data.room_number })
+              categoryTitle:  props.data.room_number, month: props.data.month, year: props.data.year})
         }
       >
         <View style={styles.build}>
@@ -66,14 +67,14 @@ const RoomCard = (props) => {
             <Text style={styles.txt}> บาท </Text>
           </View>
         </View>
-        <TouchableOpacity style={styles.btnLoad}>
+        {/* <TouchableOpacity style={styles.btnLoad}>
           <Text
             style={{ fontSize: "10px", fontWeight: "bold", color: "white" }}
           >
             {" "}
             downloade{" "}
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <TouchableOpacity style={styles.btnNext}>
           <Text
             style={{ fontSize: "10px", fontWeight: "bold", color: "#FFB085" }}
@@ -81,15 +82,17 @@ const RoomCard = (props) => {
             {" "}
             ดูรายละเอียด{" "}
           </Text>
+          <AntDesign name="rightcircle" size={16} color="#FFB085" />
         </TouchableOpacity>
       </Card>
       )}
 
       {props.data.month === props.filter && (
-      <Card
+        <Card
         style={[styles.cardContainer]}
         onPress={() =>
-          props.navigation.navigate("InvoiceDetail", { id: props.data.id })
+          props.navigation.navigate("InvoiceDetail", {  id:  props.data.id,
+              categoryTitle:  props.data.room_number, month: props.data.month, year: props.data.year})
         }
       >
         <View style={styles.build}>
@@ -135,14 +138,14 @@ const RoomCard = (props) => {
             <Text style={styles.txt}> บาท </Text>
           </View>
         </View>
-        <TouchableOpacity style={styles.btnLoad}>
+        {/* <TouchableOpacity style={styles.btnLoad}>
           <Text
             style={{ fontSize: "10px", fontWeight: "bold", color: "white" }}
           >
             {" "}
             downloade{" "}
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <TouchableOpacity style={styles.btnNext}>
           <Text
             style={{ fontSize: "10px", fontWeight: "bold", color: "#FFB085" }}
@@ -150,6 +153,7 @@ const RoomCard = (props) => {
             {" "}
             ดูรายละเอียด{" "}
           </Text>
+          <AntDesign name="rightcircle" size={16} color="#FFB085" />
         </TouchableOpacity>
       </Card>
       )}
@@ -273,4 +277,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RoomCard;
+export default InvoiceBox;

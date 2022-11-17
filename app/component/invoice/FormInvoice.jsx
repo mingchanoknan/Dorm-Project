@@ -5,49 +5,86 @@ import {
   Text,
   Image,
   TouchableOpacity,
-  TextInput,
+  TextInput
 } from "react-native";
-import { Feather } from "@expo/vector-icons";
+import { Feather } from '@expo/vector-icons';
 import { FontAwesome } from "@expo/vector-icons";
 import { baseUrl } from "@env";
 import axios from "axios";
 import { StackActions } from "@react-navigation/native";
 
-const TableInvoice = (props) => {
+const FormInvoice = (props) => {
+  const [dorm_fee, setDorm_fee] = useState(props.rentPrice.room_price);
+  const [water_fee, setWater_fee] = useState(props.meterWater.sum);
+  const [electricity_fee, setElectricity_fee] = useState(props.meterElec.sum);
+  const [common_fee, setCommon_fee] = useState(props.rentPrice.common_fee);
+  const [expenses, setExpenses] = useState(0);
+  const [amount, setAmount] = useState(0);
+  const [tax, setTax] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [note, setNote] = useState("");
+  const [fine, setFine] = useState(0);
   const [edit, setEditable] = useState(false);
   const [sent, setSent] = useState(false);
+  
+  useEffect(() => {
+    dorm_fee == "" ? setDorm_fee(0) : dorm_fee;
+    water_fee == "" ? setWater_fee(0) : water_fee;
+    electricity_fee == "" ? setElectricity_fee(0) : electricity_fee;
+    common_fee == "" ? setCommon_fee(0) : common_fee;
+    expenses == "" ? setExpenses(0) : expenses;
 
-  const payment = async (event) => {
-    // const roomInvoice = {
-    //     month : props.month,
-    //       year : props.year,
-    //       room_number : props.rentPrice.room_number,
-    //       invoice_date : new Date().toLocaleDateString().slice(0,10),
-    //       common_fee : common_fee,
-    //       dorm_fee : dorm_fee,
-    //       electricity_fee : electricity_fee,
-    //       water_fee : water_fee,
-    //       expenses : expenses,
-    //       fine : fine,
-    //       amount : amount,
-    //       tax : tax,
-    //       total : total,
-    //       note : note,
-    //       status : "UNAPPROVED_BILL"
-    // }
-    // try {
-    //   const updateInvoice = await axios.post(
-    //     `${baseUrl}/addInvoice`, roomInvoice
-    //   );
-    //   if (updateInvoice.status === 200) {
-    //     setSent(true);
-    //     alert("ส่งบิลไปยังผู้เช่าเรียบร้อย");
-    //   } else {
-    //     throw new Error("An error ");
-    //   }
-    // } catch (error) {
-    //   alert(error);
-    // }
+    const sum =
+      parseInt(dorm_fee) +
+      parseInt(water_fee) +
+      parseInt(electricity_fee) +
+      parseInt(common_fee) +
+      parseInt(expenses);
+    const tax1 =
+      (parseInt(dorm_fee) +
+        parseInt(water_fee) +
+        parseInt(electricity_fee) +
+        parseInt(common_fee) +
+        parseInt(expenses)) *
+      0.07;
+    const total1 = sum + tax1;
+    setAmount(sum.toFixed(2));
+    setTax(tax1.toFixed(2));
+    setTotal(total1.toFixed(2));
+  }, [dorm_fee, water_fee, electricity_fee, common_fee, expenses]);
+
+  const sendBill = async (event) => {
+    const roomInvoice = {
+        month : props.month,
+          year : props.year,
+          room_number : props.rentPrice.room_number,
+          invoice_date : new Date().toLocaleDateString().slice(0,10),
+          common_fee : common_fee,
+          dorm_fee : dorm_fee,
+          electricity_fee : electricity_fee,
+          water_fee : water_fee,
+          expenses : expenses,
+          fine : fine,
+          amount : amount,
+          tax : tax,
+          total : total,
+          note : note,
+          status : "UNAPPROVED_BILL"
+    }
+    try {
+      const updateInvoice = await axios.post(
+        `${baseUrl}/addInvoice`, roomInvoice
+      );
+
+      if (updateInvoice.status === 200) {
+        setSent(true);
+        alert("ส่งบิลไปยังผู้เช่าเรียบร้อย");
+      } else {
+        throw new Error("An error ");
+      }
+    } catch (error) {
+      alert(error);
+    }
   };
   return (
     <>
@@ -69,7 +106,7 @@ const TableInvoice = (props) => {
           }}
         >
           {" "}
-          ห้อง {props.invoice.room_number} {props.invoice.month}/{props.invoice.year}
+          ห้อง  {props.month}/{props.year}
         </Text>
       </View>
 
@@ -91,11 +128,11 @@ const TableInvoice = (props) => {
           }}
         >
           <Text style={styles.txtHead}> รายละเอียดหัวบิล </Text>
-          <Text style={styles.txtHead}> ชื่อ คุณ {props.userInfo.first_name} </Text>
+          <Text style={styles.txtHead}> ชื่อ คุณ {props.user.first_name} </Text>
           <Text style={[styles.txtHead]}> เบอร์โทร : </Text>
-          <Text style={[styles.txtHead]}> {props.userInfo.tel_no1} </Text>
+          <Text style={[styles.txtHead]}>{props.user.tel_no1} </Text>
           <Text style={styles.txtHead}> เบอร์โทรสำรอง : </Text>
-          <Text style={styles.txtHead}> {props.userInfo.tel_no2}</Text>
+          <Text style={styles.txtHead}>{props.user.tel_no2} </Text>
         </View>
 
         <View style={styles.status}>
@@ -103,7 +140,7 @@ const TableInvoice = (props) => {
             <Text style={styles.txtHead}> สถานะบิล</Text>
             <Text style={[styles.txtHead, { color: "red", marginLeft: 20 }]}>
               {" "}
-              {props.invoice.status == "UNAPPROVED_BILL" ? 'ยังไม่ชำระ' : 'ชำระแล้ว'}
+              {sent ? "ยังไม่ชำระ" : "บิลยังไม่ถูกส่ง"}
             </Text>
           </View>
 
@@ -111,14 +148,12 @@ const TableInvoice = (props) => {
             <View style={styles.conSend}>
               <Text style={[styles.txtHead]}> บิลจะถูกส่งไปให้ผู้เช่า </Text>
             </View>
-            <Text
-              style={[
-                styles.txtHead, { fontSize: "10px"}
-              ]}
-            >
-              {props.userInfo.first_name} {props.userInfo.last_name}
+            <Text style={[styles.txtHead, { fontSize: "12px" }, sent ? {color: "black"} : {color: "gray", textAlign: "center", fontSize: "12px"}]}>
+              {" "} {sent ? props.user.first_name+" "+props.user.last_name : "ยังไม่มีผู้เช่าเชื่อมต่อ"}
             </Text>
-            <Text style={[styles.txtHead, { fontSize: "10px"}]}>{props.userInfo.tel_no1}</Text>
+            <Text style={[styles.txtHead, { fontSize: "12px" }]}>
+              {" "} {sent ? props.user.tel_no1 : ""}
+            </Text>
           </View>
         </View>
       </View>
@@ -129,10 +164,12 @@ const TableInvoice = (props) => {
           zIndex: 100,
           width: "105%",
           alignSelf: "center",
-          top: "72%",
-          height: "120%"
+          top: "78%",
+          height: "120%",
+          //backgroundColor: 'red'
         }}
       >
+        {/* <TableBill invoice={roomInvoice} /> */}
         <View
           style={{
             backgroundColor: "#e3effa",
@@ -172,28 +209,28 @@ const TableInvoice = (props) => {
               paddingTop: "5%",
             }}
           >
-            <Text style={{ fontSize: "11px", fontWeight: "bold" }}>
+            <Text style={{ fontSize: "12px", fontWeight: "bold" }}>
               ค่าเช่าห้อง(Room rate)
             </Text>
-            <Text style={{ fontSize: "11px", fontWeight: "bold" }}>
-              ค่าน้ำ(Water rate)
+            <Text style={{ fontSize: "12px", fontWeight: "bold" }}>
+              ค่าน้ำ(Water rate) หน่วยละ {props.meterWater.consumption} บาท ใช้ไป {props.meterWater.used_unit} หน่วย
             </Text>
-            <Text style={{ fontSize: "11px", fontWeight: "bold" }}>
-              ค่าไฟฟ้า(Electrical rate)
+            <Text style={{ fontSize: "12px", fontWeight: "bold" }}>
+              ค่าไฟฟ้า(Electrical rate) หน่วยละ {props.meterElec.consumption} บาท ใช้ไป {props.meterElec.used_unit} หน่วย
             </Text>
-            <Text style={{ fontSize: "11px", fontWeight: "bold" }}>
+            <Text style={{ fontSize: "12px", fontWeight: "bold" }}>
               ค่าส่วนกลาง(Common free)
             </Text>
-            <Text style={{ fontSize: "11px", fontWeight: "bold" }}>
+            <Text style={{ fontSize: "12px", fontWeight: "bold" }}>
               ค่าใช้จ่ายเพิ่มเติม
             </Text>
-            <Text style={{ fontSize: "11px", fontWeight: "bold" }}>
+            <Text style={{ fontSize: "12px", fontWeight: "bold" }}>
               เงินรวมก่อนภาษี
             </Text>
-            <Text style={{ fontSize: "11px", fontWeight: "bold" }}>
+            <Text style={{ fontSize: "12px", fontWeight: "bold" }}>
               ภาษีมูลค่าเพิ่ม 7 %
             </Text>
-            <Text style={{ fontSize: "11px", fontWeight: "bold" }}>
+            <Text style={{ fontSize: "12px", fontWeight: "bold" }}>
               รวมสุทธิ
             </Text>
           </View>
@@ -217,40 +254,39 @@ const TableInvoice = (props) => {
                   ? { backgroundColor: "#e1f2eb", borderColor: "#e1f2eb" }
                   : { borderColor: "#e1f2eb" },
               ]}
+              onChangeText={(dorm_fee) => setDorm_fee(dorm_fee)}
             >
-             ฿ {props.invoice.dorm_fee}
+              {dorm_fee}
             </TextInput>
             <TextInput
               keyboardType="numeric"
               editable={false}
+              onChangeText={(water_fee) => setWater_fee(water_fee)}
               style={[
                 styles.txtInput,
-                {
-                  marginTop: 5,
-                  backgroundColor: "#e1f2eb",
-                  borderColor: "#e1f2eb",
-                },
+                
+                { marginTop: 5, backgroundColor: "#e1f2eb", borderColor: "#e1f2eb" },
               ]}
             >
-             ฿ {props.invoice.water_fee}
+              {water_fee}
             </TextInput>
             <TextInput
               keyboardType="numeric"
               editable={false}
+              onChangeText={(electricity_fee) =>
+                setElectricity_fee(electricity_fee)
+              }
               style={[
                 styles.txtInput,
-                {
-                  marginTop: 5,
-                  backgroundColor: "#e1f2eb",
-                  borderColor: "#e1f2eb",
-                },
+                { marginTop: 5, backgroundColor: "#e1f2eb", borderColor: "#e1f2eb" },
               ]}
             >
-             ฿ {props.invoice.electricity_fee}
+              {electricity_fee}
             </TextInput>
             <TextInput
               keyboardType="numeric"
               editable={edit}
+              onChangeText={(common_fee) => setCommon_fee(common_fee)}
               style={[
                 styles.txtInput,
                 !edit
@@ -259,11 +295,12 @@ const TableInvoice = (props) => {
                 { marginTop: 5 },
               ]}
             >
-             ฿ {props.invoice.common_fee}
+              {common_fee}
             </TextInput>
             <TextInput
               keyboardType="numeric"
               editable={edit}
+              onChangeText={(expenses) => setExpenses(expenses)}
               style={[
                 styles.txtInput,
                 !edit
@@ -272,11 +309,12 @@ const TableInvoice = (props) => {
                 { marginTop: 5 },
               ]}
             >
-             ฿ {props.invoice.expenses}
+              {expenses}
             </TextInput>
             <TextInput
               keyboardType="numeric"
               editable={false}
+              onChangeText={(amount) => setAmount(amount)}
               style={[
                 styles.txtInput,
                 {
@@ -286,11 +324,12 @@ const TableInvoice = (props) => {
                 },
               ]}
             >
-             ฿ {props.invoice.amount}
+              {amount}
             </TextInput>
             <TextInput
               keyboardType="numeric"
               editable={false}
+              onChangeText={(tax) => setTax(tax)}
               style={[
                 styles.txtInput,
                 {
@@ -300,11 +339,12 @@ const TableInvoice = (props) => {
                 },
               ]}
             >
-             ฿ {props.invoice.tax}
+              {tax}
             </TextInput>
             <TextInput
               keyboardType="numeric"
               editable={false}
+              onChangeText={(total) => setTotal(total)}
               style={[
                 styles.txtInput,
                 {
@@ -314,7 +354,7 @@ const TableInvoice = (props) => {
                 },
               ]}
             >
-            ฿ {props.invoice.total}
+              {total}
             </TextInput>
           </View>
         </View>
@@ -322,8 +362,9 @@ const TableInvoice = (props) => {
       <View
         style={{
           width: "100%",
-          top: "102%",
+          top: "105%",
           alignItems: "center",
+          
         }}
       >
         <View
@@ -343,41 +384,27 @@ const TableInvoice = (props) => {
           </Text>
           <TextInput
             editable={edit}
-            style={[
-              edit ? { backgroundColor: "white" } : "",
-              {
-                fontSize: "10px",
-                padding: 2,
-                paddingLeft: 5,
-                width: "80%",
-                height: 25,
-                borderRadius: "50%",
-                alignSelf: "center",
-              },
-            ]}
+            style={[ edit ? {backgroundColor: "white"} : "", {
+              fontSize: "10px",
+              padding: 2,
+              paddingLeft: 5,
+              width: "80%",
+              height: 25,
+              borderRadius: "50%",
+              alignSelf: "center",
+            }]}
+            placeholder="กรอกข้อความที่นี่(ถ้ามี)"
+            onChangeText={(note) => setNote(note)}
           >
-            {props.invoice.note}
+            {note}
           </TextInput>
         </View>
-        <Text
-          style={[
-            styles.txtHead,
-            { fontSize: "10px", color: "#F26565", top: 45, left: 20, textAlign: 'left', alignSelf: "flex-start" },
-          ]}
-        >
-          *หากชำระล่าช้าจะถูกทบในเดือนถัดไป{" "}
-        </Text>
       </View>
       <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
-        {!edit && !sent && (
-          <TouchableOpacity
-            style={styles.btnLoad}
-            onPress={() =>
-              props.navigation.navigate("Payment", {
-                id: props.invoice._id,
-                total: props.invoice.total,
-              })
-            }
+        {!edit && !sent && ( 
+            <TouchableOpacity
+            onPress={sendBill}
+            style={[styles.btnLoad]}
           >
             <Text
               style={{
@@ -387,7 +414,77 @@ const TableInvoice = (props) => {
               }}
             >
               {" "}
-              ชำระบิล{" "}
+              ส่งบิล{" "}
+            </Text>
+          </TouchableOpacity>
+          )}
+          {!edit && !sent && (
+          <TouchableOpacity
+            onPress={() => setEditable(true)}
+            style={[styles.btnEdite, {marginLeft: 10}]}
+          >
+            <Feather name="edit" size={18} color="white" />
+          </TouchableOpacity>
+        )}
+        {!edit && sent && (
+          <TouchableOpacity
+            onPress={() => setEditable(true)}
+            style={styles.btnLoad}
+            // onPress={() => navigation.navigate("Payment", { id: data.id, total: data.total})}
+          >
+            <Text
+              style={{
+                fontSize: "10px",
+                fontWeight: "bold",
+                color: "white",
+              }}
+            >
+              {" "}
+              แก้ไขบิล{" "}
+            </Text>
+          </TouchableOpacity>
+        )}
+        {edit && (
+          <TouchableOpacity
+            onPress={() => setEditable(false)}
+            style={[styles.btnLoad, { backgroundColor: "#689fe3" }]}
+          >
+            <Text
+              style={{
+                fontSize: "10px",
+                fontWeight: "bold",
+                color: "white",
+              }}
+            >
+              {" "}
+              บันทึก{" "}
+            </Text>
+          </TouchableOpacity>
+        )}
+        {edit && (
+          <TouchableOpacity
+            onPress={() => {
+                setEditable(false)
+              setDorm_fee(props.rentPrice.room_price)
+              setWater_fee(props.meterWater.sum)
+              setElectricity_fee(props.meterElec.sum)
+              setCommon_fee(props.rentPrice.common_fee)
+              setNote("");
+                }}
+            style={[
+              styles.btnLoad,
+              { marginLeft: 10, backgroundColor: "#e3686f" },
+            ]}
+          >
+            <Text
+              style={{
+                fontSize: "10px",
+                fontWeight: "bold",
+                color: "white",
+              }}
+            >
+              {" "}
+              ยกเลิก{" "}
             </Text>
           </TouchableOpacity>
         )}
@@ -430,7 +527,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     zIndex: 100,
     width: "100%",
-    height: "80%",
+    height: "90%",
     position: "relative",
     padding: 10,
     display: "flex",
@@ -485,8 +582,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFB085",
   },
   btnLoad: {
-    top: 340,
-    left: "55%",
+    top: 370,
+    left: "75%",
     justifyContent: "center",
     width: 85,
     padding: 8,
@@ -559,4 +656,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TableInvoice;
+export default FormInvoice;
