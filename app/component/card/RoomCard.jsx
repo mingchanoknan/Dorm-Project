@@ -25,12 +25,13 @@ const RoomCard = (props) => {
       <Card
         style={[styles.cardContainer, { backgroundColor: props.data.bgColor}]}
         footer={Footer}
-        onPress={() =>
+        onPress={() =>{
+          if(props.screen == "show room type"){
           props.navigation.navigate("CheckRoomDetail", {
-            id: props.data.id,
+            id: props.data._id,
             name: props.data.typeName,
             editable: props.editable
-          })
+          })}}
         }
       >
         <Text style={styles.text} category="h2">
@@ -40,7 +41,7 @@ const RoomCard = (props) => {
           Start at <Text category="h6">{props.data.price}</Text> THB / month
         </Text>
       </Card>
-      <Divider style={{ zIndex: 100, width: "100%", position: "absolute", bottom: 65 }} />
+      <Divider style={{ zIndex: 100, width: "92%", position: "absolute", bottom: 65 }} />
       <View style={[styles.circle, { backgroundColor: props.data.iconColor }]}>
         <FontAwesome name="hotel" size={40} color="white" />
       </View>

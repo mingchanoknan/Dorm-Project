@@ -41,6 +41,7 @@ const App = () => {
         <LessorNavigation />
         {/* <TenantNavigation/> */}
         {/* <LoginNavigation /> */}
+        {/* <Register /> */}
         {/* <ManageAccount /> */}
         </NavigationContainer>
       </ApplicationProvider>
