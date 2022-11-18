@@ -1,4 +1,4 @@
-import React, { useState, useEffect }  from "react";
+import React, { useState, useEffect } from "react";
 import {
   ScrollView,
   Text,
@@ -12,22 +12,25 @@ import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import { IndexPath, Layout, Select, SelectItem } from "@ui-kitten/components";
 import Box from "../../component/invoice/InvoiveBox";
 import { INVOICE } from "../../dummy/INVOICE";
-import {baseUrl} from "@env"
-import axios from 'axios';
+import { baseUrl } from "@env";
+import axios from "axios";
 
 const Invoices = ({ route, navigation }) => {
-  const data = ["AllBill",  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December"];
+  const data = [
+    "AllBill",
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
   const [selectedIndex, setSelectedIndex] = React.useState(new IndexPath(0));
   const displayValue = data[selectedIndex.row];
 
@@ -36,36 +39,33 @@ const Invoices = ({ route, navigation }) => {
 
   useEffect(() => {
     const url = `${baseUrl}/invoices`;
-
     const fetchUsers = async () => {
       try {
         const response = await axios.get(url);
-
         if (response.status === 200) {
-          
-              setUser(response.data);
-              console.log(response.data);
-          return; 
+          setUser(response.data);
+          console.log(response.data);
+          return;
         } else {
           throw new Error("Failed to fetch users invoice user");
         }
       } catch (error) {
-          console.log('Data fetching cancelled invoice user');
+        console.log("Data fetching cancelled invoice user");
       }
-      
     };
     fetchUsers();
   }, []);
+
   return (
     <View style={styles.view}>
       <Image
         source={require("../../assets/bg_invoice.png")}
         style={styles.background}
       ></Image>
-      
+
       <Layout style={styles.bill1} level="1">
-        <Select 
-          style={{ width: "100%", borderRadius: "50%"}}
+        <Select
+          style={{ width: "100%", borderRadius: "50%" }}
           placeholder="รอบบิล"
           value={displayValue}
           selectedIndex={selectedIndex}
@@ -77,15 +77,19 @@ const Invoices = ({ route, navigation }) => {
           {/* {data.map(renderOption)} */}
         </Select>
       </Layout>
-    
+
       <ScrollView style={[styles.box, { flex: 1 }]}>
         <View style={[{ alignItems: "center" }]}>
-          {user && (user.map((item, index) => (
-            <View key={index}>
-              <Box data={item} filter={displayValue} navigation={navigation} />
-            </View>
-          ))
-          )}
+          {user &&
+            user.map((item, index) => (
+              <View key={index}>
+                <Box
+                  data={item}
+                  filter={displayValue}
+                  navigation={navigation}
+                />
+              </View>
+            ))}
         </View>
       </ScrollView>
     </View>
@@ -106,7 +110,7 @@ const styles = StyleSheet.create({
     height: "50%",
     position: "absolute",
     zIndex: -100,
-    top: -150
+    top: -150,
     //   borderRadius: "50px",
     //   borderBottomEndRadius: "0px",
     //   borderBottomLeftRadius: "0px",

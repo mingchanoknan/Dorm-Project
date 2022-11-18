@@ -1,17 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  ScrollView,
-  Text,
   View,
   Image,
   StyleSheet,
-  TextInput,
   FlatList,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { NEWS } from "../../dummy/NEWS";
 import News from "../../component/annoucenews/news";
-import Modal from "../../component/annoucenews/createdPost";
+import {baseUrl} from "@env"
+import axios from 'axios';
 
 const AnnouceNews = ({ navigation }) => {
   const renderGridItem = (itemData) => {
@@ -32,6 +30,10 @@ const AnnouceNews = ({ navigation }) => {
     );
   };
 
+  useEffect(() =>{
+
+  })
+
   return (
     <View style={styles.container}>
       <Image
@@ -43,7 +45,7 @@ const AnnouceNews = ({ navigation }) => {
         <FlatList
         data={NEWS}
         renderItem={renderGridItem}
-        numColumns={2}
+        numColumns={1}
         keyExtractor={item => item.id}
         navigation={navigation}
       />

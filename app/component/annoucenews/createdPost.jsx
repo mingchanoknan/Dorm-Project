@@ -1,15 +1,57 @@
-import React from "react";
-import { StyleSheet, View, TextInput } from "react-native";
+import React, { useState } from "react";
+import { StyleSheet, View, TextInput, Alert } from "react-native";
 import { Button, Card, Modal, Text, Input, Icon } from "@ui-kitten/components";
 import { FontAwesome } from "@expo/vector-icons";
+import { baseUrl } from "@env";
+import axios from "axios";
+
 const CreatedPost = () => {
   const [visible, setVisible] = React.useState(false);
   const [text, setText] = React.useState("");
   const [title, setTitle] = React.useState("");
+  const [created_date, setCreated_date] = React.useState(null);
 
-  const Created = () => {
-    console.log("title : " + title);
-    console.log("text : " + text);
+  class news {
+    constructor() {
+      this.title = "";
+      this.text = "";
+      this.created_date = "";
+      this.created_byId = null;
+    }
+    title;
+    text;
+    created_date;
+    created_byId;
+  }
+
+  useState(() => {
+    let currentDate = new Date();
+    let d = currentDate.getDate();
+    let m = currentDate.getMonth();
+    let y = currentDate.getFullYear();
+    setCreated_date(y + "-" + m + "-" + d);
+  }, []);
+
+  const Created = async () => {
+    let record = new news();
+    record.title = title;
+    record.text = text;
+    record.created_date = created_date;
+    record.created_byId = 1;
+
+    console.log(record);
+
+    const res = await axios.post(`${baseUrl}/addNews`, record);
+    Alert.alert(res.data, undefined, [
+      {
+        text: "Yes",
+        onPress: () => {
+          setTitle("");
+          setText("");
+          setVisible(false);
+        },
+      },
+    ]);
   };
 
   return (
@@ -57,7 +99,15 @@ const CreatedPost = () => {
             placeholder="เนื้อหา"
             onChangeText={setText}
           />
-          <View style={[{ flexDirection: "row", justifyContent: "flex-end" }]}>
+          <View style={[{ flexDirection: "row", justifyContent: "flex-end" , alignItems:"center",}]}>
+            <Icon
+              fill="#626567"
+              style={{ width: 30, height: 30, alignSelf: "center",marginTop: 20 ,marginHorizontal: 5}}
+              name="image"
+              onPress={() => {
+               
+              }}
+            ></Icon>
             <Button
               style={{ alignSelf: "center", marginTop: 20 }}
               size="small"
