@@ -9,19 +9,95 @@ import {
   Input,
   Icon,
 } from "@ui-kitten/components";
-import { TouchableOpacity, StyleSheet, View } from "react-native";
+import { TouchableOpacity, StyleSheet, View, Alert } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
+import { baseUrl } from "@env";
+import axios from "axios";
 
-const news = ({ item, width, numberOfLines, onSelect }) => {
-  // console.log(item)
-  const [visible, setVisible] = React.useState(false);
-  const [isEditing, setIsEditing] = React.useState(false);
-  const [text, setText] = React.useState(item.item.text);
-  const [title, setTitle] = React.useState(item.item.title);
+const news = ({ item, width, numberOfLines, canEdit, onSelect }) => {
+  const data = item.item;
+  const [visible, setVisible] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [id, setId] = useState(data._id);
+  const [text, setText] = useState(data.text);
+  const [title, setTitle] = useState(data.title);
+  const [created_date, setCreated_date] = useState(data.created_date);
+  const [created_byId, setCreated_byId] = useState(data.created_byId);
+  const [show, setShow] = useState(canEdit);
 
-  const Edited = () => {
-    console.log("title : " + title);
-    console.log("text : " + text);
+  class news {
+    constructor() {
+      this._id = id;
+      this.title = "";
+      this.text = "";
+      this.created_date = "";
+      this.created_byId = null;
+    }
+    _id;
+    title;
+    text;
+    created_date;
+    created_byId;
+  }
+
+  const Edited = async () => {
+    let record = new news();
+    record._id = id;
+    record.title = title;
+    record.text = text;
+    record.created_date = created_date;
+    record.created_byId = created_byId;
+
+    console.log(record);
+
+    const res = await axios.post(`${baseUrl}/updateNews`, record);
+    Alert.alert("แก้ไขสำเร็จ", undefined, [
+      {
+        text: "ปิด",
+        onPress: () => {
+          setTitle(title);
+          setText(text);
+        },
+      },
+    ]);
+  };
+
+  const ConfirmDel = () => {
+    Alert.alert("ยืนยันการลบ", undefined, [
+      {
+        text: "ยืนยัน",
+        onPress: () => {
+          Delete();
+        },
+      },
+      {
+        text: "ยกเลิก",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel",
+      },
+    ]);
+  };
+
+  const Delete = async () => {
+    let record = new news();
+    record._id = id;
+    record.title = title;
+    record.text = text;
+    record.created_date = created_date;
+    record.created_byId = created_byId;
+
+    console.log(record);
+
+    const res = await axios.post(`${baseUrl}/deleteNews`, record);
+    Alert.alert("ลบสำเร็จ", undefined, [
+      {
+        text: "ปิด",
+        onPress: () => {
+          setTitle(title);
+          setText(text);
+        },
+      },
+    ]);
   };
 
   const Header = () => (
@@ -30,40 +106,57 @@ const news = ({ item, width, numberOfLines, onSelect }) => {
         padding: 10,
         flexDirection: "row",
         justifyContent: "space-between",
-        borderBottomColor:"#90AACB",
-        borderBottomWidth:2
+        borderBottomColor: "#90AACB",
+        borderBottomWidth: 2,
       }}
     >
-      <Text category="h6">{title}</Text>
-      <OverflowMenu
-        visible={visible}
-        anchor={renderToggleButton}
-        onBackdropPress={() => setVisible(false)}
-      >
-        <MenuItem
-          title="Edit"
-          onPress={() => {
-            setIsEditing(true);
-            setVisible(false);
-          }}
-        />
-        <MenuItem title="Delete" />
-      </OverflowMenu>
+      <View>
+        <Text category="h6">{data.title}</Text>
+      </View>
+      {show && (
+        <OverflowMenu
+          visible={visible}
+          anchor={renderToggleButton}
+          onBackdropPress={() => setVisible(false)}
+        >
+          <MenuItem
+            title="Edit"
+            onPress={() => {
+              setIsEditing(true);
+              setVisible(false);
+            }}
+          />
+          <MenuItem
+            title="Delete"
+            onPress={() => {
+              ConfirmDel();
+            }}
+          />
+        </OverflowMenu>
+      )}
     </View>
   );
 
   const Footer = () => (
     <View style={[styles.footerContainer]}>
+      <Text style={{ paddingLeft: 20, fontSize: 12, color: "#626567" }}>
+        สร้างเมื่อ : {created_date}
+      </Text>
       <Icon
-      fill="black"
-      style={{ width: 15, height: 15, alignSelf: "flex-end" }}
-      name="arrowhead-right-outline"
-      onPress={() => {
-        {
-          onSelect();
-        }
-      }}
-    ></Icon>
+        fill="black"
+        style={{
+          width: 15,
+          height: 15,
+          alignSelf: "flex-end",
+          paddingRight: 30,
+        }}
+        name="arrowhead-right-outline"
+        onPress={() => {
+          {
+            onSelect();
+          }
+        }}
+      ></Icon>
     </View>
   );
 
@@ -80,8 +173,8 @@ const news = ({ item, width, numberOfLines, onSelect }) => {
 
   return (
     <View style={[styles.shadow]}>
-      <Card style={[styles.card, {width}]} header={Header} footer={Footer}>
-        <Text numberOfLines={numberOfLines}>{text}</Text>
+      <Card style={[styles.card, { width }]} header={Header} footer={Footer}>
+        <Text numberOfLines={numberOfLines}>{data.text}</Text>
       </Card>
 
       <Modal
@@ -121,6 +214,8 @@ const news = ({ item, width, numberOfLines, onSelect }) => {
               size="small"
               onPress={() => {
                 setIsEditing(false);
+                setTitle(data.title);
+                setText(data.text);
               }}
             >
               CANCEL
@@ -136,19 +231,19 @@ const styles = StyleSheet.create({
   card: {
     marginBottom: 10,
     marginTop: 20,
-    borderRadius:15,
+    borderRadius: 15,
     backgroundColor: "rgba(230, 248, 253, 0.9)",
-    alignSelf: "center"
+    alignSelf: "center",
   },
   footerContainer: {
     flexDirection: "row",
     justifyContent: "flex-end",
-    padding: 5,
+    padding: 10,
   },
   backdrop: {
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
-  shadow:{
+  shadow: {
     flex: 1,
     shadowColor: "#000",
     shadowOffset: {

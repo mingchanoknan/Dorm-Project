@@ -8,12 +8,11 @@ import { NEWS } from "../../dummy/NEWS";
 
 const NewsDetail = ({ route, navigation }) => {
   const data = route.params.data;
-  const [isEditing, setIsEditing] = React.useState(false);
   const [title, setTitle] = React.useState(data.title);
   const [text, setText] = React.useState(data.text);
-  const [visible, setVisible] = React.useState(false);
+  const [created_date, setCreated_byId] = useState(data.created_date);
 
-  console.log("--------\n", route.params.newsId, "\n", route.params.data);
+  console.log("--------\n", data);
 
   const Edited = () => {
     console.log("title : " + title);
@@ -21,7 +20,11 @@ const NewsDetail = ({ route, navigation }) => {
   };
 
   const Header = () => (
-    <View style={[{ borderBottomColor: "#90AACB", borderBottomWidth: 2 ,padding: 15,}]}>
+    <View
+      style={[
+        { borderBottomColor: "#90AACB", borderBottomWidth: 2, padding: 15 },
+      ]}
+    >
       <Text category="h6">{title}</Text>
     </View>
   );
@@ -37,6 +40,20 @@ const NewsDetail = ({ route, navigation }) => {
           <Text style={styles.text} category="p1">
             {text}
           </Text>
+          <Image
+            source={require("../../assets/user.jpg")}
+            style={styles.image}
+          ></Image>
+          <Text
+            style={{
+              fontSize: 12,
+              color: "#626567",
+              textAlign: "right",
+              marginTop: 20,
+            }}
+          >
+            สร้างเมื่อ : {created_date}
+          </Text>
         </Card>
       </View>
     </View>
@@ -49,14 +66,17 @@ const styles = StyleSheet.create({
     height: "100%",
     felx: 1,
     alignItems: "center",
+    justifyContent: "center",
     backgroundColor: "white",
   },
   background: {
     width: "100%",
-    height: "60%",
+    height: "80%",
     borderBottomLeftRadius: 60,
     borderBottomRightRadius: 60,
-    top: -100
+    position: "absolute",
+    alignSelf: "flex-start",
+    top: -100,
   },
   card: {
     flex: 1,
@@ -76,7 +96,6 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   shadow: {
-    top: 250,
     position: "absolute",
     shadowColor: "#000",
     shadowOffset: {
@@ -86,6 +105,13 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.37,
     shadowRadius: 7.49,
     elevation: 12,
+  },
+  image: {
+    width: 150,
+    height: 150,
+    alignSelf: "center",
+    marginTop: 20,
+    marginBottom: 15,
   },
 });
 
