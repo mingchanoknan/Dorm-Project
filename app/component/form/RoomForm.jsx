@@ -201,6 +201,7 @@ export default function RoomForm({ navigation, route, screen }) {
       .catch((err) => {
         console.log(err);
       });
+        // console.log(r.room_number)
     })
     }
     else if (roomOftype.room_number.includes("-")) {
@@ -210,6 +211,8 @@ export default function RoomForm({ navigation, route, screen }) {
         if (i < 10) {
           let temp = String(i)
          item = "0".concat(temp)
+        } else {
+          item = String(i)
         }
        r.room_number = r.build.concat(r.floor, item);
         await axios
@@ -220,6 +223,7 @@ export default function RoomForm({ navigation, route, screen }) {
       .catch((err) => {
         console.log(err);
       });
+      // console.log(r.room_number)
       }
     }
     addRoomType();
@@ -401,7 +405,6 @@ export default function RoomForm({ navigation, route, screen }) {
                   onPress: async () => {
                     setVisible(true);
                     await uploadFile();
-                    
                   }
                   
                 },

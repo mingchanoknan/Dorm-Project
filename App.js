@@ -40,8 +40,8 @@ const App = () => {
         <NavigationContainer>
         {/* <LessorNavigation /> */}
         {/* <Login /> */}
-        <LessorNavigation />
-        {/* <TenantNavigation/> */}
+        {/* <LessorNavigation /> */}
+        <TenantNavigation/>
         {/* <LoginNavigation /> */}
         {/* <Register /> */}
         {/* <ManageAccount /> */}

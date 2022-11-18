@@ -41,7 +41,7 @@ const MeterDisplay = (props) => {
     setLoading(true)
     const getInfoMeter = async () => {
       let info = await axios.get(`${baseUrl}/meter/getbytype/${props.type}`);
-      
+      console.log(info.data)
       setInfoBySelect(info.data)
       setLists(info.data)
       setLoading(false)
