@@ -949,7 +949,7 @@ const UserProfile = ({ route, navigation }) => {
           setUser(response.data);
           setContract(contract.data[0]);
           setVehicle(vehicle.data);
-          //console.log(response.data);
+          // console.log(response.data);
           //console.log(contract.data[0]);
           //console.log(response.data);
           //console.log(vehicle.data);

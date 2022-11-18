@@ -136,10 +136,14 @@ const LessorNavigation = () => {
           })}
         />
         <LessorsNavigator.Screen
-          name="ManageParcel"
+          name="Manage Parcel"
           component={ManageParcel}
           options={({ route }) => ({
             // title: route.params.categoryTitle,
+            title: "Manage Parcel",
+            headerStyle: { backgroundColor: "transparent" },
+            headerTintColor: "white",
+            headerShown: true,
           })}
         />
 
@@ -176,6 +180,17 @@ const LessorNavigation = () => {
             // title: route.params.categoryTitle,
           })}
         />
+         {/* <LessorsNavigator.Screen
+          name="AddParcel"
+          component={AddParcel}
+          options={({ route }) => ({
+            // title: route.params.categoryTitle,
+            title: "Add Parcel",
+            headerStyle: { backgroundColor: "transparent" },
+            headerTintColor: "white",
+            headerShown: true,
+          })}
+        /> */}
       </LessorsNavigator.Navigator>
     );
   };
@@ -186,9 +201,6 @@ const LessorNavigation = () => {
         initialRouteName="Lessors"
         screenOptions={{
           headerShown: false,
-
-          tabBarActiveTintColor: "white",
-          tabBarInactiveTintColor: "red",
           //     tabBarStyle: {
           //   backgroundColor: '#d1cfcf',
           //   borderTopColor: 'transparent',
@@ -210,7 +222,7 @@ const LessorNavigation = () => {
         />
         <LessorsFavTabNavigator.Screen
           name="Favorites"
-          component={AddParcel}
+          component={ParcelNavigation}
           options={{
             tabBarIcon: ({ color, size }) => {
               return <Fontisto name="bell-alt" size={24} color={color} />;
@@ -355,20 +367,32 @@ const LessorNavigation = () => {
     );
   };
 
-  const ParcelNavigation = () => {
+  const ParcelNavigation = ({ route, navigation}) => {
     return (
       <ParcelNavigator.Navigator>
         <ParcelNavigator.Screen
           name="ManageParcel"
           component={ManageParcel}
-          options={({ route, navigation }) => {
-            return {
-              title: "Manage Parcel",
-              headerLeft: () => listIconToOpenDrawer(navigation),
-            };
-          }}
+          options={({ route }) => ({
+            // title: route.params.categoryTitle,
+            title: "Manage Parcel",
+            headerStyle: { backgroundColor: "transparent" },
+            headerTintColor: "white",
+            headerShown: true,
+            headerLeft: () => listIconToOpenDrawer3(navigation),
+          })}
         />
-        <ParcelNavigator.Screen name="AddParcel" component={AddParcel} />
+        <ParcelNavigator.Screen
+          name="AddParcel"
+          component={AddParcel}
+          options={({ route }) => ({
+            // title: route.params.categoryTitle,
+            title: "Add Parcel",
+            headerStyle: { backgroundColor: "transparent" },
+            headerTintColor: "white",
+            headerShown: true,
+          })}
+        />
       </ParcelNavigator.Navigator>
     );
   };
@@ -463,7 +487,15 @@ const LessorNavigation = () => {
         name="ManageInvoices"
         component={ManageInvoiceNavigation}
       />
-      <LessorNavigator.Screen name="Parcel" component={ParcelNavigation} />
+        <LessorNavigator.Screen
+        name="ManageParcels"
+        component={ParcelNavigation}
+        options={({ route, navigation }) => ({
+            // title: route.params.categoryTitle,
+            title: "Manage Parcel",
+            headerShown: false
+          })}
+      />
       <LessorNavigator.Screen
         name="Response"
         component={Response}

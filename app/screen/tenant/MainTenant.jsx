@@ -76,7 +76,7 @@ const MainTenant = ({ route, navigation }) => {
               <View style={styles.viewCircle}>
                 <TouchableOpacity
                   style={styles.circle}
-                  onPress={() => navigation.navigate("InvoiceBill")}
+                  onPress={() => navigation.navigate("AllInvoice")}
                 >
                   <FontAwesome5 name="file-invoice-dollar" size={36} color="white" />
                   <Text style={styles.headTxt}>บิลค่าเช่า</Text>
@@ -87,7 +87,7 @@ const MainTenant = ({ route, navigation }) => {
               <View style={styles.viewCircle}>
                 <TouchableOpacity
                   style={styles.circle}
-                  onPress={() => navigation.navigate("Parcel")}
+                  onPress={() => navigation.navigate("Parcels")}
                 >
                   <FontAwesome5 name="box" size={36} color="white" />
                   <Text style={styles.headTxt}>พัสดุ</Text>
@@ -98,7 +98,7 @@ const MainTenant = ({ route, navigation }) => {
               <View style={styles.viewCircle}>
                 <TouchableOpacity
                   style={styles.circle}
-                  onPress={() => navigation.navigate("Reports")}
+                  onPress={() => navigation.navigate("Report")}
                 >
                   <Ionicons name="megaphone" size={36} color="white" />
                   <Text style={styles.headTxt}>แจ้งเรื่อง</Text>
