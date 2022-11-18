@@ -1,15 +1,108 @@
 import { Divider, IndexPath, Select, SelectItem } from "@ui-kitten/components";
-import { useState } from "react";
-import { ImageBackground, StyleSheet, Text, View } from "react-native";
+import { Alert, ImageBackground, StyleSheet, Text, View } from "react-native";
 import ReportCard from "../../component/card/ReportCard";
 import { REPORT } from "../../dummy/REPORT";
-
+import {baseUrl} from "@env"
+import axios from "axios";
+import { useEffect, useState } from "react";
+import Spinner from 'react-native-loading-spinner-overlay';
+let username ="Admin"
 const Response = () => {
   const [selectItem, setSelectItem] = useState(new IndexPath(0));
+  const [loading, setLoading] = useState(false);
+  const [allReport, setAllReport] = useState([]);
+  const [listBySelect, setListBySelect] = useState([]);
+  const [selectStatus, setSelectStatus] = useState("all");
+  const [commentInput, setCommentInput] = useState("");
+  const [selectPost, setSelectPost] = useState(0);
+  
+  useEffect(() => {
+    setLoading(true);
+    const getReport = async() => {
+      const reports = await axios.get(`${baseUrl}/report/getall/`)
+      let sortDate = reports.data
+      console.log(sortDate)
+      sortDate.sort((a, b) => {
+        function convertDate(text) {
+          const date = text.replace(",", "")
+          const arr = date.split(" ")
+          const arrDate = arr[0].split("/")
+          const arrTime = arr[1].split(":")
+          return new Date(arrDate[2], arrDate[1], arrDate[0], arrTime[0], arrTime[1], arrTime[2])
+        }
 
+        return convertDate(b.date) - convertDate(a.date)
+      }
+      );
+      setLoading(false);
+      setAllReport(sortDate)
+      setListBySelect(sortDate)
+    }
+   getReport()
+  }, [])
+ 
+  useEffect(() => {
+    const queryByStatus = async () => {
+      setLoading(true);
+      const response = await axios.get(`${baseUrl}/report/status/`, { params: { status: selectStatus } })
+      
+      let sortDate = response.data
+      console.log(sortDate)
+      sortDate.sort((a, b) => {
+        function convertDate(text) {
+          const date = text.replace(",", "")
+          const arr = date.split(" ")
+          const arrDate = arr[0].split("/")
+          const arrTime = arr[1].split(":")
+          return new Date(arrDate[2], arrDate[1], arrDate[0], arrTime[0], arrTime[1], arrTime[2])
+        }
+
+        return convertDate(b.date) - convertDate(a.date)
+      }
+      );
+      setLoading(false);
+      setListBySelect(sortDate)
+    }
+    if (selectStatus == "all") {
+      setListBySelect(allReport)
+    }
+    else {
+      queryByStatus();
+    }
+  }, [selectStatus])
+  const getallReport = async() => {
+    const reports = await axios.get(`${baseUrl}/report/getall/`)
+    let sortDate = reports.data
+    sortDate.sort((a, b) => {
+      function convertDate(text) {
+        const date = text.replace(",", "")
+        const arr = date.split(" ")
+        const arrDate = arr[0].split("/")
+        const arrTime = arr[1].split(":")
+        return new Date(arrDate[2], arrDate[1], arrDate[0], arrTime[0], arrTime[1], arrTime[2])
+      }
+
+      return convertDate(b.date) - convertDate(a.date)
+    }
+      );
+    setAllReport(sortDate)
+    setListBySelect(sortDate)
+  }
+  const changeStatus = async (rep) => {
+    setLoading(true);
+    
+  rep.status =true
+    const res = await axios.put(`${baseUrl}/report/update/`,rep);
+    setLoading(false);
+  }
   return (
     <View style={{ flex: 1 }}>
       <ImageBackground source={require('../../assets/bg-respone.png')} resizeMode="cover" style={styles.image}>
+      <Spinner
+          visible={loading}
+          textContent={'Loading...'}
+          textStyle={{color: '#FFF'}}
+        />
       <View
         style={{
           flex: 1,
@@ -26,7 +119,7 @@ const Response = () => {
           <Select
             value={
               selectItem.row === 0
-                ? "สถานะ"
+                ? "ทั้งหมด"
                 : selectItem.row === 1
                 ? "ยังไม่ซ่อม"
                 : "ซ่อมแล้ว"
@@ -35,10 +128,17 @@ const Response = () => {
             selectedIndex={selectItem}
             onSelect={(index) => {
               setSelectItem(index);
+              if (index.row == 0) {
+                setSelectStatus("all")
+              } else if (index.row == 1) {
+                setSelectStatus(false)
+              } else {
+                setSelectStatus(true)
+              }
             }}
-            placeholder={"สถานะ"}
+            placeholder={"ทั้งหมด"}
           >
-            <SelectItem title="สถานะ" disabled />
+            <SelectItem title="ทั้งหมด" />
 
             <SelectItem title="ยังไม่ซ่อม" />
             <SelectItem title="ซ่อมแล้ว" />
@@ -53,7 +153,7 @@ const Response = () => {
             height: 2,
           }}
         ></Divider>
-        <ReportCard data={REPORT} page={"response"} />
+          <ReportCard data={listBySelect} page={"response"} updateStatus={changeStatus} name={username}/>
         </View>
         </ImageBackground>
     </View>

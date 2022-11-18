@@ -103,11 +103,12 @@ const ManageInvoice = ({ route, navigation }) => {
     const fetchrooms = async () => {
       try {
         const room = await axios.get(urlAllRoom);
+        
         // const user = await axios.get(urlUser);
         if (room.status === 200) {
           setRoom(room.data);
           setAll(room.data);
-          //console.log(room.data);
+          // console.log(room.data);
           //console.log(listBy);
           // setUser(user.data);
           //console.log(response.data);
