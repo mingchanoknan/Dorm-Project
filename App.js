@@ -5,7 +5,8 @@ import LoginNavigation from './app/navigation/LoginNavigation';
 import Login from './app/screen/Login';
 import Register from './app/screen/Register';
 import ManageAccount from './app/screen/MangeAccount';
-import AnnouceNews from './app/screen/tenant/AnnouceNews';
+import AnnouceNewsT from './app/screen/tenant/AnnouceNews';
+import AnnouceNewsL from './app/screen/lessor/AnnouceNews';
 import NewsDetail from "./app/screen/lessor/NewsDetail";
 import CreatedPost from "./app/component/annoucenews/createdPost";
 import { ApplicationProvider, IconRegistry, Layout, Text } from '@ui-kitten/components';
@@ -37,7 +38,7 @@ const App = () => {
       <IconRegistry icons={EvaIconsPack} />
       <ApplicationProvider {...eva} theme={eva.light}>
         <NavigationContainer>
-        {/* <LessorNavigation /> */}   
+        {/* <LessorNavigation /> */}
         {/* <Login /> */}
         {/* <LessorNavigation /> */}
         <TenantNavigation/>

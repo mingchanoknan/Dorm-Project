@@ -46,8 +46,6 @@ const ManageInvoice = ({ route, navigation }) => {
   const [date, setDate] = useState("2022");
   const [visible, setVisible] = React.useState(false);
 
-  const [month, setMonth] = useState("");
-  const [year, setYear] = useState("");
   const [invoices, setInvoices] = useState("");
   const months = [
     "January",
@@ -67,8 +65,10 @@ const ManageInvoice = ({ route, navigation }) => {
     let currentDate = new Date();
     let m = months[currentDate.getMonth()]
     let y= currentDate.getFullYear()
-  const [monthYear, setMonthYear] = useState("")
-  const [listBy, setListBy] = useState(m.concat(" ",y));
+    const [monthYear, setMonthYear] = useState("")
+    const [listBy, setListBy] = useState(m.concat(" ",y));
+    const [month, setMonth] = useState(m);
+    const [year, setYear] = useState(y);
 
   // console.log(listBy);
 
@@ -86,20 +86,8 @@ const ManageInvoice = ({ route, navigation }) => {
   }, [selectedBuild, selectedFloor]);
 
   useEffect(() => {
-    // axios
-    //   .get(`${baseUrl}/rent`)
-    //   .then((response) => {
-    //     setRoom(response.data);
-    //     setAll(response.data);
-    //     console.log(response.data);
-    //   })
-    //   .catch((error) => console.log("error manageInvoice"));
-    // const urlUser = `${baseUrl}/getUserNum/${categoryTitle}`;
-
     const urlAllRoom = `${baseUrl}/rent`;
 
-    // console.log("test");
-    // console.log(categoryTitle);
     const fetchrooms = async () => {
       try {
         const room = await axios.get(urlAllRoom);
@@ -108,14 +96,6 @@ const ManageInvoice = ({ route, navigation }) => {
         if (room.status === 200) {
           setRoom(room.data);
           setAll(room.data);
-          // console.log(room.data);
-          //console.log(listBy);
-          // setUser(user.data);
-          //console.log(response.data);
-          //console.log(contract.data[0]);
-          //console.log(response.data);
-          //console.log(vehicle.data);
-          //console.log(contract.data[0]);
           return;
         } else {
           throw new Error("Failed to fetch manageinvoice");
@@ -149,51 +129,6 @@ const ManageInvoice = ({ route, navigation }) => {
     setYear(array[0]);
   };
 
-  // const getInvoice = (selectedDate) => {
-  //   const formatedDate = (yearAndMonth) => {
-  //     let array = yearAndMonth.split(" ");
-  //     const months = [
-  //       "January",
-  //       "February",
-  //       "March",
-  //       "April",
-  //       "May",
-  //       "June",
-  //       "July",
-  //       "August",
-  //       "September",
-  //       "October",
-  //       "November",
-  //       "December",
-  //     ];
-  //     setDate(array[0] + "/" + array[1] + "/01");
-  //     setListBy(months[parseInt(array[1]) - 1] + " " + array[0]);
-
-  //     const fetchUsers = async () => {
-  //       const url = `${baseUrl}/getRoomInvoice/${
-  //         months[parseInt(array[1]) - 1]
-  //       }/${array[0]}`;
-  //       try {
-  //         const response = await axios.get(url);
-  //         if (response.status === 200) {
-  //           setVisible(false);
-  //           setMonth(months[parseInt(array[1]) - 1]);
-  //           setYear(array[0]);
-  //           setInvoices(response.data);
-  //           //console.log(response.data);
-  //           // setReserve(response.data[0]);
-  //           return;
-  //         } else {
-  //           throw new Error("Failed to fetch invoices");
-  //         }
-  //       } catch (error) {
-  //         console.log("Data fetching cancelled invoices");
-  //       }
-  //     };
-  //     fetchUsers();
-  //   };
-  //   formatedDate(selectedDate);
-  // };
   const renderGridItem = (itemData) => {
     return (
       <>

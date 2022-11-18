@@ -42,6 +42,16 @@ const TenantNavigation = () => {
       onPress={() => navigation.openDrawer()}
     />
   );
+
+  const listIconToOpenDrawer3 = (navigation) => (
+    <FontAwesome
+      name="bars"
+      size={24}
+      color="white"
+      onPress={() => navigation.openDrawer()}
+      style={{ paddingLeft: 10 }}
+    />
+  );
   //Stack
   const MyTenantsNavigator = () => {
     return (
@@ -80,9 +90,9 @@ const TenantNavigation = () => {
           })}
         />
         <TenantsNavigator.Screen
-          name="Parcel"
+          name="Parcel1"
           component={Parcel}
-          options={({ route }) => ({
+          options={({ route, navigation }) => ({
             // title: route.params.categoryTitle,
           })}
         />
@@ -233,10 +243,21 @@ const TenantNavigation = () => {
           headerShown: false,
         })}
       />
-      <TenantNavigator.Screen name="Invoice" component={InvoiceNavigation} />
-      <TenantNavigator.Screen name="Parcel" component={Parcel} />
+      <TenantNavigator.Screen name="AllInvoice" component={InvoiceNavigation} />
+      <TenantNavigator.Screen name="Parcels" component={Parcel}
+      options={({ route, navigation }) => {
+          return {
+            headerShown: true,
+            title: 'Parcel',
+            headerShown: true,
+            headerStyle: { backgroundColor: "transparent" },
+            headerTintColor: "white",
+            headerLeft: () => listIconToOpenDrawer3(navigation),
+          };
+        }}
+       />
       <TenantNavigator.Screen
-        name="Reports"
+        name="Report"
         component={Reports}
         options={({ route, navigation }) => {
           return {

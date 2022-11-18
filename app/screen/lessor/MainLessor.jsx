@@ -69,7 +69,7 @@ const MainLessor = ({ route, navigation }) => {
 
                 <TouchableOpacity
                   style={styles.circle}
-                  onPress={() => navigation.navigate("ManageParcel")}
+                  onPress={() => navigation.navigate("ManageParcels")}
                 >
 
                   <Feather name="box" size={24} color="white" />
@@ -78,14 +78,14 @@ const MainLessor = ({ route, navigation }) => {
               </View>
 
               <View style={styles.viewCircle}>
-                <TouchableOpacity style={styles.circle}>
+                <TouchableOpacity style={styles.circle} onPress={() => navigation.navigate("Response")}>
                   <AntDesign name="notification" size={24} color="white" />
                 </TouchableOpacity>
                 <Text style={styles.headTxt}>แจ้งเรื่อง</Text>
               </View>
 
               <View style={styles.viewCircle}>
-                <TouchableOpacity style={styles.circle}>
+                <TouchableOpacity style={styles.circle} onPress={() => navigation.navigate("News")}>
                   <Ionicons name="newspaper-outline" size={24} color="white" />
                 </TouchableOpacity>
                 <Text style={styles.headTxt}>ข่าวสาร</Text>
@@ -106,7 +106,7 @@ const MainLessor = ({ route, navigation }) => {
 
             <TouchableOpacity
               style={styles.box}
-              onPress={() => navigation.navigate("CheckRoom")}
+              onPress={() => navigation.navigate("Room")}
             >
 
               <Image
@@ -135,7 +135,7 @@ const MainLessor = ({ route, navigation }) => {
 
             <TouchableOpacity
               style={styles.box}
-              onPress={() => navigation.navigate("RoomStatus")}>
+              onPress={() => navigation.navigate("Room Status")}>
 
               <Image
                 source={require("../../assets/room2.png")}
@@ -160,7 +160,7 @@ const MainLessor = ({ route, navigation }) => {
 
             <TouchableOpacity
               style={styles.box}
-              onPress={() => navigation.navigate("Meter")}
+              onPress={() => navigation.navigate("RecordMeter")}
             >
 
               <Image
@@ -174,7 +174,7 @@ const MainLessor = ({ route, navigation }) => {
 
             <TouchableOpacity
               style={styles.box}
-              onPress={() => navigation.navigate("Invoices")}
+              onPress={() => navigation.navigate("ManageInvoices")}
             >
               <Image
                 source={require("../../assets/bill4.png")}
@@ -188,7 +188,7 @@ const MainLessor = ({ route, navigation }) => {
 
             <TouchableOpacity
               style={styles.box}
-              onPress={() => navigation.navigate("ManageParcel")}
+              onPress={() => navigation.navigate("ManageParcels")}
             >
               <Image
                 source={require("../../assets/box2.png")}
