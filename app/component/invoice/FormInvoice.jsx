@@ -58,7 +58,7 @@ const FormInvoice = (props) => {
         month : props.month,
           year : props.year,
           room_number : props.rentPrice.room_number,
-          invoice_date : new Date().toLocaleDateString().slice(0,10),
+          invoice_date : new Date().toISOString().slice(0,10),
           common_fee : common_fee,
           dorm_fee : dorm_fee,
           electricity_fee : electricity_fee,
