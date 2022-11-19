@@ -1,26 +1,40 @@
-import React, { useState} from "react";
+import React, { useState, useEffect} from "react";
 import { Text, View, TextInput, FlatList, ScrollView } from "react-native";
 import {
   Image,
   ImageBackground,
   StyleSheet,
   Button,
-  TouchableOpacity,
+  Dimensions,
+  TouchableOpacity, Alert
 } from "react-native";
-import { Datepicker, Icon, Layout } from "@ui-kitten/components";
+import { Datepicker, Icon, Layout, IndexPath,
+  Popover,
+  Select,
+  SelectItem, } from "@ui-kitten/components";
 import { AntDesign } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import Choice from "../../component/invoice/choice";
 import Time from "../../component/invoice/time";
 import Date from "../../component/invoice/date";
+import Spinner from "react-native-loading-spinner-overlay";
+import * as ImagePicker from "expo-image-picker";
+import { baseUrl } from "@env";
+import axios from "axios";
+import { StackActions } from "@react-navigation/native";
 
 
 const Payment = ({ route, navigation }) => {
-  const { total } = route.params;
+  const { total, id, categoryTitle, month, year } = route.params;
   const [ totalPay, setTotalPay] = useState(0);
   const [ date, setDate] = useState("");
   const [ time, setTime] = useState("");
   const [note, setNote] = useState("");
+  const [image, setImage] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [showTotal, setShowTotal] = useState(false);
+  const [showSlip, setShowSlip] = useState(false);
+  const [statusPay, setStatusPay] = useState("checking_payment");
 
   console.log(totalPay);
   const onChangeDateHandler = (date) => {
@@ -30,12 +44,122 @@ const Payment = ({ route, navigation }) => {
   };
   const onChangeTimeHandler = (time) => {
     setTime(time);
-    console.log(time)
+    console.log('po' + time)
     // console.log(reserve_date.toISOString());
+  };
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: false,
+      //   aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      let list = [...image];
+      list.unshift(result);
+      setShowSlip(false);
+      setImage(list);
+      console.log(list)
+    }
+  };
+  const deleteImage = (index) => {
+    let list = [...image];
+    list.splice(index, 1);
+
+    setImage(list);
+  };
+  let h = Dimensions.get("window").height;
+let height;
+if (h > 1000) {
+  height = h / 2.5;
+} else {
+  height = h / 3.5;
+}
+  const sendReport = async () => {
+    if (image.length > 0 && totalPay != ""){
+      setLoading(true);
+      let imageUrl = [];
+      const uploadImage = async () => {
+        let formData = new FormData();
+        for (var i = 0; i < image.length; i++) {
+          // ImagePicker saves the taken photo to disk and returns a local URI to it
+          let localUri = image[i].uri;
+          let filename = localUri.split("/").pop();
+          // Infer the type of the image
+          let match = /\.(\w+)$/.exec(filename);
+          let type = match ? `image/${match[i]}` : `image`;
+
+          formData.append("files", { uri: localUri, name: filename, type });
+        }
+        const config = {
+          headers: {
+            "content-type": "multipart/form-data",
+          },
+        };
+        try {
+          const re = await axios.post(`${baseUrl}/file/upload`, formData, config);
+          imageUrl = re.data;
+          console.log(re.data);
+        } catch (err) {
+          console.log(err);
+        }
+      };
+
+      if (image.length > 0) {
+        await uploadImage();
+      }
+
+
+      try {
+      const res = await axios.post(`${baseUrl}/addPayment`, {
+        payment_date : date,
+        payment_time : time,
+        payment_note : note,
+        idInvoice : id,
+        url : image[0].uri,
+        amount : totalPay 
+      });
+
+      setLoading(false);
+      alert('ส่งสลีปเรียบร้อย')
+      navigation.navigate("InvoiceDetail", {  id:  id,
+        categoryTitle:  categoryTitle, month: month, year: year});
+      // navigation.dispatch(
+      //   StackActions.replace("InvoiceDetail", {  id:  id,
+      //     categoryTitle:  categoryTitle, month: month, year: year})
+      // );
+
+    } catch (err) {
+      console.log(err);
+    }
+
+    try {
+      const response = await axios.put(`${baseUrl}/updateStatusInvoice/${id}/${statusPay}`);
+    } catch (err) {
+      console.log(err);
+    }
+
+    }else{
+      if(totalPay == ""){
+        setShowTotal(true);
+      }if(image.length <= 0){
+        setShowSlip(true);
+      }else{
+        setShowTotal(false);
+        setShowSlip(false);
+      }
+    }
   };
 
   return (
     <View style={styles.view}>
+      <Spinner
+        visible={loading}
+        textContent={"Loading..."}
+        textStyle={{ color: "#FFF" }}
+      />
       <View style={styles.bg_money}>
         <Text
           style={{
@@ -103,11 +227,15 @@ const Payment = ({ route, navigation }) => {
           แจ้งหลักฐานการโอนเงิน
         </Text>
         <Text style={[styles.txt, { left: "4%" }]}>จำนวนเงิน</Text>
-        <TextInput onChangeText={(totalPay) => setTotalPay(totalPay)}
+        <TextInput onChangeText={(totalPay) => {setTotalPay(totalPay)
+      setShowTotal(false);
+        }}
           style={[styles.inputInfo, { width: "80%", paddingLeft: "5%" }]}
           keyboardType="numeric"
         ></TextInput>
-
+           { showTotal && (
+        <Text style={{fontSize: "8px", fontWeight: "bold", color: 'red', top: 5, left: "10%"}}> กรุนากรอกจำนวนเงินที่โอน </Text>
+        )}
         <View style={styles.timeDate}>
           <Text style={[styles.txt, { position: "absolute", top: 10 }]}>
             วันที่โอนเงิน
@@ -138,14 +266,14 @@ const Payment = ({ route, navigation }) => {
               },
             ]}
           ></TextInput>
-
+          
           {/* <Button style={styles.btnUp} title="click">กดเพื่อแนบสลิป</Button> */}
-
+          
           <TouchableOpacity
             style={[
               styles.btnUp,
               { justifyContent: "center", marginLeft: "6%" },
-            ]}
+            ]}   onPress={pickImage}
           >
             <Text
               style={{
@@ -159,6 +287,10 @@ const Payment = ({ route, navigation }) => {
               Upload Slip
             </Text>
           </TouchableOpacity>
+          {image.length > 0 && (
+          <Text style={{fontSize: "12px", fontWeight: "bold", position: "absolute",  marginVertical: 155,  marginLeft: "43%", color: 'gray' }}> {image[0].uri.slice(0, 47)}... </Text>
+          )}
+          { showSlip && (
           <Text
             style={{
               color: "red",
@@ -172,12 +304,14 @@ const Payment = ({ route, navigation }) => {
             
             กรุณาแนบสลิปทุกครั้ง!!
           </Text>
+          )}
         </View>
         <TouchableOpacity
             style={[
               styles.btnSend,
               { justifyContent: "center"},
             ]}
+            onPress={sendReport}
           >
             <Text
               style={{

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   ScrollView,
   StyleSheet,
@@ -14,6 +14,7 @@ import { INVOICE } from "../../dummy/INVOICE";
 import TableInvoice from "../../component/invoice/tableInvoice";
 import {baseUrl} from "@env"
 import axios from 'axios';
+import { useFocusEffect } from "@react-navigation/native";
 
 function User({userObject, navigation, userInfo}) {
   //console.log(userObject.dorm_fee);
@@ -67,7 +68,8 @@ const InvioveDetail = ({ route, navigation }) => {
   const [invoice, setInvoice] = useState(null);
   const [user, setUser] = useState(null);
 
-  useEffect(() => {
+  useFocusEffect(
+    useCallback(() => {
     const url = `${baseUrl}/getInvoice/${categoryTitle}/${month}/${year}`;
     const urlUser = `${baseUrl}/getUserNum/${categoryTitle}`;
 
@@ -92,7 +94,8 @@ const InvioveDetail = ({ route, navigation }) => {
     };
     fetchUsers();
   
-  }, [categoryTitle]);
+  }, [categoryTitle])
+  );
   console.log(invoice);
 
   return (

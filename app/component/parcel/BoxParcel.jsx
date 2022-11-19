@@ -9,7 +9,7 @@ import {
   Input,
   Icon, TextInput
 } from "@ui-kitten/components";
-import { TouchableOpacity, StyleSheet, View } from "react-native";
+import { TouchableOpacity, StyleSheet, View, Alert} from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { baseUrl } from "@env";
 import axios from "axios";
@@ -30,7 +30,7 @@ const BoxParcel = ({ item, width }) => {
       const response = await axios.post(`${baseUrl}/updateParcel`, {
         _id : item.item._id,
         name: name,
-        room_number: room_number,
+        room_number: room_number.toUpperCase(),
         sent_date : sent_date,
         receive_date : receive_date,
         transport_name : transport_name,
@@ -60,21 +60,38 @@ const BoxParcel = ({ item, width }) => {
 
   const  deleteHandler = async (event) => {
     try {
-      const response = await axios.post(`${baseUrl}/deleteParcel`, {
-        _id : item.item._id,
-        name: name,
-        room_number: room_number,
-        sent_date : sent_date,
-        receive_date : receive_date,
-        transport_name : transport_name,
-        status : status
-      });
+      Alert.alert(
+        "ยืนยันที่จะลบรายการพัสดุ",
+        "",
+        [
+          {
+            text: "OK",
+            onPress: async (event) => {
+              const response = await axios.post(`${baseUrl}/deleteParcel`, {
+                _id : item.item._id,
+                name: name,
+                room_number: room_number.toUpperCase(),
+                sent_date : sent_date,
+                receive_date : receive_date,
+                transport_name : transport_name,
+                status : status
+              });
 
-      if (response.status === 200) {
-        alert("ลบรายการพัสดุสำเร็จ");
-      } else {
-        throw new Error("An error deleteParcel");
-      }
+              if (response.status === 200) {
+                alert("ลบรายการพัสดุสำเร็จ");
+              } else {
+                throw new Error("An error deleteParcel");
+              }
+            },
+          },
+          {
+            text: "Cancel",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel",
+          },
+        ],
+        { cancelable: false }
+      );
     } catch (error) {
       alert(error);
     }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Text,
   View,
@@ -13,11 +13,31 @@ import { Ionicons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { Card, Layout, Divider } from "@ui-kitten/components";
-import { FontAwesome } from "@expo/vector-icons";
-import RoomGridTile from "../../component/contract/RoomGridTile";
-import { RENT } from "../../dummy/RENT";
+import { baseUrl } from "@env";
+import axios from "axios";
 
 const MainLessor = ({ route, navigation }) => {
+  const [countUser, setCountUser] = useState(0);
+  const [countRoom, setCountRoom] = useState(0);
+  const [room_status, setRoom_status] = useState("available");
+
+  useEffect(() => {
+    axios
+    .get(`${baseUrl}/countUser`)
+    .then((response) => {
+      setCountUser(response.data)
+    })
+    .catch((error) => console.log("error countUser"));
+  })
+
+  useEffect(() => {
+    axios
+    .get(`${baseUrl}/countRoom/${room_status}`)
+    .then((response) => {
+      setCountRoom(response.data)
+    })
+    .catch((error) => console.log("error countRoom"));
+  })
   return (
     <View style={styles.view}>
       {/* <View style={styles.header2}>
@@ -234,7 +254,7 @@ const MainLessor = ({ route, navigation }) => {
                   bottom: 30,
                 }}
               >
-                20
+                {countUser}
               </Text>
               <Text
                 style={{
@@ -269,11 +289,12 @@ const MainLessor = ({ route, navigation }) => {
                   fontSize: "30px",
                   fontWeight: "bold",
                   textAlign: "right",
+                  left: 15,
                   marginRight: 40,
                   bottom: 30,
                 }}
               >
-                5
+                {countRoom}
               </Text>
               <Text
                 style={{
