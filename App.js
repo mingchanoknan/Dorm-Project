@@ -50,6 +50,7 @@ const App = () => {
   }, [userFromApp])
   return (
     <>
+
       <Provider store={store}>
         <IconRegistry icons={EvaIconsPack} />
         <ApplicationProvider {...eva} theme={eva.light}>
@@ -72,6 +73,7 @@ const App = () => {
           </NavigationContainer>
         </ApplicationProvider>
       </Provider>
+
 
     </>
   );

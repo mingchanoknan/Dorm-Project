@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
+import { baseUrl } from "@env";
+import axios from "axios";
 
 const MangeAccount = () => {
   const [isEditable, setEditable] = useState(false);
@@ -17,6 +19,8 @@ const MangeAccount = () => {
   );
   const [tel, onChangeTel] = React.useState("0945525308");
 
+
+  
   const edit = () => {
     // console.log("before : " + firstname)
     // console.log("before : " + lastname)
@@ -37,7 +41,7 @@ const MangeAccount = () => {
       ></Image>
 
       <Image
-        source={require("../assets/user.jpg")}
+        source={require("../assets/user.png")}
         style={{
           width: 180,
           height: 180,

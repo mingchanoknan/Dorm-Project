@@ -5,41 +5,74 @@ import {
   ActionSheetIOS,
   StyleSheet,
 } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
+import { IndexPath, Layout, Select, SelectItem } from "@ui-kitten/components";
+const data = ["หญิง", "ชาย"];
+const gender = (props) => {
+  const [selectedIndex, setSelectedIndex] = React.useState(new IndexPath(0));
+  const renderOption = (title) => <SelectItem title={title} />;
+  const displayValue = data[selectedIndex.row];
 
-const gender = () => {
-  const [gender, setgender] = useState("เพศ");
+  // const genderSelection = () => {
+  //   ActionSheetIOS.showActionSheetWithOptions(
+  //     {
+  //       options: ["Cancel", "ชาย", "หญิง"],
+  //       destructiveButtonIndex: 2,
+  //       cancelButtonIndex: 0,
+  //     },
+  //     (buttonIndex) => {
+  //       if (buttonIndex === 0) {
+  //         // cancel action
+  //       } else if (buttonIndex === 1) {
+  //         setgender("ชาย");
+  //         setSex("M");
+  //         props.onGender(gender);
+  //       } else if (buttonIndex === 2) {
+  //         setgender("หญิง");
+  //         setSex("F");
+  //         props.onGender(gender);
+  //         console.log(sex);
+  //       }
+  //     }
+  //   );
+  //   console.log(gender);
+  //   // props.onGender(sex);
+  //   // props.onGender(gender);
+  // };
 
-  const genderSelection = () =>
-    ActionSheetIOS.showActionSheetWithOptions(
-      {
-        options: ["Cancel", "ชาย", "หญิง"],
-        destructiveButtonIndex: 2,
-        cancelButtonIndex: 0,
-      },
-      (buttonIndex) => {
-        if (buttonIndex === 0) {
-          // cancel action
-        } else if (buttonIndex === 1) {
-          setgender("ชาย");
-        } else if (buttonIndex === 2) {
-          setgender("หญิง");
-        }
-      }
-    );
+  const onSelectHandler = (index) => {
+    setSelectedIndex(index);
+    props.onGender(index.row);
+  };
 
   return (
-    <TouchableOpacity style={[styles.input]} onPress={genderSelection}>
-      <Text style={{ fontWeight: "400", color: "#6C6363", fontSize: 20 }}>
-        {gender}
-      </Text>
-      <FontAwesome
-        name="caret-down"
-        color="#6C6363"
-        size={20}
-        style={{ paddingLeft: 10 }}
-      ></FontAwesome>
-    </TouchableOpacity>
+    // <TouchableOpacity
+    //   style={[styles.input]}
+    //   // onChange={setgender}
+    //   onPress={genderSelection}
+    // >
+    //   <TextInput
+    //     style={{ fontWeight: "400", color: "#6C6363", fontSize: 20 }}
+
+    //     editable={false}
+    //   >
+    //     {gender}
+    //   </TextInput>
+    //   <FontAwesome
+    //     name="caret-down"
+    //     color="#6C6363"
+    //     size={20}
+    //     style={{ paddingLeft: 10 }}
+    //   ></FontAwesome>
+    // </TouchableOpacity>
+    <Select
+      style={[{ width: 105 }]}
+      placeholder="Default"
+      value={displayValue}
+      selectedIndex={selectedIndex}
+      onSelect={(index) => onSelectHandler(index)}
+    >
+      {data.map(renderOption)}
+    </Select>
   );
 };
 
@@ -57,6 +90,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     backgroundColor: "white",
+  },
+  select: {
+    flex: 1,
+    margin: 1,
   },
 });
 

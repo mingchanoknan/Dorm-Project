@@ -9,10 +9,16 @@ import {
 } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
+import { set } from "react-native-reanimated";
+import { PropsService } from "@ui-kitten/components/devsupport";
 
-const Example = () => {
+const Example = (props) => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [date, setDate] = React.useState(new Date());
+  const [dob, setDOB] = useState(null);
+  const [age, setAge] = React.useState("");
+  const [today, setToday] = useState(new Date());
+  const [test, setTest] = useState("jello");
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -23,8 +29,16 @@ const Example = () => {
   };
 
   const handleConfirm = (date) => {
-    //console.warn("A date has been picked: ", date);
     setDate(date);
+    let currentDate = new Date();
+    let NowY = currentDate.getFullYear();
+    let age = NowY - dob.getFullYear();
+    setAge(age);
+    console.log("-------\nA date has been picked: ", date.toLocaleDateString());
+    console.log("YOB :", dob.getFullYear());
+    console.log("Age : ",age);
+    props.onData(age); //string
+    props.onDate(date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate())
     hideDatePicker();
   };
 
@@ -65,6 +79,7 @@ const Example = () => {
       <DateTimePickerModal
         isVisible={isDatePickerVisible}
         mode="date"
+        onChange={setDOB}
         date={date}
         onConfirm={handleConfirm}
         onCancel={hideDatePicker}
@@ -74,14 +89,18 @@ const Example = () => {
           fontWeight: "400",
           color: "#6C6363",
           fontSize: 18,
-          marginLeft:5
+          marginLeft: 5,
         }}
       >
         อายุ :
       </Text>
       <TextInput
-        style={[styles.age]}
-        placeholder="10 ปี"
+        style={[
+          styles.age,
+          { fontWeight: "400", color: "#6C6363", fontSize: 18 },
+        ]}
+        // placeholder="age"
+        value={String(age)}
         editable={false}
         placeholderTextColor="#6C6363"
         fontWeight="400"

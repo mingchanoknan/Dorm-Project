@@ -57,7 +57,22 @@ const NewsDetail = ({ route, navigation }) => {
         },
       },
     ]);
-  };
+
+    // if (res.status === 200){
+    //   Alert.alert("แก้ไขสำเร็จ", undefined, [
+    //     {
+    //       text: "ปิด",
+    //       onPress: () => {
+    //         setTitle(title);
+    //         setText(text);
+    //       },
+    //     },
+    //   ]);
+    // }else{
+    //   throw new Error("An error ");
+    // }
+    };
+    
 
   const ConfirmDel = () => {
     Alert.alert("ยืนยันการลบ", undefined, [
@@ -129,7 +144,6 @@ const NewsDetail = ({ route, navigation }) => {
       </Button>
     </View>
   );
-
   return (
     <View style={styles.container}>
       <Image
