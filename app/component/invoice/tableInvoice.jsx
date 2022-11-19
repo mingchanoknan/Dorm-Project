@@ -103,7 +103,7 @@ const TableInvoice = (props) => {
             <Text style={styles.txtHead}> สถานะบิล</Text>
             <Text style={[styles.txtHead, { color: "red", marginLeft: 20 }]}>
               {" "}
-              {props.invoice.status == "UNAPPROVED_BILL" ? 'ยังไม่ชำระ' : 'ชำระแล้ว'}
+              {props.invoice.status == "UNAPPROVED_BILL" ? 'ยังไม่ชำระ' : props.invoice.status == "checking_payment" ? "กำลังตรวจสอบ" : "ชำระแล้ว"}
             </Text>
           </View>
 
@@ -369,13 +369,14 @@ const TableInvoice = (props) => {
         </Text>
       </View>
       <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
-        {!edit && !sent && (
+        {props.invoice.status == "UNAPPROVED_BILL" && !edit && !sent && (
           <TouchableOpacity
             style={styles.btnLoad}
             onPress={() =>
               props.navigation.navigate("Payment", {
                 id: props.invoice._id,
                 total: props.invoice.total,
+                categoryTitle:  props.invoice.room_number, month: props.invoice.month, year: props.invoice.year
               })
             }
           >
@@ -388,6 +389,23 @@ const TableInvoice = (props) => {
             >
               {" "}
               ชำระบิล{" "}
+            </Text>
+          </TouchableOpacity>
+        )}
+        {props.invoice.status == "checking_payment" && (
+          <TouchableOpacity
+            style={[styles.btnLoad, {backgroundColor: 'gray'}]}
+            disabled={true}
+          >
+            <Text
+              style={{
+                fontSize: "10px",
+                fontWeight: "bold",
+                color: "white",
+              }}
+            >
+              {" "}
+              จ่ายเงินแล้ว{" "}
             </Text>
           </TouchableOpacity>
         )}

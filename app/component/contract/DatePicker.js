@@ -26,7 +26,7 @@ const Example = (props) => {
   return (
     <View>
       <TouchableOpacity style={{display: 'flex', flexDirection: 'row', padding: 5, paddingLeft:10, borderWidth: 1, borderColor: '#D8D4D4', borderRadius: 50, backgroundColor: '#F7F8FB', width: 110}} onPress={showDatePicker}>
-        <Text style={{color:"#8F9AB3", fontSize: '12px'}}>{date.toLocaleDateString()}</Text>
+        <Text style={{color:"#8F9AB3", fontSize: '12px'}}>{date.toLocaleDateString().slice(0, 10)}</Text>
         <AntDesign name="calendar"  style={{marginLeft: 8}} size={14} color="#65778E" />
       </TouchableOpacity>
       <DateTimePickerModal

@@ -33,7 +33,7 @@ const AddParcel = ({ route, navigation }) => {
   };
 
   const onChangeRoomHandler = (room_number) => {
-    setRoom_number(room_number);
+    setRoom_number(room_number.toUpperCase());
   };
 
   const onChangeTransHandler = (transport_name) => {
