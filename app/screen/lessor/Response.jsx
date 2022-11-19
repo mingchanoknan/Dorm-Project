@@ -6,8 +6,10 @@ import {baseUrl} from "@env"
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Spinner from 'react-native-loading-spinner-overlay';
-let username ="Admin"
+import { useSelector } from "react-redux";
+// let username ="Admin"
 const Response = () => {
+  const user = useSelector((state) => state.user)
   const [selectItem, setSelectItem] = useState(new IndexPath(0));
   const [loading, setLoading] = useState(false);
   const [allReport, setAllReport] = useState([]);
@@ -17,6 +19,7 @@ const Response = () => {
   const [selectPost, setSelectPost] = useState(0);
   
   useEffect(() => {
+    console.log(user)
     setLoading(true);
     const getReport = async() => {
       const reports = await axios.get(`${baseUrl}/report/getall/`)
@@ -126,7 +129,8 @@ const Response = () => {
             }
             style={{ width: 150 }}
             selectedIndex={selectItem}
-            onSelect={(index) => {
+              onSelect={(index) => {
+                console.log(index)
               setSelectItem(index);
               if (index.row == 0) {
                 setSelectStatus("all")
@@ -153,7 +157,7 @@ const Response = () => {
             height: 2,
           }}
         ></Divider>
-          <ReportCard data={listBySelect} page={"response"} updateStatus={changeStatus} name={username}/>
+          <ReportCard data={listBySelect} page={"response"} updateStatus={changeStatus} name={user.username}/>
         </View>
         </ImageBackground>
     </View>

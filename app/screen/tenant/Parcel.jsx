@@ -43,8 +43,6 @@ const Parcel = ({ route, navigation }) => {
       }else{
         setUrl(`${baseUrl}/parcel`)
       }
-      
-      
       const url1 = `${baseUrl}/getParcelNum/${room_number}`;
       
       const fetchUsers = async () => {

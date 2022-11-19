@@ -1,16 +1,17 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet,  TouchableOpacity, View } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { useEffect, useState } from "react";
-import { Icon, Input, Tooltip } from "@ui-kitten/components";
+import { Icon, Input,Text, Tooltip } from "@ui-kitten/components";
 import RoomCard from "../card/RoomCard";
 import axios from "axios";
 const ManageRoomForm = (props) => {
   const [image, setImage] = useState([]);
 
   useEffect(() => {
+    console.log(props)
     setImage(props.allData.image);
   }, []);
-
+  const [visibleConv, setVisibleConv] = useState(false)
   const [visible, setVisible] = useState(false);
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -42,9 +43,18 @@ const ManageRoomForm = (props) => {
       />
     </TouchableOpacity>
   );
+  const renderToggleButtonConv = () => (
+    <TouchableOpacity onPress={() =>setVisibleConv(true)} style={{justifyContent:'flex-end'}}>
+      <Icon
+        style={{ width: 20, height: 20 }}
+        fill="#8F9BB3"
+        name="alert-circle-outline"
+      />
+    </TouchableOpacity>
+  );
   return (
     <View style={{ flex: 1 }}>
-      <View style={{ flex: 1, paddingHorizontal: "10%", marginVertical: "3%" }}>
+      <View style={{ flex: 1, paddingHorizontal: "10%", marginBottom:20 }}>
         <Input
           style={{ marginBottom: 10 }}
           label="คำแนะนำ"
@@ -69,7 +79,20 @@ const ManageRoomForm = (props) => {
           textStyle={{ minHeight: 64 }}
           value={props.allData.convenience.join(",")}
           onChangeText={(nextValue) => props.changeInput(nextValue, "conve")}
-        />
+        /><View style={{display:'flex',alignItems:'flex-end'}}>
+        <Tooltip
+        anchor={renderToggleButtonConv}
+        visible={visibleConv}
+        onBackdropPress={() => setVisibleConv(false)}
+        style={{display:'flex', flexWrap: "wrap",width:300,}}
+      >
+        - ใช้สัญลักษณ์ "," ในการแบ่งสิ่งอำนวยความสะดวก เช่น โต๊ะ,เก้าอี้,พัดลม {'\n'}
+       
+          </Tooltip></View>
+        {props.screen == 'add' &&
+        <View>
+        <Text category="c1" status='danger' style={{ textAlign: 'center', marginBottom: 8 }}>
+          *กรุณตรวจสอบข้อมูลตึก ชั้น และห้องก่อนส่ง เนื่องจากจะไม่สามารถลบหรือแก้ไขได้*</Text>
         <View
           style={{
             flexDirection: "row",
@@ -108,21 +131,27 @@ const ManageRoomForm = (props) => {
             anchor={renderToggleButton}
             visible={visible}
             onBackdropPress={() => setVisible(false)}
-            style={{display:'flex', flexWrap: "wrap"}}
+            style={{display:'flex', flexWrap: "wrap",width:250}}
           >
             - ถ้าต้องการระบุเจาะจงห้องให้ใช้สัญลักษณ์ "," เช่น 05,08 {'\n'}
             - แต่ถ้าต้องการระบุตั้งแต่ห้องไหนถึงห้องไหนให้ใช้สัญลักษณ์ "-" เช่น 11-20
           </Tooltip>
-        </View>
+          </View>
+          </View>
+          }
       </View>
 
       <View style={{ flex: 1, alignItems: "center" }}>
+        {props.allData.image.length === 0 &&
+          <Text catagory="c1" status='danger'>*ต้องใส่รูปอย่างน้อย 1 รูป*</Text>
+        }
         <TouchableOpacity
           style={{
             flex: 1,
             backgroundColor: "rgba(71, 197, 252, 0.1)",
             padding: 20,
             borderRadius: 20,
+            marginTop:5
           }}
           onPress={pickImage}
         >

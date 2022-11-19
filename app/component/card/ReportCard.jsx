@@ -43,6 +43,7 @@ const ReportCard = (props) => {
     console.log(item.comments)
     const res = await axios.put(`${baseUrl}/report/update/`, item);
     setLoading(false)
+    console.log( item.comments)
   };
   
   return (
