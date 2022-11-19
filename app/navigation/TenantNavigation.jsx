@@ -2,7 +2,7 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Text, Image, StyleSheet, Alert } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 import { Fontisto } from "@expo/vector-icons";
 
@@ -15,8 +15,8 @@ import MainTenant from "../screen/tenant/MainTenant";
 import AnnouceNews from "../screen/tenant/AnnouceNews";
 import NewsDetail from "../screen/tenant/NewsDetail";
 import { FontAwesome } from "@expo/vector-icons";
-
-const TenantNavigation = () => {
+import { Ionicons } from "@expo/vector-icons";
+const TenantNavigation = (props) => {
   const TenantNavigator = createDrawerNavigator();
 
   const InvoiceNavigator = createNativeStackNavigator();
@@ -25,6 +25,50 @@ const TenantNavigation = () => {
   const TenantsNavigator = createNativeStackNavigator();
   const NewsNavigator = createNativeStackNavigator();
 
+  const logout2 = () => (
+    <Ionicons name="ios-log-out-outline"
+      size={24}
+      color="black"
+      onPress={() => {
+        Alert.alert(
+          "ต้องการออกจากระบบหรือไม่",
+          undefined,
+          [
+            {
+              text: "Cancel",
+              onPress: () => console.log("Cancel Pressed"),
+              style: "cancel",
+            },
+            { text: "Yes", onPress: () =>props.setUserFromApp(null) },
+          ]
+        );
+        
+      }}
+      style={{ paddingLeft: 10 }}
+    />
+  );
+
+  const logout = () => (
+    <Ionicons name="ios-log-out-outline"
+      size={24}
+      color="black"
+      onPress={() => {
+        Alert.alert(
+          "ต้องการออกจากระบบหรือไม่",
+          undefined,
+          [
+            {
+              text: "Cancel",
+              onPress: () => console.log("Cancel Pressed"),
+              style: "cancel",
+            },
+            { text: "Yes", onPress: () => props.setUserFromApp(null) },
+          ]
+        );
+        
+      }}
+      style={{ marginRight: 10 }}
+    />);
   const listIconToOpenDrawer = (navigation) => (
     <FontAwesome
       name="bars"
@@ -71,6 +115,7 @@ const TenantNavigation = () => {
             title: "Home",
             headerShown: true,
             headerLeft: () => listIconToOpenDrawer2(navigation),
+            headerRight: () => logout2(),
             headerStyle: { backgroundColor: "transparent" },
             // headerBackground: () => (
             //   <View style={{ backgroundColor: "#7dd0f5", height: "100%" }}>
@@ -101,6 +146,7 @@ const TenantNavigation = () => {
           component={Reports}
           options={({ route }) => ({
             // title: route.params.categoryTitle,
+            
             headerShown: true,
           })}
         />
@@ -160,7 +206,10 @@ const TenantNavigation = () => {
 
   const InvoiceNavigation = () => {
     return (
-      <InvoiceNavigator.Navigator initialRouteName="Invoice">
+      <InvoiceNavigator.Navigator initialRouteName="Invoice"
+      screenOptions={{
+        headerRight: () => logout2(),
+      }}>
         <InvoiceNavigator.Screen
           name="Invoices"
           component={Invoices}
@@ -168,6 +217,7 @@ const TenantNavigation = () => {
             return {
               title: "Invoices",
               headerLeft: () => listIconToOpenDrawer2(navigation),
+           
               headerTintColor: "white",
               headerStyle: { backgroundColor: "transparent" },
             };
@@ -209,6 +259,7 @@ const TenantNavigation = () => {
             return {
               title: "Annouce News",
               headerLeft: () => listIconToOpenDrawer(navigation),
+              
             };
           }}
         />
@@ -253,6 +304,9 @@ const TenantNavigation = () => {
             headerStyle: { backgroundColor: "transparent" },
             headerTintColor: "white",
             headerLeft: () => listIconToOpenDrawer3(navigation),
+            
+              headerRight: () => logout(),
+            
           };
         }}
        />
@@ -262,6 +316,9 @@ const TenantNavigation = () => {
         options={({ route, navigation }) => {
           return {
             headerShown: true,
+            
+              headerRight: () => logout(),
+            
           };
         }}
       />

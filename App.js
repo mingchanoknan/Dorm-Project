@@ -11,6 +11,10 @@ import NewsDetail from "./app/screen/lessor/NewsDetail";
 import CreatedPost from "./app/component/annoucenews/createdPost";
 import { ApplicationProvider, IconRegistry, Layout, Text } from '@ui-kitten/components';
 import * as eva from '@eva-design/eva';
+import { legacy_createStore as createStore, combineReducers } from "redux";
+import { Provider } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+
 
 import axios from 'axios';
 
@@ -31,22 +35,44 @@ import axios from 'axios';
 // )
 
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
+import userReducer from './app/storeRedux/reducer/userReducer';
+import { useEffect, useState } from 'react';
 
 const App = () => {
+  const [userFromApp, setUserFromApp] = useState(null);
+  const rootReducer = combineReducers({
+    user: userReducer
+  })
+  const store = createStore(rootReducer)
+
+  useEffect(() => {
+    console.log(userFromApp)
+  }, [userFromApp])
   return (
     <>
-      <IconRegistry icons={EvaIconsPack} />
-      <ApplicationProvider {...eva} theme={eva.light}>
-        <NavigationContainer>
-        {/* <LessorNavigation /> */}
-        {/* <Login /> */}
-        {/* <LessorNavigation /> */}
-        <TenantNavigation/>
-        {/* <LoginNavigation /> */}
-        {/* <Register /> */}
-        {/* <ManageAccount /> */}
-        </NavigationContainer>
-      </ApplicationProvider>
+      <Provider store={store}>
+        <IconRegistry icons={EvaIconsPack} />
+        <ApplicationProvider {...eva} theme={eva.light}>
+          <NavigationContainer>
+            {/* <LessorNavigation /> */}
+            {!userFromApp && (
+              <Login setUserFromApp={setUserFromApp} />
+            )}
+            {userFromApp && userFromApp.role == "tenant" && (
+              <TenantNavigation setUserFromApp={ setUserFromApp } />
+            )}
+            {userFromApp && userFromApp.role == "lessor" && (
+              <LessorNavigation setUserFromApp={ setUserFromApp } />
+            )}
+            
+            
+            {/* <LoginNavigation /> */}
+            {/* <Register /> */}
+            {/* <ManageAccount /> */}
+          </NavigationContainer>
+        </ApplicationProvider>
+      </Provider>
+
     </>
   );
 };

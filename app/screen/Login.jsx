@@ -6,17 +6,25 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { Divider } from "@ui-kitten/components";
 import register from "./Register"
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useSelector, useDispatch } from "react-redux";
+import { setUser } from "../storeRedux/action/userAction";
 import axios from "axios";
+import { baseUrl } from "@env"
+import { Icon, Input} from '@ui-kitten/components';
 
 
-
-const Login = ({ navigation }) => {
+const Login = (props) => {
+  const { navigation,  } = props;
+  const user = useSelector((state) => state.user)
+  const dispatch = useDispatch();
+  console.log(user)
   const [username, setUsername] = useState(null);
   const [password, setPassword] = useState(null);
 
@@ -25,17 +33,28 @@ const Login = ({ navigation }) => {
     // setUsername(username);
     // setPassword(password);
 
-    console.log("login : " + username);
-    console.log("login : " + password);
     try {
-      const result = await axios.get("http://192.168.1.10:8080/login?username=gotenlnwZa2&password=goteneiei")
-      console.log(result.data)
+      const result = await axios.get(baseUrl+"/login", {
+        params: {
+        username, password
+      }})
+      props.setUserFromApp(result.data)
+      dispatch(setUser({...result.data}));
     }
     catch (e) {
       console.log(e.message)
     }
   };
+  const [secureTextEntry, setSecureTextEntry] = React.useState(true);
 
+  const toggleSecureEntry = () => {
+    setSecureTextEntry(!secureTextEntry);
+  };
+  const renderIcon = (props) => (
+    <TouchableWithoutFeedback onPress={toggleSecureEntry}>
+      <Icon {...props} name={secureTextEntry ? 'eye-off-outline' : 'eye-outline'}/>
+    </TouchableWithoutFeedback>
+  );
   return (
     <View style={styles.container}>
       <Image
@@ -56,31 +75,32 @@ const Login = ({ navigation }) => {
           style={{
             height: 3,
             color: "yellow",
-            width: 260,
-            position: "relative",
-            top: 200,
+            width:"100%",
+            top: "170%",
           }}
         />
       </View>
 
       <View style={styles.loginBox}>
-        <TextInput
+        <Input
           style={[styles.input]}
-          onChangeText={setUsername}
+          onChangeText={(text)=>setUsername(text)}
           value={username}
           placeholder="Username"
           placeholderTextColor="#6C6363"
           fontWeight="400"
           keyboardType="default"
         />
-        <TextInput
+        <Input
           style={styles.input}
-          onChangeText={setPassword}
+          secureTextEntry={secureTextEntry}
+          onChangeText={(text) => setPassword(text)}
           value={password}
           placeholder="Password"
           placeholderTextColor="#6C6363"
           fontWeight="400"
           keyboardType="default"
+          accessoryRight={renderIcon}
         />
         <TouchableOpacity
           style={{
@@ -90,11 +110,11 @@ const Login = ({ navigation }) => {
             placeholderTextColor: "#6C6363",
           }}
         >
-          <Text style={{ fontSize: 18 }}>Forget Password?</Text>
+          <Text style={{ fontSize: "15%" }}>Forget Password?</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
-          // onPress={onPress}
+          onPress={comFirmLogin}
         >
           <Text
             style={{
@@ -103,7 +123,7 @@ const Login = ({ navigation }) => {
               color: "white",
               textAlign: "center",
             }}
-            onPress={comFirmLogin}
+            
           >
             LOGIN
           </Text>
@@ -144,37 +164,36 @@ const styles = StyleSheet.create({
   },
   box: {
     position: "absolute",
-    justifyContent: "center",
+    // justifyContent: "center",
     alignSelf: "center",
+
   },
   header: {
     fontSize: 34,
     letterSpacing: "5px",
     fontWeight: "bold",
     display: "flex",
-    position: "relative",
     // textAlign: "center",
     // justifyContent: "center",
-    top: 180,
+    top:"160%",
     left: "10%",
   },
   text: {
     fontSize: 25,
     display: "flex",
-    position: "relative",
-    top: 175,
+    top:"160%",
     left: "10%",
   },
   circle: {
     position: "absolute",
-    top: 150,
+    top:100,
     justifyContent: "space-between",
     flexDirection: "row",
     alignSelf: "center",
     paddingRight: "5%",
   },
   loginBox: {
-    width: 320,
+    width: "90%",
     height: 310,
     shadowColor: "#000000",
     shadowOffset: {
@@ -188,7 +207,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(230, 248, 253, 0.8)",
     justifyContent: "center",
     alignSelf: "center",
-    top: 300,
+   top:"35%"
   },
   input: {
     height: 45,
@@ -207,6 +226,15 @@ const styles = StyleSheet.create({
     borderRadius: 80,
     backgroundColor: "#90AACB",
     padding: 10,
+    shadowColor: "#000",
+shadowOffset: {
+	width: 0,
+	height: 1,
+},
+shadowOpacity: 0.22,
+shadowRadius: 2.22,
+
+elevation: 3,
   },
   create: {
     padding: 10,
@@ -215,7 +243,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     display: "flex",
     position: "absolute",
-    bottom: 60,
+    bottom: "5%",
     borderWidth: 3,
     borderColor: "#90AACB",
   },

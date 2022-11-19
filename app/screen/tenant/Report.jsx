@@ -20,6 +20,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
 import Spinner from 'react-native-loading-spinner-overlay';
 import HeaderBackground from "../../component/background/HeaderBackground";
 import ReportCard from "../../component/card/ReportCard";
@@ -39,10 +40,12 @@ if (h > 1000) {
 else {
   height = h / 3.5
 }
-let room_number = "A203"
-let username = "gotenlnwZa";
+// let room_number = "A203"
+// let username = "gotenlnwZa";
 const Report = () => {
 
+  const user = useSelector((state) => state.user)
+    
   const [selectItem, setSelectItem] = useState(new IndexPath(0));
   const [visible, setVisible] = useState(false);
   const [image, setImage] = useState([]);
@@ -51,9 +54,11 @@ const Report = () => {
   const [allReport, setAllReport] = useState([]);
   const [listBySelect, setListBySelect] = useState([]);
   const [selectStatus, setSelectStatus] = useState("all")
+  // const [username, setUsername] = useState("")
+  // const [roomNumber,setRoomNumber] = useState("")
 
   useEffect(() => {
-    const getReport = async() => {
+    const getReport = async () => {
       const reports = await axios.get(`${baseUrl}/report/getall/`)
       // console.log(reports.data)
       let sortDate = reports.data
@@ -72,7 +77,8 @@ const Report = () => {
       setAllReport(sortDate)
       setListBySelect(sortDate)
     }
-   getReport()
+    getReport()
+    
   }, [])
   
   useEffect(() => {
@@ -106,8 +112,8 @@ const Report = () => {
   },[selectStatus])
   class report  {
     constructor() {
-      this.room_number = room_number;
-      this.name = username;
+      this.room_number = user.room_number;
+      this.name = user.username;
       this.content = "";
       this.date =0;
       this.topic = "";
@@ -180,26 +186,30 @@ const Report = () => {
           setVisible(false);}
       },
     ])
-  //   const getReport = async() => {
-  //     const reports = await axios.get(`${baseUrl}/report/getall/`)
-  //     console.log(reports.data)
-  //     let sortDate = reports.data
-  //     sortDate.sort((a, b) => {
-  //       function convertDate(text) {
-  //         const date = text.replace(",", "")
-  //         const arr = date.split(" ")
-  //         const arrDate = arr[0].split("/")
-  //         const arrTime = arr[1].split(":")
-  //         return new Date(arrDate[2], arrDate[1], arrDate[0], arrTime[0], arrTime[1], arrTime[2])
-  //       }
+    const getReport = async() => {
+      const reports = await axios.get(`${baseUrl}/report/getall/`)
+      console.log(reports.data)
+      let sortDate = reports.data
+      sortDate.sort((a, b) => {
+        function convertDate(text) {
+          const date = text.replace(",", "")
+          const arr = date.split(" ")
+          const arrDate = arr[0].split("/")
+          const arrTime = arr[1].split(":")
+          return new Date(arrDate[2], arrDate[1], arrDate[0], arrTime[0], arrTime[1], arrTime[2])
+        }
 
-  //       return convertDate(b.date) - convertDate(a.date)
-  //     }
-  //       );
-  //     setAllReport(sortDate)
-  //     setListBySelect(sortDate)
-  //   }
-  //  getReport()
+        return convertDate(b.date) - convertDate(a.date)
+      }
+        );
+      setAllReport(sortDate)
+      setListBySelect(sortDate)
+    }
+    let temp = { ...selectItem }
+    temp.row = 0
+    setSelectItem(temp)
+    setSelectStatus("all")
+    getReport()
   }
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -247,7 +257,7 @@ const Report = () => {
         fullWidth={true}
         onBackdropPress={() => setVisible(false)}
       >
-        <AddReport room_number={room_number} name={username} sendReport={sendReport} image={image} setImage={setImage} pickImage={pickImage} deleteImage={deleteImage} />
+        <AddReport room_number={user.room_number} name={user.username} sendReport={sendReport} image={image} setImage={setImage} pickImage={pickImage} deleteImage={deleteImage} />
       </Popover>
 
       <View style={{ flex: 1, marginTop: "5%",width:"100%" }}>
@@ -291,7 +301,7 @@ const Report = () => {
           }}
         ></Divider>
         
-          <ReportCard data={listBySelect} page={"report"} name={username} />
+          <ReportCard data={listBySelect} page={"report"} name={user.username} />
         
         
       </View>
