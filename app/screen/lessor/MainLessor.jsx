@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Text,
   View,
@@ -13,11 +13,31 @@ import { Ionicons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { Card, Layout, Divider } from "@ui-kitten/components";
-import { FontAwesome } from "@expo/vector-icons";
-import RoomGridTile from "../../component/contract/RoomGridTile";
-import { RENT } from "../../dummy/RENT";
+import { baseUrl } from "@env";
+import axios from "axios";
 
 const MainLessor = ({ route, navigation }) => {
+  const [countUser, setCountUser] = useState(0);
+  const [countRoom, setCountRoom] = useState(0);
+  const [room_status, setRoom_status] = useState("available");
+
+  useEffect(() => {
+    axios
+    .get(`${baseUrl}/countUser`)
+    .then((response) => {
+      setCountUser(response.data)
+    })
+    .catch((error) => console.log("error countUser"));
+  })
+
+  useEffect(() => {
+    axios
+    .get(`${baseUrl}/countRoom/${room_status}`)
+    .then((response) => {
+      setCountRoom(response.data)
+    })
+    .catch((error) => console.log("error countRoom"));
+  })
   return (
     <View style={styles.view}>
       {/* <View style={styles.header2}>
@@ -69,7 +89,7 @@ const MainLessor = ({ route, navigation }) => {
 
                 <TouchableOpacity
                   style={styles.circle}
-                  onPress={() => navigation.navigate("ManageParcel")}
+                  onPress={() => navigation.navigate("ManageParcels")}
                 >
 
                   <Feather name="box" size={24} color="white" />
@@ -78,14 +98,14 @@ const MainLessor = ({ route, navigation }) => {
               </View>
 
               <View style={styles.viewCircle}>
-                <TouchableOpacity style={styles.circle}>
+                <TouchableOpacity style={styles.circle} onPress={() => navigation.navigate("Response")}>
                   <AntDesign name="notification" size={24} color="white" />
                 </TouchableOpacity>
                 <Text style={styles.headTxt}>แจ้งเรื่อง</Text>
               </View>
 
               <View style={styles.viewCircle}>
-                <TouchableOpacity style={styles.circle}>
+                <TouchableOpacity style={styles.circle} onPress={() => navigation.navigate("News")}>
                   <Ionicons name="newspaper-outline" size={24} color="white" />
                 </TouchableOpacity>
                 <Text style={styles.headTxt}>ข่าวสาร</Text>
@@ -106,7 +126,7 @@ const MainLessor = ({ route, navigation }) => {
 
             <TouchableOpacity
               style={styles.box}
-              onPress={() => navigation.navigate("CheckRoom")}
+              onPress={() => navigation.navigate("Room")}
             >
 
               <Image
@@ -135,7 +155,7 @@ const MainLessor = ({ route, navigation }) => {
 
             <TouchableOpacity
               style={styles.box}
-              onPress={() => navigation.navigate("RoomStatus")}>
+              onPress={() => navigation.navigate("Room Status")}>
 
               <Image
                 source={require("../../assets/room2.png")}
@@ -160,7 +180,7 @@ const MainLessor = ({ route, navigation }) => {
 
             <TouchableOpacity
               style={styles.box}
-              onPress={() => navigation.navigate("Meter")}
+              onPress={() => navigation.navigate("RecordMeter")}
             >
 
               <Image
@@ -174,7 +194,7 @@ const MainLessor = ({ route, navigation }) => {
 
             <TouchableOpacity
               style={styles.box}
-              onPress={() => navigation.navigate("Invoices")}
+              onPress={() => navigation.navigate("ManageInvoices")}
             >
               <Image
                 source={require("../../assets/bill4.png")}
@@ -188,7 +208,7 @@ const MainLessor = ({ route, navigation }) => {
 
             <TouchableOpacity
               style={styles.box}
-              onPress={() => navigation.navigate("ManageParcel")}
+              onPress={() => navigation.navigate("ManageParcels")}
             >
               <Image
                 source={require("../../assets/box2.png")}
@@ -234,7 +254,7 @@ const MainLessor = ({ route, navigation }) => {
                   bottom: 30,
                 }}
               >
-                20
+                {countUser}
               </Text>
               <Text
                 style={{
@@ -269,11 +289,12 @@ const MainLessor = ({ route, navigation }) => {
                   fontSize: "30px",
                   fontWeight: "bold",
                   textAlign: "right",
+                  left: 15,
                   marginRight: 40,
                   bottom: 30,
                 }}
               >
-                5
+                {countRoom}
               </Text>
               <Text
                 style={{

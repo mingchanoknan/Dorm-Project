@@ -1,210 +1,90 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
+  Alert,
   Dimensions,
+  Image,
   ImageBackground,
+  Keyboard,
   StyleSheet,
   TouchableOpacity,
   View,
 } from "react-native";
 import { Avatar, Button, Card, Input, List, Text } from "@ui-kitten/components";
 import RoomImageCarousel from "../carousel/imageCarousel";
+import { useTheme } from "@react-navigation/native";
+import { baseUrl } from "@env";
+import axios from "axios";
+import { ScrollView } from "react-native-gesture-handler";
+import RenderCard from "./RenderCard";
+import Spinner from "react-native-loading-spinner-overlay/lib";
 
 const data = new Array(8).fill({
   title: "Item",
 });
-const width = Dimensions.get('screen').width;
+const width = Dimensions.get("screen").width;
 const ReportCard = (props) => {
-  const [widthOfView, setWidthOfView] = useState(0);
-  const renderItemHeader = (headerProps, item) => (
-    <View {...headerProps}>
-      <View
-        style={{
-          flex: 1,
-          flexDirection: "row",
-          justifyContent: "space-between",
-        }}
-      >
-        <View>
-          <Text category="h6">{item.item.topic}</Text>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              marginTop: 10,
-            }}
-          >
-            <Text category="s2">By :</Text>
-            <View
-              style={[
-                styles.writer,
-                { backgroundColor: "rgba(130, 219, 208, 0.6)" },
-              ]}
-            >
-              <Text category="s2">{item.item.name} </Text>
-            </View>
+  const [loading, setLoading] = useState(false);
 
-            <View
-              style={[
-                styles.writer,
-                { backgroundColor: "rgba(130, 219, 150, 0.6)" },
-              ]}
-            >
-              <Text category="s2">{item.item.room_number} </Text>
-            </View>
-          </View>
-        </View>
-        <View
-          style={{
-            backgroundColor: item.item.status ?  "#48C78E" :"#F14668",
-            padding: 10,
-            borderRadius: 50,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            maxHeight: 40,
-            width: 110,
-          }}
-        >
-          <Text style={{ color: "white" }}>
-            {item.item.status? "ซ่อมแล้ว" : "ยังไม่ซ่อม"}
-          </Text>
-        </View>
-      </View>
-    </View>
-  );
 
-  const renderFooter = (footerProps, item) => {
-      return (
-        <View
-          {...footerProps}
-          style={{
-            margin: 10,
-          }}
-        >
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "center",
-            }}
-          >
-            <Input
-              style={{ minWidth: "70%", borderRadius: "25%" }}
-              multiline={true}
-              placeholder="Response Problem..."
-            ></Input>
-            <TouchableOpacity
-              style={{
-                backgroundColor: "rgba(249, 169, 145, 0.6)",
-                padding: 10,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                borderRadius: "10%",
-                marginLeft: 20,
-              }}
-            >
-              <Text category="label">SAVE</Text>
-            </TouchableOpacity>
-          </View>
-          {item.item.comments.length > 0 &&
-            item.item.comments.map((item, index) => (
-              <View key={index}>
-                <Card style={styles.card}>
-                  <View
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                    }}
-                  >
-                    <Avatar
-                      style={{ marginRight: 10 }}
-                      size="large"
-                      source={require("../../assets/user.png")}
-                    />
-                    <View>
-                      <Text
-                        style={{ marginLeft: 20, marginBottom: 2 }}
-                        category="label"
-                      >
-                        {item.name}
-                      </Text>
-                      <View
-                        style={{
-                          backgroundColor: "white",
-                          paddingVertical: 5,
-                          paddingHorizontal: 15,
-                          minWidth: "60%",
-                          marginLeft: 10,
-                          borderRadius: 15,
-                          maxWidth: "85%",
-                          display: "flex",
-                        }}
-                      >
-                        <Text category="s1">{item.comment}</Text>
-                      </View>
-                    </View>
-                  </View>
-                </Card>
-                <View style={{ display: "flex", alignItems: "flex-end" }}>
-                  <Text category="label" style={{ marginRight: "5%",color:"#A4A2A2"}}>
-                    {item.date}
-                  </Text>
-                </View>
-              </View>
-            ))}
-        </View>
-      );
+  class comment {
+    constructor(comment) {
+      this.name = props.name;
+      this.comment = comment;
+      this.date = new Date().toLocaleString();
+    }
+    name;
+    comment;
+    date;
+  }
+  const saveComment = async (item, commentInput) => {
+    setLoading(true)
+    const newcomment = new comment(commentInput);
+    item.comments.push(newcomment);
+    console.log(item.comments)
+    const res = await axios.put(`${baseUrl}/report/update/`, item);
+    setLoading(false)
+    console.log( item.comments)
   };
-
-  const renderItem = (item) => (
-    <View style={{ marginVertical: "1%" }} onLayout={(event) => setWidthOfView(event.nativeEvent.layout.width)}>
-      <Card
-        style={styles.item}
-        header={(headerProps) => renderItemHeader(headerProps, item)}
-        footer={(footerProps) => renderFooter(footerProps, item)}
-      >
-        <Text category="s1" style={{ padding: 10, textAlign: "center" }}>
-          {item.item.content}
-        </Text>
-        {item.item.image.length > 0 &&
-          <RoomImageCarousel image={item.item.image} width={widthOfView - 50} height={300} paginationColor={"#84E6E3" } />
-       }
-          
-       
-        <View style={{ display: "flex", alignItems: "flex-end" }}>
-          <Text category="label" style={{ color: "#A4A2A2" }}>
-            {item.item.date}
-          </Text>
-        </View>
-      </Card>
-    </View>
-  );
-
+  
   return (
     <View style={{ flex: 1 }}>
+      <Spinner
+          visible={loading}
+          textContent={'Loading...'}
+          textStyle={{color: '#FFF'}}
+        />
       {props.page == "response" ? (
-        <View style={{ flex: 1 }}>
-          <List
-            style={styles.container}
-            contentContainerStyle={styles.contentContainer}
-            data={props.data}
-            renderItem={renderItem}
-          />
-        </View>
+        <ScrollView>
+          {props.data.map((item, index) => {
+            return (
+              <View key={index}>
+                <RenderCard
+                item={item}
+                page={props.page}
+                  updateStatus={props.updateStatus}
+                  saveComment= {saveComment}
+              />
+              </View>
+              
+            )
+          })}
+        </ScrollView>
       ) : (
         <ImageBackground
           source={require("../../assets/bg-report.png")}
           style={{ flex: 1 }}
           resizeMode={"cover"}
-        >
-          <List
-            style={styles.container}
-            contentContainerStyle={styles.contentContainer}
-            data={props.data}
-            renderItem={renderItem}
-          />
+          >
+            <ScrollView>
+            {props.data.map((item,index) => {
+            
+              return (
+                <View key={index}>
+                  <RenderCard item={item} saveComment={saveComment}  page={props.page} />
+               </View>
+              )
+            })}
+              </ScrollView>
         </ImageBackground>
       )}
     </View>
@@ -214,7 +94,7 @@ export default ReportCard;
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
+    flex: 1,
     paddingHorizontal: 20,
     backgroundColor: "rgba(144, 170, 203, 0)",
   },

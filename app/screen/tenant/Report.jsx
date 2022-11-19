@@ -20,6 +20,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
 import Spinner from 'react-native-loading-spinner-overlay';
 import HeaderBackground from "../../component/background/HeaderBackground";
 import ReportCard from "../../component/card/ReportCard";
@@ -30,6 +31,7 @@ import { Card, Input, List, Text } from "@ui-kitten/components";
 import FooterBackground from "../../component/background/FooterBackground";
 import {baseUrl} from "@env"
 import axios from "axios";
+import AddReport from "../../component/card/AddReport";
 let h = Dimensions.get('window').height
 let height;
 if (h > 1000) {
@@ -38,24 +40,27 @@ if (h > 1000) {
 else {
   height = h / 3.5
 }
-let room_number = "A203"
-let username = "gotenlnwZa";
+// let room_number = "A203"
+// let username = "gotenlnwZa";
 const Report = () => {
 
+  const user = useSelector((state) => state.user)
+    
   const [selectItem, setSelectItem] = useState(new IndexPath(0));
   const [visible, setVisible] = useState(false);
   const [image, setImage] = useState([]);
-  const [topic, setTopic] = useState("");
-  const [content, setContent] = useState("");
+ 
   const [loading, setLoading] = useState(false);
   const [allReport, setAllReport] = useState([]);
   const [listBySelect, setListBySelect] = useState([]);
   const [selectStatus, setSelectStatus] = useState("all")
+  // const [username, setUsername] = useState("")
+  // const [roomNumber,setRoomNumber] = useState("")
 
   useEffect(() => {
-    const getReport = async() => {
+    const getReport = async () => {
       const reports = await axios.get(`${baseUrl}/report/getall/`)
-      console.log(reports.data)
+      // console.log(reports.data)
       let sortDate = reports.data
       sortDate.sort((a, b) => {
         function convertDate(text) {
@@ -72,7 +77,8 @@ const Report = () => {
       setAllReport(sortDate)
       setListBySelect(sortDate)
     }
-   getReport()
+    getReport()
+    
   }, [])
   
   useEffect(() => {
@@ -82,13 +88,15 @@ const Report = () => {
       let sortDate = response.data
       sortDate.sort((a, b) => {
         function convertDate(text) {
+  
+          
           const date = text.replace(",", "")
           const arr = date.split(" ")
           const arrDate = arr[0].split("/")
           const arrTime = arr[1].split(":")
           return new Date(arrDate[2], arrDate[1], arrDate[0], arrTime[0], arrTime[1], arrTime[2])
         }
-
+        console.log(convertDate(b.date))
         return convertDate(b.date) - convertDate(a.date)
       }
       );
@@ -100,12 +108,12 @@ const Report = () => {
     else {
       queryByStatus();
     }
-    console.log(selectStatus)
+    // console.log(selectStatus)
   },[selectStatus])
   class report  {
     constructor() {
-      this.room_number = room_number;
-      this.name = username;
+      this.room_number = user.room_number;
+      this.name = user.username;
       this.content = "";
       this.date =0;
       this.topic = "";
@@ -123,21 +131,8 @@ const Report = () => {
     image;
     
   }
-  class comment  {
-    constructor() {
-      this.name = username;
-      this.comment = "";
-      this.date =0;
 
-    }
-
-    name;
-    comment;
-    date;
-
-    
-  }
-  const sendReport = async () => {
+  const sendReport = async (content, topic) => {
     setLoading(true)
     let imageUrl = [];
     const uploadImage = async () => {
@@ -186,13 +181,35 @@ const Report = () => {
     Alert.alert(res.data, undefined, [
       {
         text: "Yes", onPress: () => {
-          setTopic("")
-          setContent("")
+          
           setImage([])
           setVisible(false);}
       },
     ])
- console.log(createReport)
+    const getReport = async() => {
+      const reports = await axios.get(`${baseUrl}/report/getall/`)
+      console.log(reports.data)
+      let sortDate = reports.data
+      sortDate.sort((a, b) => {
+        function convertDate(text) {
+          const date = text.replace(",", "")
+          const arr = date.split(" ")
+          const arrDate = arr[0].split("/")
+          const arrTime = arr[1].split(":")
+          return new Date(arrDate[2], arrDate[1], arrDate[0], arrTime[0], arrTime[1], arrTime[2])
+        }
+
+        return convertDate(b.date) - convertDate(a.date)
+      }
+        );
+      setAllReport(sortDate)
+      setListBySelect(sortDate)
+    }
+    let temp = { ...selectItem }
+    temp.row = 0
+    setSelectItem(temp)
+    setSelectStatus("all")
+    getReport()
   }
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -240,157 +257,10 @@ const Report = () => {
         fullWidth={true}
         onBackdropPress={() => setVisible(false)}
       >
-        <View style={{ backgroundColor: "rgba(182, 232, 255, 1)",flex:1}}>
-          <View style={styles.formReport}>
-            <View style={styles.roomName}>
-              <View style={styles.formControl}>
-                <Text> ห้อง : </Text>
-                <Input
-                  disabled={true}
-                  placeholder="Disabled"
-                  style={{ borderRadius: "50%" }}
-                  value={room_number}
-                />
-              </View>
-
-              <View style={styles.formControl}>
-                <Text> ชื่อ : </Text>
-                <Input
-                  disabled={true}
-                  placeholder="Disabled"
-                  style={{ borderRadius: "50%" }}
-                  value={username}
-                />
-              </View>
-            </View>
-            <View style={[styles.formControl, { paddingVertical: 10 }]}>
-              <Text> หัวข้อ : </Text>
-              <Input
-                style={{ minWidth: "80%", borderRadius: "15%" }}
-                placeholder="หัวข้อการแจ้งซ่อม"
-                value={topic}
-                onChangeText={(nextValue) => setTopic(nextValue)}
-              />
-            </View>
-            <View style={styles.content}>
-              <Text> เนื้อหา : </Text>
-              <Input
-                style={{ minWidth: "80%", borderRadius: "25%" }}
-                multiline={true}
-                textStyle={{ minHeight: 64 }}
-                placeholder="ใส่รายรายละเอียด"
-                value={content}
-                onChangeText={(nextValue) => setContent(nextValue)}
-              />
-            </View>
-            <View
-              style={{
-                flex:1,
-                flexDirection: "row",
-                justifyContent: "flex-end",
-                alignSelf: "flex-end",
-                paddingVertical: 10,
-              }}
-            >
-              <TouchableOpacity
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  backgroundColor: "#FFB085",
-                  borderRadius: "50%",
-                  paddingHorizontal: 15,
-                }}
-                onPress={pickImage}
-              >
-                <Text>
-                  <Ionicons name="ios-image" size={24} color="black" />
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{
-                  backgroundColor: "#FFB085",
-                  borderRadius: 30,
-                  borderWidth: 0,
-                  marginLeft: "3%",
-                  padding: 15,
-                }}
-                onPress={() => {
-                  Alert.alert("ต้องส่งรายงานปัญหาหรือไม่", undefined, [
-                    {
-                      text: "Cancel",
-                      onPress: () => console.log("Cancel Pressed"),
-                      style: "cancel",
-                    },
-                    {
-                      text: "Yes", onPress: () => {
-                        sendReport();
-                      }
-                    },
-                  ])
-                  
-                }}
-              >
-                <Text category="s1" style={{ color: "white" }}>
-                  Send
-                </Text>
-              </TouchableOpacity>
-            </View>
-            <ScrollView style={{maxHeight: height}}>
-            {image.length > 0 &&
-              image.map((item, index) => {
-                return (
-                  <View
-                    key={index}
-                    style={{
-                      flex: 1,
-                      position: "relative",
-                      flexDirection: "row",
-                      justifyContent: "center",
-                      margin: 20,
-                      padding: 5,
-                      width: "80%",
-                    }}
-                  >
-                    <Image
-                      source={{ width: "100%", height: 300, uri: item.uri }}
-                      resizeMode="cover"
-                    />
-                    <TouchableOpacity
-                      onPress={() => deleteImage(index)}
-                      style={{
-                        backgroundColor: "pink",
-                        position: "absolute",
-                        top: -10,
-                        right: -10,
-                        borderRadius: 50,
-                        padding: 10,
-                        shadowColor: "#000",
-                        shadowOffset: {
-                          width: 0,
-                          height: 2,
-                        },
-                        shadowOpacity: 0.25,
-                        shadowRadius: 3.84,
-
-                        elevation: 5,
-                      }}
-                    >
-                      <Icon
-                        style={{ width: 32, height: 32 }}
-                        fill="#000"
-                        name="trash-2-outline"
-                      />
-                    </TouchableOpacity>
-                  </View>
-                );
-              })}
-              </ScrollView>
-          </View>
-        </View>
+        <AddReport room_number={user.room_number} name={user.username} sendReport={sendReport} image={image} setImage={setImage} pickImage={pickImage} deleteImage={deleteImage} />
       </Popover>
 
-      <View style={{ flex: 1, marginTop: "5%" }}>
+      <View style={{ flex: 1, marginTop: "5%",width:"100%" }}>
         <View style={styles.filter}>
           <Text category="h6">รายการแจ้งทั้งหมด</Text>
 
@@ -430,7 +300,10 @@ const Report = () => {
             height: 3,
           }}
         ></Divider>
-        <ReportCard data={listBySelect} page={"report"} />
+        
+          <ReportCard data={listBySelect} page={"report"} name={user.username} />
+        
+        
       </View>
     </View>
   );

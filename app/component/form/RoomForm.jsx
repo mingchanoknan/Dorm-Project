@@ -104,7 +104,7 @@ class rent {
   
 }
 
-export default function RoomForm({ navigation, route, screen }) {
+export default function RoomForm({ navigation, route }) {
   const [currentPage, setCurrentPage] = React.useState(0);
   const [allData, setAllData] = React.useState(new room());
   const [imageUri, setImageUri] = React.useState([]);
@@ -174,10 +174,6 @@ export default function RoomForm({ navigation, route, screen }) {
     setRoomOfType(objRent);
 
   };
-  React.useEffect(() => {
-    if (screen == "edit") {
-    }
-  });
  
   const addRoomForRent =  async() => {
     let r = new rent()
@@ -201,6 +197,7 @@ export default function RoomForm({ navigation, route, screen }) {
       .catch((err) => {
         console.log(err);
       });
+        // console.log(r.room_number)
     })
     }
     else if (roomOftype.room_number.includes("-")) {
@@ -210,6 +207,8 @@ export default function RoomForm({ navigation, route, screen }) {
         if (i < 10) {
           let temp = String(i)
          item = "0".concat(temp)
+        } else {
+          item = String(i)
         }
        r.room_number = r.build.concat(r.floor, item);
         await axios
@@ -220,6 +219,7 @@ export default function RoomForm({ navigation, route, screen }) {
       .catch((err) => {
         console.log(err);
       });
+      // console.log(r.room_number)
       }
     }
     addRoomType();
@@ -307,9 +307,9 @@ export default function RoomForm({ navigation, route, screen }) {
           <ManageRoomTypeForm  allData={allData} changeInput={changeInput} />
         )}
         {currentPage == 1 && (
-          <ManageRoomDetailForm allData={allData} changeInput={changeInput} changeRoomInput={changeRoomInput} rent={roomOftype} />
+          <ManageRoomDetailForm allData={allData} changeInput={changeInput} changeRoomInput={changeRoomInput} rent={roomOftype} screen={'add'} />
         )}
-        {currentPage == 2 && <ConfirmRoom allData={allData} rent={roomOftype}/>}
+        {currentPage == 2 && <ConfirmRoom allData={allData} rent={roomOftype} screen={'add'}/>}
       </ScrollView>
       <View
         style={{ flexDirection: "row", justifyContent: "flex-end", margin: 20 }}
@@ -367,7 +367,11 @@ export default function RoomForm({ navigation, route, screen }) {
                 currentPage == 1 &&
                 (allData.suggestion == "" ||
                   allData.information == "" ||
-                  allData.convenience == "")
+                  allData.convenience == ""||
+                  roomOftype.build == "" ||
+                  roomOftype.floor == "" ||
+                  roomOftype.room_number == "" ||
+                allData.image=="") 
               ) {
                 Alert.alert("กรุณากรอกข้อมูลให้ครบถ้วน", undefined, [
                   {
@@ -401,7 +405,6 @@ export default function RoomForm({ navigation, route, screen }) {
                   onPress: async () => {
                     setVisible(true);
                     await uploadFile();
-                    
                   }
                   
                 },

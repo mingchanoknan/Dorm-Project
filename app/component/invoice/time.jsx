@@ -6,7 +6,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 const TimePicker = (props) => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [time, setTime] = useState(new Date(Date.now()));
-  console.log(time.toLocaleTimeString('en-US'));
+  // console.log(time.toLocaleTimeString('en-US'));
   const showDatePicker = () => {
     setDatePickerVisibility(true);
   };
@@ -15,10 +15,11 @@ const TimePicker = (props) => {
     setDatePickerVisibility(false);
   };
 
-  const handleConfirm = (time) => {
+  const handleConfirm = (time1) => {
     // console.warn("A date has been picked: ", date);
-    setTime(time);
-    props.onTime(time.toISOString().slice(0, 10))
+    setTime(time1);
+    props.onTime(time1.toLocaleTimeString('en-US'))
+    //console.log(time1.toLocaleTimeString('en-US'));
     hideDatePicker();
   };
 
@@ -35,7 +36,7 @@ const TimePicker = (props) => {
       <DateTimePickerModal
         isVisible={isDatePickerVisible}
         mode="time"
-        time = {time.toLocaleTimeString('en-US')}
+        time = {time}
         display={Platform.OS === 'ios' ? 'spinner' : 'default'}
         onConfirm={handleConfirm}
         onCancel={hideDatePicker}

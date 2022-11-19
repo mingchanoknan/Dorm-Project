@@ -22,7 +22,6 @@ const CheckRoomDetail = ({ route, navigation }) => {
 
   useFocusEffect(
     useCallback(() => {
-    
       axios
         .get(`${baseUrl}/room/getbyid`, {
           params: {
@@ -37,17 +36,6 @@ const CheckRoomDetail = ({ route, navigation }) => {
         });
     }, [])
   );
-  const image = [
-    {
-      src: require("../../assets/1.jpg"),
-    },
-    {
-      src: require("../../assets/2.jpg"),
-    },
-    {
-      src: require("../../assets/3.jpg"),
-    },
-  ];
   return (
     <View style={{ flex: 1, backgroundColor: "#FDF8F4" }}>
       <HeaderBackground
@@ -85,17 +73,21 @@ const CheckRoomDetail = ({ route, navigation }) => {
         {editable && (
           <View
             style={{
-              flexDirection: "row",
               justifyContent: "flex-end",
               position: "absolute",
               bottom: 10,
-              right: 10,
+              right: 0,
               zIndex: 10,
             }}
           >
             <TouchableOpacity
               style={{ marginRight: 20 }}
-              onPress={() => console.log("Test")}
+              onPress={() => {
+                navigation.navigate("Edit type room", {
+                id: data._id
+              })
+                
+              }}
             >
               <Icon
                 fill="#000"
@@ -103,13 +95,7 @@ const CheckRoomDetail = ({ route, navigation }) => {
                 style={{ width: "35", height: "35" }}
               ></Icon>
             </TouchableOpacity>
-            <TouchableOpacity>
-              <Icon
-                fill="#000"
-                name="trash-2-outline"
-                style={{ width: "35", height: "35" }}
-              ></Icon>
-            </TouchableOpacity>
+
           </View>
         )}
         {data && (

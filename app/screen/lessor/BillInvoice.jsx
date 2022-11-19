@@ -14,6 +14,7 @@ import {baseUrl} from "@env"
 import axios from 'axios';
 import BillRoomInvoice from "../../component/invoice/BillRoomInvoice";
 import FormInvoice from "../../component/invoice/FormInvoice";
+import { StackActions } from "@react-navigation/native";
 
 
 function User({userObject, month, year, user, roomInvoice, rentPrice, meterWater, meterElec, navigation}) {
@@ -86,13 +87,11 @@ const BillInvoice = ({ route, navigation }, props) => {
                   'กรุณากรอกมิเตอร์ของรอบบิล',  
                   month+" "+year,  
                   [  
-                      {text: 'OK', onPress: () => navigation.navigate("Meter", {
-                        // id: itemData.item.id,
-                        // categoryTitle: itemData.item.room_number,
-                        // month: month,
-                        // year: year
-                      })
-                    },  
+                      {text: 'OK', onPress: () => {
+                      navigation.dispatch(
+                        StackActions.replace("Meter", {  })
+                      );
+                      }},  
                       // {  
                       //     text: 'Cancel',  
                       //     onPress: () => console.log('Cancel Pressed'),  

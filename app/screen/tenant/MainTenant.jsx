@@ -95,38 +95,52 @@ const MainTenant = ({ route, navigation }) => {
               alignItems: "center",
             }}
           >
-            <View style={styles.viewCircle}>
-              <TouchableOpacity
-                style={styles.circle}
-                onPress={() => navigation.navigate("InvoiceBill")}
-              >
-                <FontAwesome5
-                  name="file-invoice-dollar"
-                  size={36}
-                  color="white"
-                />
-                <Text style={styles.headTxt}>บิลค่าเช่า</Text>
-              </TouchableOpacity>
-            </View>
 
-            <View style={styles.viewCircle}>
-              <TouchableOpacity
-                style={styles.circle}
-                onPress={() => navigation.navigate("Parcel")}
-              >
-                <FontAwesome5 name="box" size={36} color="white" />
-                <Text style={styles.headTxt}>พัสดุ</Text>
-              </TouchableOpacity>
-            </View>
+            <View
+              style={{
+                width: "90%",
+                height: "100%",
+                borderRadius: "10%",
+                padding: 20,
+                elevation: 13,
+                flexDirection: "row",
+                justifyContent: "space-around",
+                alignSelf: "center",
+                alignItems: "center",
+              }}
+            >
+              <View style={styles.viewCircle}>
+                <TouchableOpacity
+                  style={styles.circle}
+                  onPress={() => navigation.navigate("AllInvoice")}
+                >
+                  <FontAwesome5 name="file-invoice-dollar" size={36} color="white" />
+                  <Text style={styles.headTxt}>บิลค่าเช่า</Text>
+                </TouchableOpacity>
+               
+              </View>
 
-            <View style={styles.viewCircle}>
-              <TouchableOpacity
-                style={styles.circle}
-                onPress={() => navigation.navigate("Reports")}
-              >
-                <Ionicons name="megaphone" size={36} color="white" />
-                <Text style={styles.headTxt}>แจ้งเรื่อง</Text>
-              </TouchableOpacity>
+              <View style={styles.viewCircle}>
+                <TouchableOpacity
+                  style={styles.circle}
+                  onPress={() => navigation.navigate("Parcels")}
+                >
+                  <FontAwesome5 name="box" size={36} color="white" />
+                  <Text style={styles.headTxt}>พัสดุ</Text>
+                </TouchableOpacity>
+                
+              </View>
+
+              <View style={styles.viewCircle}>
+                <TouchableOpacity
+                  style={styles.circle}
+                  onPress={() => navigation.navigate("Report")}
+                >
+                  <Ionicons name="megaphone" size={36} color="white" />
+                  <Text style={styles.headTxt}>แจ้งเรื่อง</Text>
+                </TouchableOpacity>
+                
+              </View>
             </View>
           </View>
         </View>

@@ -10,7 +10,8 @@ const ManageRoomDetailForm = (props) => {
   const [iconColor, setIconColor] = useState("#fff");
   const [toggleColorPickerBackground, setToggleBackground] = useState(false);
   const [toggleColorPickerIcon, setToggleIcon] = useState(false);
-    useEffect(() => {
+  useEffect(() => {
+      
         setBgColor(props.allData.bgColor)
         setIconColor(props.allData.iconColor)
     }, [])

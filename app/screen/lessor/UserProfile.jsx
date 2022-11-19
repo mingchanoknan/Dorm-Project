@@ -95,7 +95,7 @@ function User({ userObject, navigation, contract, roomNumber, vehicle }) {
       const updateRoom = await axios.put(
         `${baseUrl}/updateStatus/${room_number}/${statusRoom}`
       );
-
+        
       let arrayids = [];
       vehicle.forEach((d) => {
         arrayids.push(d._Id);
@@ -949,11 +949,12 @@ const UserProfile = ({ route, navigation }) => {
           setUser(response.data);
           setContract(contract.data[0]);
           setVehicle(vehicle.data);
-          //console.log(response.data);
+          // console.log(response.data);
           //console.log(contract.data[0]);
           //console.log(response.data);
           //console.log(vehicle.data);
           //console.log(contract.data[0]);
+
           return;
         } else {
           throw new Error("Failed to fetch user");
