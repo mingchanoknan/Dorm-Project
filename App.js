@@ -38,11 +38,11 @@ const App = () => {
       <IconRegistry icons={EvaIconsPack} />
       <ApplicationProvider {...eva} theme={eva.light}>
         <NavigationContainer>
-        {/* <LessorNavigation /> */}   
+        {/* <LessorNavigation /> */}
         {/* <Login /> */}
-        <LessorNavigation />
+        {/* <LessorNavigation /> */}
         {/* <TenantNavigation/> */}
-        {/* <LoginNavigation /> */}
+        <LoginNavigation />
         {/* <Register /> */}
         {/* <ManageAccount /> */}
         </NavigationContainer>

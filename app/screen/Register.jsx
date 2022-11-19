@@ -7,27 +7,109 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
+  Alert,
 } from "react-native";
 import Gender from "../component/register/gender";
 import Date from "../component/register/datePicker";
+import { baseUrl } from "@env";
+import axios from "axios";
 
 const Register = () => {
   const [username, setUsername] = useState(null);
   const [password, setPassword] = useState(null);
-  const [firstname, setFirstname] = React.useState("");
-  const [lastname, setLastname] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [tel1, setTel1] = React.useState("");
-  const [tel2, setTel2] = React.useState("");
-  const [address, setAddress] = React.useState("");
-  const [roomNo, setRoomNo] = React.useState("");
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [email, setEmail] = useState("");
+  const [tel1, setTel1] = useState("");
+  const [tel2, setTel2] = useState("");
+  const [address, setAddress] = useState("");
+  const [birthdate, setBirthdate] = useState("");
+  const [age, setAge] = useState(null);
+  const [sex, setSex] = useState(null);
+  const [roomNo, setRoomNo] = useState("");
+  const [role, setRole] = useState("user");
 
-  const submit = () => {
-    // setUsername(username);
-    // setPassword(password);
-    // setFirstname(firstname);
-    console.log("regis : " + username);
-    console.log("regis : " + password);
+  class user {
+    constructor() {
+      this.username = "";
+      this.password = "";
+      this.first_name = "";
+      this.last_name = "";
+      this.email = "";
+      this.tel_no1 = "";
+      this.tel_no2 = "";
+      this.address = "";
+      this.sex = "";
+      this.birthdate = "";
+      this.age = "";
+      this.room_number = "";
+      this.role = "";
+    }
+    username;
+    password;
+    first_name;
+    last_name;
+    email;
+    tel_no1;
+    tel_no2;
+    address;
+    sex;
+    birthdate;
+    age;
+    room_number;
+    role;
+  }
+
+  const Submit = async () => {
+    let record = new user();
+    record.username = username;
+    record.password = password;
+    record.first_name = firstname;
+    record.last_name = lastname;
+    record.email = email;
+    record.tel_no1 = tel1;
+    record.tel_no2 = tel2;
+    record.address = address;
+    record.sex = sex;
+    record.birthdate = birthdate;
+    record.age = age;
+    record.room_number = roomNo;
+    record.role = role;
+
+    console.log(record);
+    const res = await axios.post(`${baseUrl}/addUser`, record);
+    if (res.data === false) {
+      Alert.alert("username นี้ถูกใช้ไปแล้ว", undefined, [
+        {
+          text: "ปิด",
+          onPress: () => {
+            // setTitle("");
+            // setText("");
+            // setVisible(false);
+          },
+        },
+      ]);
+    } else if (res.data === true) {
+      Alert.alert("ลงทะเบียนสำเร็จ", undefined, [
+        {
+          text: "ปิด",
+          onPress: () => {
+            setUsername(null);
+            setPassword(null);
+            setFirstname("");
+            setLastname("");
+            setEmail("");
+            setTel1("");
+            setTel2("");
+            setAddress("");
+            setBirthdate("");
+            setAge(null);
+            setSex(null);
+            setRoomNo("");
+          },
+        },
+      ]);
+    }
   };
 
   return (
@@ -70,6 +152,7 @@ const Register = () => {
             placeholderTextColor="#6C6363"
             fontWeight="400"
             keyboardType="default"
+            secureTextEntry={true}
           />
           <TextInput
             style={[styles.input]}
@@ -135,7 +218,15 @@ const Register = () => {
               margin: 12,
             }}
           >
-            <Date />
+            <Date
+              onData={(age) => {
+                setAge(age);
+              }}
+              onDate={(date) => {
+                setBirthdate(date);
+                console.log(birthdate);
+              }}
+            />
           </View>
 
           <View
@@ -158,7 +249,15 @@ const Register = () => {
             >
               ระบุเพศ :
             </Text>
-            <Gender />
+            <Gender
+              onGender={(sex) => {
+                if (sex == 0) {
+                  setSex("female");
+                } else if (sex == 1) {
+                  setSex("male");
+                }
+              }}
+            />
 
             <Text
               style={{
@@ -182,7 +281,7 @@ const Register = () => {
               textAlign="center"
             />
           </View>
-          <TouchableOpacity style={styles.button} onPress={submit}>
+          <TouchableOpacity style={styles.button} onPress={Submit}>
             <Text
               style={{
                 fontSize: 22,
