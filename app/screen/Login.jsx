@@ -8,41 +8,69 @@ import {
   TextInput,
   TouchableWithoutFeedback,
 } from "react-native";
+import { Alert } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { Divider } from "@ui-kitten/components";
-import register from "./Register"
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import register from "./Register";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useSelector, useDispatch } from "react-redux";
 import { setUser } from "../storeRedux/action/userAction";
 import axios from "axios";
-import { baseUrl } from "@env"
-import { Icon, Input} from '@ui-kitten/components';
-
+import { baseUrl } from "@env";
+import { Icon, Input } from "@ui-kitten/components";
 
 const Login = (props) => {
-  const { navigation,  } = props;
-  const user = useSelector((state) => state.user)
+  const { navigation } = props;
+  const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  console.log(user)
+  console.log(user);
   const [username, setUsername] = useState(null);
   const [password, setPassword] = useState(null);
 
-
-  const comFirmLogin = async() => {
-    // setUsername(username);
-    // setPassword(password);
-
+  const comFirmLogin = async () => {
+    setUsername(username);
+    setPassword(password);
     try {
-      const result = await axios.get(baseUrl+"/login", {
+      const result = await axios.get(baseUrl + "/login", {
         params: {
-        username, password
-      }})
-      props.setUserFromApp(result.data)
-      dispatch(setUser({...result.data}));
-    }
-    catch (e) {
-      console.log(e.message)
+          username,
+          password,
+        },
+      });
+      if (!result.data) {
+        console.log("Login ไม่สำเร็จ")
+        Alert.alert("Login ไม่สำเร็จ กรุณาลองใหม่อีกครั้ง", undefined, [
+          {
+            text: "ปิด",
+            onPress: () => {
+            },
+          },
+        ]);
+      } else if (result.data) {
+        console.log("------\nLogin! \n Data ", result.data)
+        Alert.alert("Login สำเร็จ", undefined, [
+          {
+            text: "ปิด",
+            onPress: () => {
+              navigation.navigate("Main");
+            },
+          },
+        ]);
+        props.setUserFromApp(result.data);
+        dispatch(setUser({ ...result.data }));
+      }
+    } catch (e) {
+      console.log(e.message);
+      if(e.message === "Request failed with status code 500"){
+        Alert.alert("Cant find this username", undefined, [
+          {
+            text: "ปิด",
+            onPress: () => {
+            },
+          },
+        ]);
+      }
     }
   };
   const [secureTextEntry, setSecureTextEntry] = React.useState(true);
@@ -52,7 +80,10 @@ const Login = (props) => {
   };
   const renderIcon = (props) => (
     <TouchableWithoutFeedback onPress={toggleSecureEntry}>
-      <Icon {...props} name={secureTextEntry ? 'eye-off-outline' : 'eye-outline'}/>
+      <Icon
+        {...props}
+        name={secureTextEntry ? "eye-off-outline" : "eye-outline"}
+      />
     </TouchableWithoutFeedback>
   );
   return (
@@ -75,7 +106,7 @@ const Login = (props) => {
           style={{
             height: 3,
             color: "yellow",
-            width:"100%",
+            width: "100%",
             top: "170%",
           }}
         />
@@ -84,7 +115,7 @@ const Login = (props) => {
       <View style={styles.loginBox}>
         <Input
           style={[styles.input]}
-          onChangeText={(text)=>setUsername(text)}
+          onChangeText={(text) => setUsername(text)}
           value={username}
           placeholder="Username"
           placeholderTextColor="#6C6363"
@@ -112,10 +143,7 @@ const Login = (props) => {
         >
           <Text style={{ fontSize: "15%" }}>Forget Password?</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={comFirmLogin}
-        >
+        <TouchableOpacity style={styles.button} onPress={comFirmLogin}>
           <Text
             style={{
               fontSize: 22,
@@ -123,7 +151,6 @@ const Login = (props) => {
               color: "white",
               textAlign: "center",
             }}
-            
           >
             LOGIN
           </Text>
@@ -132,7 +159,7 @@ const Login = (props) => {
 
       <TouchableOpacity
         style={styles.create}
-        onPress={() => navigation.navigate('Register')}
+        onPress={() => navigation.navigate("Register")}
       >
         <Text
           style={{
@@ -166,7 +193,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     // justifyContent: "center",
     alignSelf: "center",
-
   },
   header: {
     fontSize: 34,
@@ -175,18 +201,18 @@ const styles = StyleSheet.create({
     display: "flex",
     // textAlign: "center",
     // justifyContent: "center",
-    top:"160%",
+    top: "160%",
     left: "10%",
   },
   text: {
     fontSize: 25,
     display: "flex",
-    top:"160%",
+    top: "160%",
     left: "10%",
   },
   circle: {
     position: "absolute",
-    top:100,
+    top: 100,
     justifyContent: "space-between",
     flexDirection: "row",
     alignSelf: "center",
@@ -207,7 +233,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(230, 248, 253, 0.8)",
     justifyContent: "center",
     alignSelf: "center",
-   top:"35%"
+    top: "35%",
   },
   input: {
     height: 45,
@@ -227,14 +253,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#90AACB",
     padding: 10,
     shadowColor: "#000",
-shadowOffset: {
-	width: 0,
-	height: 1,
-},
-shadowOpacity: 0.22,
-shadowRadius: 2.22,
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
 
-elevation: 3,
+    elevation: 3,
   },
   create: {
     padding: 10,
