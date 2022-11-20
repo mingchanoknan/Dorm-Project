@@ -44,7 +44,6 @@ const Invoices = ({ route, navigation }) => {
         const response = await axios.get(url);
         if (response.status === 200) {
           setUser(response.data);
-          console.log(response.data);
           return;
         } else {
           throw new Error("Failed to fetch users invoice user");
