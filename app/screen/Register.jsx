@@ -14,7 +14,7 @@ import Date from "../component/register/datePicker";
 import { baseUrl } from "@env";
 import axios from "axios";
 
-const Register = () => {
+const Register = (props) => {
   const [username, setUsername] = useState(null);
   const [password, setPassword] = useState(null);
   const [firstname, setFirstname] = useState("");
@@ -281,6 +281,20 @@ const Register = () => {
               textAlign="center"
             />
           </View>
+        </ScrollView>
+        <View style={{ padding: 5, marginBottom: 10 ,flexDirection:'row',justifyContent:'space-between'}}>
+        <TouchableOpacity style={{ alignSelf: "flex-end",marginBottom:10}} onPress={()=>props.setIsLogin(true)} >
+            <Text
+              style={{
+                fontSize: 22,
+                fontWeight: "500",
+                color: "red",
+                textAlign: "center",
+              }}
+            >
+              CANCEL
+            </Text>
+          </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={Submit}>
             <Text
               style={{
@@ -293,7 +307,7 @@ const Register = () => {
               SIGN UP
             </Text>
           </TouchableOpacity>
-        </ScrollView>
+        </View>
       </View>
     </View>
   );
@@ -340,7 +354,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   button: {
-    position: "relative",
     borderRadius: 80,
     backgroundColor: "#90AACB",
     padding: 13,
