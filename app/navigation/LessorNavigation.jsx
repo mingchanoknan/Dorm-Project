@@ -29,7 +29,7 @@ import BillRoomInvoice from "../component/invoice/BillRoomInvoice";
 import { FontAwesome } from "@expo/vector-icons";
 import AddRoomType from "../screen/lessor/AddRoomType";
 import EditRoomType from "../screen/lessor/EditRoomType";
-const LessorNavigation = ({ setUserFromApp }) => {
+const LessorNavigation = (props) => {
   const LessorNavigator = createDrawerNavigator();
 
   const RoomNavigator = createNativeStackNavigator();

@@ -40,6 +40,7 @@ import { useEffect, useState } from 'react';
 
 const App = () => {
   const [userFromApp, setUserFromApp] = useState(null);
+  const [isLogin, setIsLogin] = useState(true);
   const rootReducer = combineReducers({
     user: userReducer
   })
@@ -56,8 +57,11 @@ const App = () => {
         <ApplicationProvider {...eva} theme={eva.light}>
           <NavigationContainer>
             {/* <LessorNavigation /> */}
-            {!userFromApp && (
-              <LoginNavigation setUserFromApp={setUserFromApp} />
+            {!userFromApp && isLogin && (
+             <Login setUserFromApp={setUserFromApp} setIsLogin={setIsLogin} />
+            )}
+            {!userFromApp && !isLogin && (
+              <Register setIsLogin={setIsLogin} />
             )}
             {userFromApp && userFromApp.role == "tenant" && (
               <TenantNavigation setUserFromApp={ setUserFromApp } />

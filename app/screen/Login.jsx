@@ -21,7 +21,6 @@ import { baseUrl } from "@env";
 import { Icon, Input } from "@ui-kitten/components";
 
 const Login = (props) => {
-  const { navigation } = props;
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   console.log(user);
@@ -53,7 +52,6 @@ const Login = (props) => {
           {
             text: "ปิด",
             onPress: () => {
-              navigation.navigate("Main");
             },
           },
         ]);
@@ -159,7 +157,7 @@ const Login = (props) => {
 
       <TouchableOpacity
         style={styles.create}
-        onPress={() => navigation.navigate("Register")}
+        onPress={() => props.setIsLogin(false)}
       >
         <Text
           style={{
