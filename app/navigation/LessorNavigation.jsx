@@ -26,6 +26,7 @@ import NewsDetail from "../screen/lessor/NewsDetail";
 import BillRoomInvoice from "../component/invoice/BillRoomInvoice";
 import CheckPayment from "../screen/lessor/CheckPayment";
 import PaymentDetail from "../screen/lessor/PaymentDetail";
+import Register from "../screen/Register";
 
 import { FontAwesome } from "@expo/vector-icons";
 import AddRoomType from "../screen/lessor/AddRoomType";
@@ -392,6 +393,18 @@ const LessorNavigation = (props) => {
             };
           }}
         />
+        <ContractNavigator.Screen
+          name="Register"
+          component={Register}
+          options={({ route, navigation }) => {
+            return {
+              title: "ห้อง " + route.params.categoryTitle,
+              // headerShown: true,
+              // headerStyle: { backgroundColor: "transparent" },
+              // headerTintColor: "white",
+            };
+          }}
+        />
       </ContractNavigator.Navigator>
     );
   };
@@ -522,7 +535,7 @@ const LessorNavigation = (props) => {
     >
       <LessorNavigator.Screen
         name="Main"
-        component={MyLessorsFavTabNavigator}
+        component={MyLessorsNavigator}
         options={({ route, navigation }) => ({
           drawerLabel: "Main",
           title: "",

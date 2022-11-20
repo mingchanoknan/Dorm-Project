@@ -6,6 +6,7 @@ import DatePicker from "../../component/contract/DatePicker";
 import { Checkbox } from "react-native-paper";
 import { baseUrl } from "@env";
 import axios from "axios";
+import { StackActions } from "@react-navigation/native";
 
 const LeaseContract = ({ route, navigation }) => {
   const [checked, setChecked] = useState(false);
@@ -87,9 +88,10 @@ const LeaseContract = ({ route, navigation }) => {
       
       if (update.status === 200 && response.status === 200 && cancle.status === 200) {
         alert("ทำสัญญาสำเร็จ");
-        // navigation.dispatch(
-        //   StackActions.replace("DetailReserve", { categoryTitle: room_number })
-        // );
+
+        navigation.dispatch(
+          StackActions.replace("Register", { categoryTitle: room_number })
+        );
       } else {
         throw new Error("An error ");
       }

@@ -9,15 +9,6 @@ import {
   TextInput,
   FlatList,
 } from "react-native";
-import { Divider, Layout, Modal } from "@ui-kitten/components";
-import {
-  Ionicons,
-  MaterialCommunityIcons,
-  Feather,
-  MaterialIcons,
-} from "@expo/vector-icons";
-import { FontAwesome5 } from "@expo/vector-icons";
-import { AntDesign } from "@expo/vector-icons";
 import { baseUrl } from "@env";
 import axios from "axios";
 import { NEWS } from "../../dummy/NEWS";
