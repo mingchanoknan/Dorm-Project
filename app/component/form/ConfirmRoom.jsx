@@ -59,14 +59,17 @@ const ConfirmRoom = (props) => {
           })}
         </View>
       </View>
-      <View style={{ marginVertical: 10,display:'flex',flexDirection:'row',alignItems:'center'}}>
+      {props.screen == "add" && (
+        <View style={{ marginVertical: 10,display:'flex',flexDirection:'row',alignItems:'center'}}>
         <Text style={styles.text}>{"ตึก : "}</Text>
-                  <Text style={[styles.text,{marginRight:10}]}>{ props.rent.build}</Text>
+        <Text style={[styles.text,{marginRight:10}]}>{ props.rent.build}</Text>
         <Text style={styles.text}>{"ชั้น : "}</Text>
         <Text style={[styles.text,{marginRight:10}]}>{props.rent.floor}</Text>
         <Text style={styles.text}>{"เลขห้อง : "}</Text>
         <Text style={[styles.text,{marginRight:10}]}>{props.rent.room_number}</Text>
       </View>
+      )}
+      
       <View style={{ marginVertical: 10 }}>
         <Text style={styles.text}>{"Image : "}</Text>
         <View
@@ -87,10 +90,18 @@ const ConfirmRoom = (props) => {
                     width: "80%",
                   }}
                 >
+                  {item.uri == undefined && (
+                  <Image
+                    source={{ width: "100%", height: 300, uri: item }}
+                    resizeMode="cover"
+                  />
+                )}
+                {item.uri != undefined && (
                   <Image
                     source={{ width: "100%", height: 300, uri: item.uri }}
                     resizeMode="cover"
                   />
+                )}
                 </View>
               );
             })}

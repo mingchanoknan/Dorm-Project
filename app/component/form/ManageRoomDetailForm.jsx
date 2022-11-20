@@ -167,6 +167,7 @@ const ManageRoomForm = (props) => {
 
         {image.length > 0 &&
           image.map((item, index) => {
+            console.log(item)
             return (
               <View
                 key={index}
@@ -180,10 +181,19 @@ const ManageRoomForm = (props) => {
                   width: "80%",
                 }}
               >
-                <Image
-                  source={{ width: "100%", height: 300, uri: item.uri }}
-                  resizeMode="cover"
-                />
+                {item.uri == undefined && (
+                  <Image
+                    source={{ width: "100%", height: 300, uri: item }}
+                    resizeMode="cover"
+                  />
+                )}
+                {item.uri != undefined && (
+                  <Image
+                    source={{ width: "100%", height: 300, uri: item.uri }}
+                    resizeMode="cover"
+                  />
+                )}
+                
                 <TouchableOpacity
                   onPress={() => deleteImage(index)}
                   style={{
