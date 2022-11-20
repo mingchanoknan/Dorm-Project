@@ -119,7 +119,9 @@ if (h > 1000) {
         payment_note : note,
         idInvoice : id,
         url : image[0].uri,
-        amount : totalPay 
+        amount : totalPay,
+        room_number : categoryTitle,
+        payment_status : statusPay
       });
 
       setLoading(false);
@@ -288,7 +290,7 @@ if (h > 1000) {
             </Text>
           </TouchableOpacity>
           {image.length > 0 && (
-          <Text style={{fontSize: "12px", fontWeight: "bold", position: "absolute",  marginVertical: 155,  marginLeft: "43%", color: 'gray' }}> {image[0].uri.slice(0, 47)}... </Text>
+          <Text style={{fontSize: "12px", fontWeight: "bold", position: "absolute",  marginVertical: 140,  marginLeft: "43%", color: 'gray' }}> {image[0].uri.slice(0, 25)}... </Text>
           )}
           { showSlip && (
           <Text

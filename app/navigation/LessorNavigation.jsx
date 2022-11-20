@@ -9,7 +9,6 @@ import { Fontisto } from "@expo/vector-icons";
 
 import MainLessor from "../screen/lessor/MainLessor";
 import AddParcel from "../screen/lessor/AddParcel";
-import CancelContract from "../screen/lessor/CancelContract";
 import CheckRoomDetail from "../screen/lessor/CheckRoomDetail";
 import CheckRoomPrice from "../screen/lessor/CheckRoomsPrice";
 import CheckRoomsStatus from "../screen/lessor/CheckRoomsStatus";
@@ -25,6 +24,8 @@ import BillInvoice from "../screen/lessor/BillInvoice";
 import AnnouceNews from "../screen/lessor/AnnouceNews";
 import NewsDetail from "../screen/lessor/NewsDetail";
 import BillRoomInvoice from "../component/invoice/BillRoomInvoice";
+import CheckPayment from "../screen/lessor/CheckPayment";
+import PaymentDetail from "../screen/lessor/PaymentDetail";
 
 import { FontAwesome } from "@expo/vector-icons";
 import AddRoomType from "../screen/lessor/AddRoomType";
@@ -33,6 +34,7 @@ const LessorNavigation = () => {
 
   const RoomNavigator = createNativeStackNavigator();
   const ContractNavigator = createNativeStackNavigator();
+  const PaymentNavigator = createNativeStackNavigator();
   const ParcelNavigator = createNativeStackNavigator();
   const BillNavigator = createNativeStackNavigator();
 
@@ -155,14 +157,11 @@ const LessorNavigation = () => {
           })}
         />
         <LessorsNavigator.Screen
-          name="Contract"
-          component={CancelContract}
+          name="CheckPayments"
+          component={PaymentNavigation}
           options={({ route, navigation }) => ({
             // title: route.params.categoryTitle,
-            title: "Contract",
-            headerStyle: { backgroundColor: "transparent" },
-            headerTintColor: "white",
-            headerShown: true,
+            headerShown: false,
           })}
         />
         <LessorsNavigator.Screen
@@ -236,32 +235,52 @@ const LessorNavigation = () => {
     );
   };
 
-  // const ContractNavigation = () => {
-  //   return (
-  //     <ContractNavigator.Navigator>
-  //       <ContractNavigator.Screen
-  //         name="LeaseContract"
-  //         component={LeaseContract}
-  //         options={({ route, navigation }) => {
-  //           return {
-  //             title: "Lease Contract",
-  //             headerLeft: () => listIconToOpenDrawer(navigation),
-  //           };
-  //         }}
-  //       />
-  //       <ContractNavigator.Screen
-  //         name="CancelContract"
-  //         component={CancelContract}
-  //         options={({ route, navigation }) => {
-  //           return {
-  //             title: "Cancel Contract",
-  //             headerLeft: () => listIconToOpenDrawer(navigation),
-  //           };
-  //         }}
-  //       />
-  //     </ContractNavigator.Navigator>
-  //   );
-  // };
+  const PaymentNavigation = () => {
+    return (
+      <PaymentNavigator.Navigator>
+        <PaymentNavigator.Screen
+          name="CheckPayments"
+          component={CheckPayment}
+          options={({ route, navigation }) => ({
+            // title: route.params.categoryTitle,
+            title: "Check Payment",
+            headerStyle: { backgroundColor: "transparent" },
+            headerTintColor: "white",
+            headerShown: true,
+            headerLeft: () => listIconToOpenDrawer3(navigation),
+          })}
+        />
+        <PaymentNavigator.Screen
+          name="PaymentDetail"
+          component={PaymentDetail}
+          options={({ route, navigation }) => ({
+            // title: route.params.categoryTitle,
+            title: "Check Payment",
+            headerStyle: { backgroundColor: "transparent" },
+            headerTintColor: "white",
+            headerShown: true,
+          })}
+        />
+        <PaymentNavigator.Screen
+          name="BillInvoice"
+          component={BillInvoice}
+          options={({ route, navigation }) => {
+            return {
+              title: "ห้อง " ,
+              headerTintColor: "#47C5FC",
+            };
+          }}
+        />
+         <PaymentNavigator.Screen
+          name="Meter"
+          component={RecordMeter}
+          options={({ route }) => ({
+            // title: route.params.categoryTitle,
+          })}
+        />
+      </PaymentNavigator.Navigator>
+    );
+  };
 
   const ContractNavigation = () => {
     return (
@@ -445,17 +464,8 @@ const LessorNavigation = () => {
       <LessorNavigator.Screen name="Room" component={RoomNavigation} />
       {/* <LessorNavigator.Screen name="Contract" component={ContractNavigation} /> */}
       <LessorNavigator.Screen
-        name="CancelContract"
-        component={CancelContract}
-        options={({ route, navigation }) => {
-          return {
-            title: "Contract",
-            headerShown: true,
-            headerStyle: { backgroundColor: "transparent" },
-            headerTintColor: "white",
-            headerLeft: () => listIconToOpenDrawer3(navigation),
-          };
-        }}
+        name="CheckPayment"
+        component={PaymentNavigation}
       />
       {/* <LessorNavigator.Screen
         name="CheckRoomsStatus"

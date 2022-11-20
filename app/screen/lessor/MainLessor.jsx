@@ -141,14 +141,17 @@ const MainLessor = ({ route, navigation }) => {
 
             <TouchableOpacity
               style={styles.box}
-              onPress={() => navigation.navigate("Contract")}
+              onPress={() => navigation.navigate("CheckPayment")}
             >
               <Image
                 source={require("../../assets/contract2.png")}
                 style={{ width: "30%", height: "40%" }}
               ></Image>
               <Text style={{ fontWeight: "bold", top: 5, fontSize: "12px" }}>
-                สัญญาเช่า
+                ตรวจสอบ
+              </Text>
+              <Text style={{ fontWeight: "bold", top: 5, fontSize: "12px" }}>
+                การชำรเะเงิน
               </Text>
             </TouchableOpacity>
 
