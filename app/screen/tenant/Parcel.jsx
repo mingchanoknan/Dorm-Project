@@ -18,6 +18,7 @@ import {
 } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
+import { useSelector, useDispatch } from "react-redux";
 import { baseUrl } from "@env";
 import axios from "axios";
 import { NEWS } from "../../dummy/NEWS";
@@ -26,9 +27,11 @@ import BoxParcelTenant from "../../component/parcel/BoxParcelTenant";
 import { useFocusEffect } from "@react-navigation/native";
 
 const Parcel = ({ route, navigation }) => {
+  const user = useSelector((state) => state.user)
+
   const [parcel, setParcel] = useState(null);
   const [select, setSelect] = useState("myParcel");
-  const [room_number, setRoom_number] = useState("A307");
+  const [room_number, setRoom_number] = useState(user.room_number);
   const [url, setUrl] = useState(`${baseUrl}/getParcelNum/${room_number}`);
 
   const [countReceived, setCountReceived] = useState(0);
@@ -37,7 +40,7 @@ const Parcel = ({ route, navigation }) => {
   useFocusEffect(
     useCallback(() => {
       if(select == 'myParcel'){
-        setRoom_number("A307")
+        setRoom_number(user.room_number)
         setUrl(`${baseUrl}/getParcelNum/${room_number}`)
         // console.log("p")
       }else{

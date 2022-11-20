@@ -11,11 +11,42 @@ import { baseUrl } from "@env";
 import axios from "axios";
 
 const BillRoomInvoice = (props) => {
+  // const [currentMonth, setCurrentMonth] = useState("");
+  // const [currentYear, setCurrentYear] = useState("");
+  // const [currentDay, setCurrentDay] = useState("")
+ 
+  // useEffect(() => {
+  //   const dateCurrent = new Date().toISOString().slice(0, 10);
+  //   const formatedDate = (yearAndMonth) => {
+  //     let array = yearAndMonth.split("-");
+  //     const months = [
+  //       "January",
+  //       "February",
+  //       "March",
+  //       "April",
+  //       "May",
+  //       "June",
+  //       "July",
+  //       "August",
+  //       "September",
+  //       "October",
+  //       "November",
+  //       "December",
+  //     ];
+      
+  
+  //     setCurrentMonth(months[parseInt(array[1]) - 1]);
+  //     setCurrentYear(array[0]);
+  //     setCurrentDay(array[2])
+  //   };
+  //   formatedDate(dateCurrent);
+  
+   
+  // }, [])
+  // console.log(new Date(`currentDay+currentMonth +currentYear`));
   const [dorm_fee, setDorm_fee] = useState(props.roomInvoice.dorm_fee);
   const [water_fee, setWater_fee] = useState(props.roomInvoice.water_fee);
-  const [electricity_fee, setElectricity_fee] = useState(
-    props.roomInvoice.electricity_fee
-  );
+  const [electricity_fee, setElectricity_fee] = useState(props.roomInvoice.electricity_fee);
   const [common_fee, setCommon_fee] = useState(props.roomInvoice.common_fee);
   const [expenses, setExpenses] = useState(props.roomInvoice.expenses);
   const [amount, setAmount] = useState(0);
@@ -139,7 +170,7 @@ const BillRoomInvoice = (props) => {
               {" "}
               {props.roomInvoice.status == "UNAPPROVED_BILL"
                 ? "ยังไม่ชำระ"
-                : props.roomInvoice.status == "checking_payment" ? "กำลังตรวจสอบ" : props.roomInvoice.status == "WRONG_BILL" ? "การชำระเงินมีข้อผิดพลาด" : "ชำระแล้ว"}
+                : props.roomInvoice.status == "checking_payment" ? "กำลังตรวจสอบ" : props.roomInvoice.status == "WRONG_BILL" ? "การชำระเงินผิดพลาด" : "ชำระแล้ว"}
             </Text>
           </View>
 

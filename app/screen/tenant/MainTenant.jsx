@@ -90,7 +90,7 @@ const MainTenant = ({ route, navigation }) => {
               padding: 20,
               elevation: 13,
               flexDirection: "row",
-              justifyContent: "space-around",
+              justifyContent: "center",
               alignSelf: "center",
               alignItems: "center",
             }}
@@ -101,10 +101,8 @@ const MainTenant = ({ route, navigation }) => {
                 width: "90%",
                 height: "100%",
                 borderRadius: "10%",
-                padding: 20,
-                elevation: 13,
                 flexDirection: "row",
-                justifyContent: "space-around",
+                justifyContent: "space-between",
                 alignSelf: "center",
                 alignItems: "center",
               }}
