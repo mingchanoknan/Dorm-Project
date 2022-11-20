@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Login from "../screen/Login";
 import Register from "../screen/Register";
+import MainTenant from "../screen/tenant/MainTenant";
 import { View, Text, Image, StyleSheet } from "react-native";
 
 const LoginNavigation = () => {
@@ -19,11 +20,16 @@ const LoginNavigation = () => {
       }}
     >
       <LoginNavigator.Screen name="Login" component={Login} />
-      <LoginNavigator.Screen name="Register" component={Register} options={({ route }) => ({
-            title:"Register",
-            headerShown: true,
-            headerStyle:{backgroundColor:"white"}
-          })}/>
+      <LoginNavigator.Screen
+        name="Register"
+        component={Register}
+        options={({ route }) => ({
+          title: "Register",
+          headerShown: true,
+          headerStyle: { backgroundColor: "white" },
+        })}
+      />
+      <LoginNavigator.Screen name="Main" component={MainTenant} />
     </LoginNavigator.Navigator>
   );
 };
