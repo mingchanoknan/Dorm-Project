@@ -139,7 +139,7 @@ const BillRoomInvoice = (props) => {
               {" "}
               {props.roomInvoice.status == "UNAPPROVED_BILL"
                 ? "ยังไม่ชำระ"
-                : props.roomInvoice.status == "checking_payment" ? "กำลังตรวจสอบ" : "ชำระแล้ว"}
+                : props.roomInvoice.status == "checking_payment" ? "กำลังตรวจสอบ" : props.roomInvoice.status == "WRONG_BILL" ? "การชำระเงินมีข้อผิดพลาด" : "ชำระแล้ว"}
             </Text>
           </View>
 
