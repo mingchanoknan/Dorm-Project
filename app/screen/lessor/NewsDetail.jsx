@@ -1,12 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Image,
   StyleSheet,
-  TextInput,
-  FlatList,
   Alert,
 } from "react-native";
+import * as ImagePicker from "expo-image-picker";
 import { Button, Card, Text, Modal, Input, Icon } from "@ui-kitten/components";
 import { baseUrl } from "@env";
 import axios from "axios";
@@ -14,14 +13,20 @@ import axios from "axios";
 const NewsDetail = ({ route, navigation }) => {
   const data = route.params.item;
   const [isEditing, setIsEditing] = React.useState(false);
-  const [id, setId] = React.useState(data._id);
+  const [id, setId] = React.useState(null);
   const [text, setText] = React.useState(data.text);
   const [title, setTitle] = React.useState(data.title);
   const [created_date, setCreated_date] = React.useState(data.created_date);
   const [created_byId, setCreated_byId] = React.useState(data.created_byId);
+  const [image, setImage] = useState(data.url);
+  const [editImage, setEditImage] = useState([])
   const [visible, setVisible] = React.useState(false);
-  console.log("--------\n", data._id, "\n", data);
-
+  console.log("---------------------\n", data);
+  // console.log("---------------------\n", data.url);
+  // console.log('"' + data.url + '"');
+  // console.log({ uri: image });
+  // console.log("Set : ",image)
+  
   class news {
     constructor() {
       this._id = id;
@@ -37,15 +42,25 @@ const NewsDetail = ({ route, navigation }) => {
     created_byId;
   }
 
+  useEffect(() => {
+    setId(data._id);
+    // console.log(id);
+  }, [data]);
+
   const Edited = async () => {
-    let record = new news();
-    record._id = id;
+    // let record = new news();
+    // record._id = id;
+    // record.title = title;
+    // record.text = text;
+    // record.created_date = created_date;
+    // record.created_byId = created_byId;
+    let record = { ...data };
     record.title = title;
     record.text = text;
-    record.created_date = created_date;
-    record.created_byId = created_byId;
-
-    console.log(record);
+    if(editImage.length > 0){
+      record.url = editImage[0].uri
+    }
+    console.log("--------------------", record);
 
     const res = await axios.post(`${baseUrl}/updateNews`, record);
     Alert.alert("แก้ไขสำเร็จ", undefined, [
@@ -54,38 +69,8 @@ const NewsDetail = ({ route, navigation }) => {
         onPress: () => {
           setTitle(title);
           setText(text);
+          navigation.navigate("AnnouceNews")
         },
-      },
-    ]);
-
-    // if (res.status === 200){
-    //   Alert.alert("แก้ไขสำเร็จ", undefined, [
-    //     {
-    //       text: "ปิด",
-    //       onPress: () => {
-    //         setTitle(title);
-    //         setText(text);
-    //       },
-    //     },
-    //   ]);
-    // }else{
-    //   throw new Error("An error ");
-    // }
-    };
-    
-
-  const ConfirmDel = () => {
-    Alert.alert("ยืนยันการลบ", undefined, [
-      {
-        text: "ยืนยัน",
-        onPress: () => {
-          Delete();
-        },
-      },
-      {
-        text: "ยกเลิก",
-        onPress: () => console.log("Cancel Pressed"),
-        style: "cancel",
       },
     ]);
   };
@@ -105,16 +90,35 @@ const NewsDetail = ({ route, navigation }) => {
       {
         text: "ปิด",
         onPress: () => {
-          setTitle(title);
-          setText(text);
+          // setTitle(title);
+          // setText(text);
+          navigation.navigate("AnnouceNews")
         },
       },
     ]);
   };
 
+  const sendImg = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: false,
+      //   aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      let list = [...editImage];
+      list.unshift(result);
+      // props.changeInput(list, "image");
+      setEditImage(list);
+    }
+  };
+
   const Header = (props) => (
     <View {...props}>
-      <Text category="h6">{title}</Text>
+      <Text category="h6" onChangeText={(text) => setTitle(text)}>
+        {title}
+      </Text>
       {/* <Text style={{marginTop:5,paddingLeft:10, fontSize:13,color:"#626567"}}>สร้างเมื่อ : {created_date}</Text> */}
     </View>
   );
@@ -137,29 +141,43 @@ const NewsDetail = ({ route, navigation }) => {
         size="small"
         status="danger"
         onPress={() => {
-          ConfirmDel();
+          Alert.alert("ยืนยันการลบ", undefined, [
+            {
+              text: "ยืนยัน",
+              onPress: () => {
+                Delete();
+              },
+            },
+            {
+              text: "ยกเลิก",
+              onPress: () => console.log("Cancel Pressed"),
+              style: "cancel",
+            },
+          ]);
         }}
       >
         DELETE
       </Button>
     </View>
   );
+
   return (
     <View style={styles.container}>
       <Image
         source={require("../../assets/bg_login.jpg")}
         style={styles.background}
       ></Image>
+
       <Card style={styles.card} header={Header} footer={Footer}>
         <Text>{text}</Text>
-        <Image
-          source={require("../../assets/user.jpg")}
-          style={styles.image}
-        ></Image>
+        {image ? (
+          <Image source={{ uri: image }} style={styles.image}></Image>
+        ) : null}
         <Text style={{ fontSize: 12, color: "#626567", textAlign: "right" }}>
           สร้างเมื่อ : {created_date}
         </Text>
       </Card>
+
       <Modal
         visible={isEditing}
         backdropStyle={styles.backdrop}
@@ -179,22 +197,25 @@ const NewsDetail = ({ route, navigation }) => {
             value={text}
             onChangeText={setText}
           />
-          <Image
-            source={require("../../assets/user.jpg")}
-            style={[styles.image]}
-          ></Image>
+          {image ? (
+            <Image source={{ uri: image }} style={[styles.image]}></Image>
+          ) : (
+            <Image source={require("../../assets/user.jpg")} style={[styles.image]}></Image>
+          )}
           <Icon
-            fill="black"
+            fill="#EC1212"
             style={{
-              width: 15,
-              height: 15,
-              right: 55,
-              top: -160,
+              width: 20,
+              height: 20,
+              right: 40,
+              top: -175,
               position: "absolute",
               zIndex: 1,
             }}
-            name="upload-outline"
-            onPress={() => {}}
+            name="plus-circle"
+            onPress={() => {
+              sendImg()
+            }}
           ></Icon>
           <View style={[styles.footerContainer, { marginVertical: 3 }]}>
             <Button
@@ -202,11 +223,24 @@ const NewsDetail = ({ route, navigation }) => {
               status="warning"
               size="small"
               onPress={() => {
-                setIsEditing(false);
-                Edited();
+                Alert.alert("ยืนยันการแก้ไข", undefined, [
+                  {
+                    text: "ยืนยัน",
+                    onPress: () => {
+                      Edited();
+                    },
+                  },
+                  {
+                    text: "ยกเลิก",
+                    style: "cancel",
+                    onPress: () => {
+                      setIsEditing(false);
+                    },
+                  },
+                ]);
               }}
             >
-              EDIT
+              SAVE
             </Button>
             <Button
               style={[{ alignSelf: "center", marginTop: 20 }]}
@@ -223,6 +257,7 @@ const NewsDetail = ({ route, navigation }) => {
           </View>
         </Card>
       </Modal>
+
     </View>
   );
 };

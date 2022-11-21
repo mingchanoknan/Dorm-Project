@@ -51,6 +51,7 @@ const ManageParcel = ({ route, navigation }) => {
             countReceived.status === 200 &&
             countNotReceived.status === 200
           ) {
+            console.log(response.data)
             setParcel(response.data);
             setCountReceived(countReceived.data);
             setCountNotReceived(countNotReceived.data);

@@ -27,7 +27,7 @@ const Register = (props) => {
   const [age, setAge] = useState(null);
   const [sex, setSex] = useState(null);
   const [roomNo, setRoomNo] = useState("");
-  const [role, setRole] = useState("user");
+  const [role, setRole] = useState("tenant");
 
   class user {
     constructor() {
@@ -106,6 +106,7 @@ const Register = (props) => {
             setAge(null);
             setSex(null);
             setRoomNo("");
+            props.setIsLogin(true)
           },
         },
       ]);

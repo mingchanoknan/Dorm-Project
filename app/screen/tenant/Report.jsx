@@ -60,7 +60,7 @@ const Report = () => {
   useEffect(() => {
     const getReport = async () => {
       const reports = await axios.get(`${baseUrl}/report/getall/`)
-      // console.log(reports.data)
+      console.log(reports.data)
       let sortDate = reports.data
       sortDate.sort((a, b) => {
         function convertDate(text) {

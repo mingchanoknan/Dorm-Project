@@ -42,6 +42,7 @@ const Parcel = ({ route, navigation }) => {
         // console.log("p")
       }else{
         setUrl(`${baseUrl}/parcel`)
+        // console.log("Hello")
       }
       const url1 = `${baseUrl}/getParcelNum/${room_number}`;
       

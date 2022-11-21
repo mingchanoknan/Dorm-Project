@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Text,
   View,
@@ -6,31 +6,85 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
+  Alert,
 } from "react-native";
 import { baseUrl } from "@env";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import { ScrollView } from "react-native-gesture-handler";
 
 const MangeAccount = () => {
+  const user = useSelector((state) => state.user);
+  const [id, setId] = React.useState(null);
   const [isEditable, setEditable] = useState(false);
-  const [firstname, onChangeFirstname] = React.useState("Pleng");
-  const [lastname, onChangeLastname] = React.useState("Piplengx");
-  const [address, onChangeAddress] = React.useState(
-    "683 หอพัก jia jia place ห้อง 1411 ซ.ฉลองกรุง1 แยก6 ถ.ฉลองกรุง แขวงลาดกระบัง เขตลาดกระบัง จ.กทม 10520"
-  );
-  const [tel, onChangeTel] = React.useState("0945525308");
+  const [isUpdate, setUpdate] = useState(false);
+  const [firstname, onChangeFirstname] = useState(user.first_name);
+  const [lastname, onChangeLastname] = useState(user.last_name);
+  const [address, onChangeAddress] = useState(user.address);
+  const [tel1, onChangeTel1] = useState(user.tel_no1);
+  const [tel2, onChangeTel2] = useState(user.tel_no2);
 
+  useEffect(() => {
+    console.log("------\n", user);
+    console.log("pass", user.password);
+    setId(user._id);
+    console.log(id)
+  }, [user]);
 
-  
+  class editUser {
+    constructor() {
+      this._id = id;
+      this.first_name = "";
+      this.last_name = "";
+      this.address = "";
+      this.tel_no1 = "";
+      this.tel_no2 = "";
+    }
+    id;
+    first_name;
+    last_name;
+    address;
+    tel_no1;
+    tel_no2;
+  }
+
   const edit = () => {
-    // console.log("before : " + firstname)
-    // console.log("before : " + lastname)
     setEditable(true);
   };
 
-  const submit = () => {
-    setEditable(false);
-    // console.log("after : " + firstname)
-    // console.log("after : " + lastname)
+  const submit = async () => {
+    let record = new editUser();
+    record._id = id;
+    record.first_name = firstname;
+    record.last_name = lastname;
+    record.address = address;
+    record.tel_no1 = tel1;
+    record.tel_no2 = tel2;
+
+    console.log("--------", record);
+    const res = await axios.post(`${baseUrl}/updateUser`, record);
+    Alert.alert("แก้ไขสำเร็จ", undefined, [
+      {
+        text: "ปิด",
+        onPress: () => {
+          // setTitle(title);
+          // setText(text);
+          setUpdate(false);
+        },
+      },
+    ]);
+
+    // Alert.alert("แก้ไขสำเร็จ", undefined, [
+    //   {
+    //     text: "ปิด",
+    //     onPress: () => {
+    //       setEditable(false);
+    //       // setTitle(title);
+    //       // setText(text);
+    //     },
+    //   },
+    // ]);
+    // setEditable(false);
   };
 
   return (
@@ -43,11 +97,11 @@ const MangeAccount = () => {
       <Image
         source={require("../assets/user.png")}
         style={{
-          width: 180,
-          height: 180,
+          width: 170,
+          height: 170,
           position: "relative",
           alignSelf: "center",
-          top: -290,
+          top: -300,
         }}
       ></Image>
 
@@ -61,7 +115,10 @@ const MangeAccount = () => {
               marginRight: 10,
             },
           ]}
-          onPress={edit}
+          onPress={() => {
+            edit();
+            setUpdate(true);
+          }}
         >
           <Text
             style={{
@@ -74,88 +131,130 @@ const MangeAccount = () => {
             Edit Profile
           </Text>
         </TouchableOpacity>
+        <ScrollView style={{ width: 320 }}>
+          <Text style={[styles.text]}>Firstname</Text>
 
-        <Text style={[styles.text]}>Firstname</Text>
+          <TextInput
+            style={[
+              styles.input,
+              { backgroundColor: isEditable ? "white" : "rgb(217, 217, 217)" },
+            ]}
+            onChangeText={onChangeFirstname}
+            value={firstname}
+            // placeholder="pleng"
+            fontWeight="400"
+            keyboardType="default"
+            editable={isEditable}
+          />
 
-        <TextInput
-          style={[
-            styles.input,
-            { backgroundColor: isEditable ? "white" : "rgb(217, 217, 217)" },
-          ]}
-          onChangeText={onChangeFirstname}
-          value={firstname}
-          // placeholder="pleng"
-          fontWeight="400"
-          keyboardType="default"
-          editable={isEditable}
-        />
+          <Text style={[styles.text]}>Lastname</Text>
 
-        <Text style={[styles.text]}>Lastname</Text>
+          <TextInput
+            style={[
+              styles.input,
+              { backgroundColor: isEditable ? "white" : "rgb(217, 217, 217)" },
+            ]}
+            onChangeText={onChangeLastname}
+            value={lastname}
+            // placeholder="piplengx"
+            fontWeight="400"
+            keyboardType="default"
+            editable={isEditable}
+          />
 
-        <TextInput
-          style={[
-            styles.input,
-            { backgroundColor: isEditable ? "white" : "rgb(217, 217, 217)" },
-          ]}
-          onChangeText={onChangeLastname}
-          value={lastname}
-          // placeholder="piplengx"
-          fontWeight="400"
-          keyboardType="default"
-          editable={isEditable}
-        />
+          <Text style={[styles.text]}>Address</Text>
 
-        <Text style={[styles.text]}>Address</Text>
+          <TextInput
+            style={[
+              styles.input,
+              {
+                backgroundColor: isEditable ? "white" : "rgb(217, 217, 217)",
+                paddingTop: 10,
+                fontSize: 15,
+              },
+            ]}
+            onChangeText={onChangeAddress}
+            value={address}
+            // placeholder="683 หอพัก jia jia place ห้อง 1411 ซ.ฉลองกรุง1 แยก6 ถ.ฉลองกรุง แขวงลาดกระบัง เขตลาดกระบัง จ.กทม 10520"
+            fontWeight="400"
+            keyboardType="default"
+            multiline={true}
+            editable={isEditable}
+            numberOfLines={3}
+            height={70}
+          />
 
-        <TextInput
-          style={[
-            styles.input,
-            {
-              backgroundColor: isEditable ? "white" : "rgb(217, 217, 217)",
-              paddingTop: 10,
-              fontSize:15,
-            },
-          ]}
-          onChangeText={onChangeAddress}
-          value={address}
-          // placeholder="683 หอพัก jia jia place ห้อง 1411 ซ.ฉลองกรุง1 แยก6 ถ.ฉลองกรุง แขวงลาดกระบัง เขตลาดกระบัง จ.กทม 10520"
-          fontWeight="400"
-          keyboardType="default"
-          multiline={true}
-          editable={isEditable}
-          numberOfLines={3}
-          height={70}
-        />
+          <Text style={[styles.text]}>Tel 1</Text>
 
-        <Text style={[styles.text]}>Tel</Text>
+          <TextInput
+            style={[
+              styles.input,
+              { backgroundColor: isEditable ? "white" : "rgb(217, 217, 217)" },
+            ]}
+            onChangeText={onChangeTel1}
+            value={tel1}
+            // placeholder="0945525308"
+            placeholderTextColor="#6C6363"
+            fontWeight="400"
+            keyboardType="default"
+            editable={isEditable}
+          />
 
-        <TextInput
-          style={[
-            styles.input,
-            { backgroundColor: isEditable ? "white" : "rgb(217, 217, 217)" },
-          ]}
-          onChangeText={onChangeTel}
-          value={tel}
-          // placeholder="0945525308"
-          placeholderTextColor="#6C6363"
-          fontWeight="400"
-          keyboardType="default"
-          editable={isEditable}
-        />
+          <Text style={[styles.text]}>Tel 2</Text>
 
-        <TouchableOpacity style={[styles.button, { marginTop: 10 }]}>
-          <Text
-            style={{
-              fontSize: 16,
-              fontWeight: "500",
-              color: "white",
-              textAlign: "center",
-            }}
-            onPress={submit}
-          >
-            Update Profile
-          </Text>
-        </TouchableOpacity>
+          <TextInput
+            style={[
+              styles.input,
+              { backgroundColor: isEditable ? "white" : "rgb(217, 217, 217)" },
+            ]}
+            onChangeText={onChangeTel2}
+            value={tel2}
+            // placeholder="0945525308"
+            placeholderTextColor="#6C6363"
+            fontWeight="400"
+            keyboardType="default"
+            editable={isEditable}
+          />
+
+          {isUpdate ? (
+            <TouchableOpacity style={[styles.button, { marginTop: 10 }]}>
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontWeight: "500",
+                  color: "white",
+                  textAlign: "center",
+                }}
+                onPress={() => {
+                  Alert.alert("ยืนยันการแก้ไข", undefined, [
+                    {
+                      text: "ยืนยัน",
+                      onPress: () => {
+                        submit();
+                        setEditable(false);
+                      },
+                    },
+                    {
+                      text: "ยกเลิก",
+                      onPress: () => {
+                        onChangeFirstname(user.first_name);
+                        onChangeLastname(user.last_name);
+                        onChangeAddress(user.address);
+                        onChangeTel1(user.tel_no1);
+                        onChangeTel2(user.tel_no2);
+                        setEditable(false);
+                        console.log("Cancel Pressed");
+                      },
+                      style: "cancel",
+                    },
+                  ]);
+                }}
+              >
+                Update Profile
+              </Text>
+            </TouchableOpacity>
+          ) : null}
+        </ScrollView>
       </View>
     </View>
   );
@@ -192,7 +291,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255, 255, 255, 0.8)",
     justifyContent: "flex-start",
     alignItems: "center",
-    top: 280,
+    top: 210,
     zIndex: 1,
   },
   button: {
@@ -214,13 +313,14 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
     fontSize: 15,
+    alignSelf: "center",
   },
   text: {
     fontSize: 15,
     alignSelf: "flex-start",
-    paddingLeft: 30,
     marginTop: 5,
     marginBottom: 5,
+    paddingLeft: 20,
   },
 });
 

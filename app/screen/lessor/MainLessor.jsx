@@ -26,6 +26,7 @@ const MainLessor = ({ route, navigation }) => {
     .get(`${baseUrl}/countUser`)
     .then((response) => {
       setCountUser(response.data)
+      console.log(response.data)
     })
     .catch((error) => console.log("error countUser"));
   })

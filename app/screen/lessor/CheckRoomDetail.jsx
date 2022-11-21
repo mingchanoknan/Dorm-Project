@@ -28,7 +28,7 @@ const CheckRoomDetail = ({ route, navigation }) => {
             id : id
         } })
         .then((response) => {
-          console.log(response.data);
+          // console.log(response.data);
           setData(response.data);
         })
         .catch((err) => {
