@@ -11,7 +11,7 @@ import { StackActions } from "@react-navigation/native";
 const LeaseContract = ({ route, navigation }) => {
   const [checked, setChecked] = useState(false);
   const { categoryId, categoryTitle, reserveFname, reserveLname } = route.params;
-  const [lease_date, setLeaseDate] = useState(new Date());
+  const [lease_date, setLeaseDate] = useState(new Date().toISOString().slice(0,10));
   const [first_name, setFirst_name] = useState(reserveFname);
   const [last_name, setLast_name] = useState(reserveLname);
   const [address, setAddress] = useState("");
@@ -90,7 +90,14 @@ const LeaseContract = ({ route, navigation }) => {
         alert("ทำสัญญาสำเร็จ");
 
         navigation.dispatch(
-          StackActions.replace("Register", { categoryTitle: room_number })
+          StackActions.replace("Register", {
+            categoryId: response.data._id,
+            categoryTitle: room_number,
+            first_name: first_name,
+            last_name: last_name,
+            address1: address,
+            tel_no1: phone,
+          })
         );
       } else {
         throw new Error("An error ");

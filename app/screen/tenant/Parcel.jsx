@@ -25,6 +25,7 @@ import { NEWS } from "../../dummy/NEWS";
 import { StackActions } from "@react-navigation/native";
 import BoxParcelTenant from "../../component/parcel/BoxParcelTenant";
 import { useFocusEffect } from "@react-navigation/native";
+import { useDerivedValue } from "react-native-reanimated";
 
 const Parcel = ({ route, navigation }) => {
   const user = useSelector((state) => state.user)
@@ -41,7 +42,7 @@ const Parcel = ({ route, navigation }) => {
     useCallback(() => {
       if(select == 'myParcel'){
         setRoom_number(user.room_number)
-        setUrl(`${baseUrl}/getParcelNum/${room_number}`)
+        setUrl(`${baseUrl}/getParcelNum/${user.room_number}`)
         // console.log("p")
       }else{
         setUrl(`${baseUrl}/parcel`)
@@ -69,7 +70,7 @@ const Parcel = ({ route, navigation }) => {
 
   const renderGridItem = (itemData) => {
     // console.log(itemData);
-    return <BoxParcelTenant item={itemData} width={"85%"} numberOfLines={1} />;
+    return <BoxParcelTenant item={itemData} user={user.room_number}  width={"85%"} numberOfLines={1} />;
   };
 
   return (

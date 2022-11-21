@@ -14,7 +14,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { baseUrl } from "@env";
 import axios from "axios";
 
-const BoxParcelTenant = ({ item, width, }) => {
+const BoxParcelTenant = ({ item, width, user }) => {
   const [name, setName] = useState(item.item.name);
   const [room_number, setRoom_number] = useState(item.item.room_number);
   const [sent_date, setSent_date] = useState(item.item.sent_date);
@@ -85,12 +85,12 @@ const BoxParcelTenant = ({ item, width, }) => {
               <Text style={[styles.txt, { color: "black" }]}> {receive_date} </Text>
             </View>
 
-          { item.item.room_number == "A307" && item.item.status === 'not_received' && (
+          {  item.item.status === 'not_received' && item.item.room_number === user && (
             <TouchableOpacity style={{backgroundColor: "#e8799c", padding: 5, width: 90, alignItems: "center", borderRadius: "50%", alignSelf: "flex-end" }} onPress={onConfirmParcel}>
                 <Text style={{ fontSize: "10px", fontWeight: "bold", color: "white"}}>ยืนยันรับพัสดุ</Text>
             </TouchableOpacity>
           )}
-          {  item.item.room_number == "A307" && item.item.status === 'received' && (
+          {   item.item.status === 'received' && item.item.room_number === user && (
             <TouchableOpacity disabled={true} style={{borderColor: "#9E9E9E", borderWidth: 2, padding: 3, width: 90, alignItems: "center", borderRadius: "50%", alignSelf: "flex-end" }}>
                 <Text style={{ fontSize: "10px", fontWeight: "bold", color: "#9E9E9E"}}>รับพัสดุแล้ว</Text>
             </TouchableOpacity>

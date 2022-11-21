@@ -13,22 +13,24 @@ import Gender from "../component/register/gender";
 import Date from "../component/register/datePicker";
 import { baseUrl } from "@env";
 import axios from "axios";
+import { StackActions } from "@react-navigation/native";
 
-const Register = (props) => {
+const Register = ({ route, navigation }) => {
+  const { first_name, last_name, categoryTitle, address1, tel_no1, categoryId } = route.params;
+  const [firstname, setFirstname] = useState(first_name);
+  const [lastname, setLastname] = useState(last_name);
   const [username, setUsername] = useState(null);
   const [password, setPassword] = useState(null);
-  const [firstname, setFirstname] = useState("");
-  const [lastname, setLastname] = useState("");
+  const [address, setAddress] = useState(address1);
   const [email, setEmail] = useState("");
-  const [tel1, setTel1] = useState("");
+  const [tel1, setTel1] = useState(tel_no1);
   const [tel2, setTel2] = useState("");
-  const [address, setAddress] = useState("");
   const [birthdate, setBirthdate] = useState("");
   const [age, setAge] = useState(null);
   const [sex, setSex] = useState(null);
-  const [roomNo, setRoomNo] = useState("");
+  const [roomNo, setRoomNo] = useState(categoryTitle);
   const [role, setRole] = useState("tenant");
-
+  console.log(first_name);
   class user {
     constructor() {
       this.username = "";
@@ -106,7 +108,12 @@ const Register = (props) => {
             setAge(null);
             setSex(null);
             setRoomNo("");
-            props.setIsLogin(true)
+            navigation.dispatch(
+              StackActions.replace("UserProfile", {
+                categoryId: categoryId,
+                categoryTitle: roomNo,
+              })
+            );
           },
         },
       ]);
@@ -120,19 +127,8 @@ const Register = (props) => {
         style={styles.background}
       ></Image>
 
-      <Image
-        source={require("../assets/user.png")}
-        style={{
-          width: 160,
-          height: 160,
-          position: "relative",
-          alignSelf: "center",
-          top: -200,
-        }}
-      ></Image>
-
       <View style={[styles.scroll]}>
-        <ScrollView>
+        <ScrollView style={{flex: 1}}>
           {/* USERNAME */}
           <TextInput
             style={[styles.input]}
@@ -155,18 +151,16 @@ const Register = (props) => {
             keyboardType="default"
             secureTextEntry={true}
           />
-          <TextInput
+          <TextInput editable={false}
             style={[styles.input]}
-            onChangeText={setFirstname}
             value={firstname}
             placeholder="Firstname"
             placeholderTextColor="#6C6363"
             fontWeight="400"
             keyboardType="default"
           />
-          <TextInput
+          <TextInput editable={false}
             style={[styles.input]}
-            onChangeText={setLastname}
             value={lastname}
             placeholder="Lastname"
             placeholderTextColor="#6C6363"
@@ -182,9 +176,8 @@ const Register = (props) => {
             fontWeight="400"
             keyboardType="default"
           />
-          <TextInput
+          <TextInput editable={false}
             style={[styles.input]}
-            onChangeText={setTel1}
             value={tel1}
             placeholder="Tel no."
             placeholderTextColor="#6C6363"
@@ -200,15 +193,13 @@ const Register = (props) => {
             fontWeight="400"
             keyboardType="numeric"
           />
-          <TextInput
+          <TextInput editable={false}
             style={[styles.input]}
-            onChangeText={setAddress}
             value={address}
             placeholder="Address"
             placeholderTextColor="#6C6363"
-            fontWeight="400"
             keyboardType="default"
-            multiline={true}
+            multiline={2}
           />
 
           <View
@@ -243,14 +234,14 @@ const Register = (props) => {
               style={{
                 fontWeight: "400",
                 color: "#6C6363",
-                fontSize: 18,
+                fontSize: 12,
                 marginLeft: 5,
                 marginRight: 5,
               }}
             >
               ระบุเพศ :
             </Text>
-            <Gender
+            <Gender 
               onGender={(sex) => {
                 if (sex == 0) {
                   setSex("female");
@@ -264,16 +255,15 @@ const Register = (props) => {
               style={{
                 fontWeight: "400",
                 color: "#6C6363",
-                fontSize: 18,
+                fontSize: 12,
                 marginLeft: 5,
                 marginRight: 5,
               }}
             >
               ห้อง :
             </Text>
-            <TextInput
+            <TextInput editable={false}
               style={[styles.room]}
-              onChangeText={setRoomNo}
               value={roomNo}
               placeholder="Room no"
               placeholderTextColor="#6C6363"
@@ -284,7 +274,14 @@ const Register = (props) => {
           </View>
         </ScrollView>
         <View style={{ padding: 5, marginBottom: 10 ,flexDirection:'row',justifyContent:'space-between'}}>
-        <TouchableOpacity style={{ alignSelf: "flex-end",marginBottom:10}} onPress={()=>props.setIsLogin(true)} >
+          {/* <TouchableOpacity style={{ alignSelf: "flex-end", marginBottom: 10 }} onPress={() => {
+            navigation.dispatch(
+              StackActions.replace("DetailReserve", {
+                categoryId: categoryId,
+                categoryTitle: roomNo,
+              })
+            );
+        }}>
             <Text
               style={{
                 fontSize: 22,
@@ -295,11 +292,14 @@ const Register = (props) => {
             >
               CANCEL
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
+        </View>
+      </View>
+      <View style={{flex: 0.15, width: "100%", justifyContent: "center", alignItems: "flex-end"}}>
           <TouchableOpacity style={styles.button} onPress={Submit}>
             <Text
               style={{
-                fontSize: 22,
+                fontSize: 12,
                 fontWeight: "500",
                 color: "white",
                 textAlign: "center",
@@ -308,8 +308,7 @@ const Register = (props) => {
               SIGN UP
             </Text>
           </TouchableOpacity>
-        </View>
-      </View>
+          </View>
     </View>
   );
 };
@@ -329,16 +328,17 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     borderBottomLeftRadius: 60,
     borderBottomRightRadius: 60,
+    position: "absolute"
   },
   scroll: {
-    height: 500,
+    flex: 0.8,
+    marginTop: "10%",
     borderWidth: 1,
     borderRadius: 30,
     borderColor: "rgba(255, 255, 255, 0.4)",
     backgroundColor: "rgba(255, 255, 255, 0.6)",
-    position: "absolute",
-    top: 190,
     padding: 10,
+    
   },
   input: {
     height: 45,
@@ -349,7 +349,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 20,
     padding: 10,
-    fontSize: 18,
+    fontSize: 12,
     position: "relative",
     marginBottom: 2,
     alignSelf: "center",
@@ -358,8 +358,8 @@ const styles = StyleSheet.create({
     borderRadius: 80,
     backgroundColor: "#90AACB",
     padding: 13,
-    marginTop: 12,
-    alignSelf: "center",
+    alignSelf: "flex-end",
+    marginRight : "12%"
   },
   room: {
     height: 45,
@@ -367,7 +367,7 @@ const styles = StyleSheet.create({
     borderColor: "#90AACB",
     borderWidth: 2,
     borderRadius: 30,
-    fontSize: 18,
+    fontSize: 12,
     position: "relative",
     marginBottom: 2,
     backgroundColor: "white",

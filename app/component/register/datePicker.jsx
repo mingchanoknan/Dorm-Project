@@ -55,7 +55,7 @@ const Example = (props) => {
         style={{
           fontWeight: "400",
           color: "#6C6363",
-          fontSize: 18,
+          fontSize: 12,
           marginLeft: 5,
         }}
       >
@@ -65,7 +65,7 @@ const Example = (props) => {
         style={[styles.calen, { width: 120 }]}
         onPress={showDatePicker}
       >
-        <Text style={{ fontWeight: "500", color: "#6C6363", fontSize: 17 }}>
+        <Text style={{ fontWeight: "500", color: "#6C6363", fontSize: 12 }}>
           {date.toLocaleDateString()}
         </Text>
         <FontAwesome
@@ -88,7 +88,7 @@ const Example = (props) => {
         style={{
           fontWeight: "400",
           color: "#6C6363",
-          fontSize: 18,
+          fontSize: 12,
           marginLeft: 5,
         }}
       >
@@ -97,7 +97,7 @@ const Example = (props) => {
       <TextInput
         style={[
           styles.age,
-          { fontWeight: "400", color: "#6C6363", fontSize: 18 },
+          { fontWeight: "400", color: "#6C6363", fontSize: 12 },
         ]}
         // placeholder="age"
         value={String(age)}
