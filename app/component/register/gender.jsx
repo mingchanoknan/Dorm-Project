@@ -9,7 +9,8 @@ import { IndexPath, Layout, Select, SelectItem } from "@ui-kitten/components";
 const data = ["หญิง", "ชาย"];
 const gender = (props) => {
   const [selectedIndex, setSelectedIndex] = React.useState(new IndexPath(0));
-  const renderOption = (title) => <SelectItem title={title} />;
+  
+  const renderOption = (title, index) => <SelectItem title={title} key={index}/>;
   const displayValue = data[selectedIndex.row];
 
   // const genderSelection = () => {

@@ -40,7 +40,6 @@ const PaymentDatail = ({ route, navigation }) => {
   const [statusApproved, setStatusApproved] = useState("APPROVED_BILL");
   const [statusCancle, setStatusCancle] = useState("WRONG_BILL");
   const [selectedIndex, setSelectedIndex] = useState(null);
-
   const [visible, setVisible] = useState(false);
   const [input, setInput] = useState("");
 

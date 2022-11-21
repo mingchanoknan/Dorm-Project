@@ -170,7 +170,7 @@ const RenderCard = (props) => {
               }
             }}
           >
-            <Text category="label">SAVE</Text>
+            <Text category="label">SEND</Text>
           </TouchableOpacity>
         </View>
         {props.item.comments.length > 0 &&

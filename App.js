@@ -58,11 +58,11 @@ const App = () => {
           <NavigationContainer>
             {/* <LessorNavigation /> */}
             {!userFromApp && isLogin && (
-             <Login setUserFromApp={setUserFromApp} setIsLogin={setIsLogin} />
+             <Login setUserFromApp={setUserFromApp}/>
             )}
-            {!userFromApp && !isLogin && (
+            {/* {!userFromApp && !isLogin && (
               <Register setIsLogin={setIsLogin} />
-            )}
+            )} */}
             {userFromApp && userFromApp.role == "tenant" && (
               <TenantNavigation setUserFromApp={ setUserFromApp } />
             )}

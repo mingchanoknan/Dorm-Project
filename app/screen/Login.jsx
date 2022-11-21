@@ -28,6 +28,7 @@ const  Login = (props) => {
   const [password, setPassword] = useState(null);
 
   const comFirmLogin = async () => {
+    console.log(baseUrl + "/login")
     setUsername(username);
     setPassword(password);
     try {
@@ -37,6 +38,7 @@ const  Login = (props) => {
           password,
         },
       });
+      console.log(result.data)
       if (!result.data) {
         console.log("Login ไม่สำเร็จ")
         Alert.alert("Login ไม่สำเร็จ กรุณาลองใหม่อีกครั้ง", undefined, [
@@ -59,7 +61,7 @@ const  Login = (props) => {
         dispatch(setUser({ ...result.data }));
       }
     } catch (e) {
-      console.log(e.message);
+      console.log(e);
       if(e.message === "Request failed with status code 500"){
         Alert.alert("Cant find this username", undefined, [
           {
@@ -155,7 +157,7 @@ const  Login = (props) => {
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={styles.create}
         onPress={() => props.setIsLogin(false)}
       >
@@ -169,7 +171,7 @@ const  Login = (props) => {
         >
           Create New Account
         </Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 };

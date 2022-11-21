@@ -436,7 +436,7 @@ const BillRoomInvoice = (props) => {
         </View>
       </View>
       <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
-        {!edit && (
+        {!edit && props.roomInvoice.status === 'UNAPPROVED_BILL' && (
           <TouchableOpacity
             onPress={() => setEditable(true)}
             style={styles.btnLoad}
@@ -451,6 +451,24 @@ const BillRoomInvoice = (props) => {
             >
               {" "}
               แก้ไขบิล{" "}
+            </Text>
+          </TouchableOpacity>
+        )}
+        {!edit && props.roomInvoice.status != 'UNAPPROVED_BILL' && (
+          <TouchableOpacity
+            disabled={true}
+            style={[styles.btnLoad, {backgroundColor: '#c0c7cc'}]}
+            // onPress={() => navigation.navigate("Payment", { id: data.id, total: data.total})}
+          >
+            <Text
+              style={{
+                fontSize: "10px",
+                fontWeight: "bold",
+                color: "white",
+              }}
+            >
+              {" "}
+              ส่งบิลแล้ว{" "}
             </Text>
           </TouchableOpacity>
         )}

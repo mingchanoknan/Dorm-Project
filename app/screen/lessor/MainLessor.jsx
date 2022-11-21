@@ -175,7 +175,7 @@ const MainLessor = ({ route, navigation }) => {
                 >
                   <AntDesign name="notification" size={24} color="white" />
                 </TouchableOpacity>
-                <Text style={styles.headTxt}>แจ้งเรื่อง</Text>
+                <Text style={styles.headTxt}>รับเรื่อง</Text>
               </View>
 
               <View style={styles.viewCircle}>
