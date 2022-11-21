@@ -74,12 +74,14 @@ const MainLessor = ({ route, navigation }) => {
 
   useEffect(() => {
     axios
+
       .get(`${baseUrl}/countRoom/${room_status}`)
       .then((response) => {
         setCountRoom(response.data);
       })
       .catch((error) => console.log("error countRoom"));
   });
+
 
   useEffect(() => {
     axios

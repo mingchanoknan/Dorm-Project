@@ -20,10 +20,10 @@ import axios from "axios";
 import { baseUrl } from "@env";
 import { Icon, Input } from "@ui-kitten/components";
 
-const Login = (props) => {
+const  Login = (props) => {
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  console.log(user);
+  // console.log(user);
   const [username, setUsername] = useState(null);
   const [password, setPassword] = useState(null);
 
@@ -47,7 +47,7 @@ const Login = (props) => {
           },
         ]);
       } else if (result.data) {
-        console.log("------\nLogin! \n Data ", result.data)
+        console.log("------------\nLogin!\n------------\n", result.data,"\n-----------------------------------")
         Alert.alert("Login สำเร็จ", undefined, [
           {
             text: "ปิด",

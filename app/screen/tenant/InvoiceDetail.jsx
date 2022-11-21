@@ -164,7 +164,7 @@ const InvioveDetail = ({ route, navigation }) => {
           setInvoice(response.data);
           setUser(resUser.data);
           //console.log(response.data);
-          console.log(resUser.data);
+          // console.log(resUser.data);
           return;
         } else {
           throw new Error("Failed to fetch users");

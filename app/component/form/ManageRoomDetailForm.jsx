@@ -223,6 +223,7 @@ const ManageRoomForm = (props) => {
               </View>
             );
           })}
+          
       </View>
     </View>
   );

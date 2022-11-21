@@ -1,7 +1,15 @@
 import React, { useState } from "react";
-import { StyleSheet, View, TextInput, Alert } from "react-native";
+import {
+  StyleSheet,
+  View,
+  TextInput,
+  Alert,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import { Button, Card, Modal, Text, Input, Icon } from "@ui-kitten/components";
 import { FontAwesome } from "@expo/vector-icons";
+import * as ImagePicker from "expo-image-picker";
 import { baseUrl } from "@env";
 import axios from "axios";
 
@@ -10,18 +18,21 @@ const CreatedPost = () => {
   const [text, setText] = React.useState("");
   const [title, setTitle] = React.useState("");
   const [created_date, setCreated_date] = React.useState(null);
+  const [loading, setLoading] = useState(false);
+  const [image, setImage] = useState([]);
 
   class news {
     constructor() {
       this.title = "";
       this.text = "";
       this.created_date = "";
-      this.created_byId = null;
+      this.url = "";
     }
     title;
     text;
     created_date;
     created_byId;
+    url;
   }
 
   useState(() => {
@@ -33,25 +44,120 @@ const CreatedPost = () => {
   }, []);
 
   const Created = async () => {
-    let record = new news();
-    record.title = title;
-    record.text = text;
-    record.created_date = created_date;
-    record.created_byId = 1;
+    let imageUrl = [];
+    if (image.length > 0) {
+      const uploadImage = async () => {
+        let formData = new FormData();
+        for (var i = 0; i < image.length; i++) {
+          // ImagePicker saves the taken photo to disk and returns a local URI to it
+          let localUri = image[i].uri;
+          let filename = localUri.split("/").pop();
+          // Infer the type of the image
+          let match = /\.(\w+)$/.exec(filename);
+          let type = match ? `image/${match[i]}` : `image`;
 
-    console.log(record);
+          formData.append("files", { uri: localUri, name: filename, type });
+        }
+        const config = {
+          headers: {
+            "content-type": "multipart/form-data",
+          },
+        };
+        try {
+          const re = await axios.post(
+            `${baseUrl}/file/upload`,
+            formData,
+            config
+          );
+          imageUrl = re.data;
+          console.log(re.data);
+        } catch (err) {
+          console.log(err);
+        }
+      };
 
-    const res = await axios.post(`${baseUrl}/addNews`, record);
-    Alert.alert(res.data, undefined, [
-      {
-        text: "Yes",
-        onPress: () => {
-          setTitle("");
-          setText("");
-          setVisible(false);
-        },
-      },
-    ]);
+      if (image.length > 0) {
+        await uploadImage();
+      }
+
+      try {
+        let record = new news();
+        record.title = title;
+        record.text = text;
+        record.created_date = created_date;
+        record.created_byId = 1;
+        record.url = image[0].uri;
+
+        console.log(record);
+
+        try {
+          const res = await axios.post(`${baseUrl}/addNews`, record);
+          Alert.alert(res.data, undefined, [
+            {
+              text: "Yes",
+              onPress: () => {
+                setTitle("");
+                setText("");
+                setVisible(false);
+              },
+            },
+          ]);
+        } catch (err) {
+          console.log(err);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    // let record = new news();
+    // record.title = title;
+    // record.text = text;
+    // record.created_date = created_date;
+    // record.created_byId = 1;
+    // record.url = image[0].uri;
+
+    // console.log(record);
+
+    // try {
+    //   const res = await axios.post(`${baseUrl}/addNews`, record);
+    //   Alert.alert(res.data, undefined, [
+    //     {
+    //       text: "Yes",
+    //       onPress: () => {
+    //         setTitle("");
+    //         setText("");
+    //         setVisible(false);
+    //       },
+    //     },
+    //   ]);
+    // } catch (err) {
+    //   console.log(err);
+    // }
+  };
+
+  const sendImg = async () => {
+  
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: false,
+      //   aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      let list = [...image];
+      list.unshift(result);
+      // props.changeInput(list, "image");
+      setImage(list);
+      console.log(list);
+    }
+  };
+
+  const deleteImage = (index) => {
+    let list = [...image];
+    list.splice(index, 1);
+    setImage(list);
   };
 
   return (
@@ -99,15 +205,87 @@ const CreatedPost = () => {
             placeholder="เนื้อหา"
             onChangeText={setText}
           />
-          <View style={[{ flexDirection: "row", justifyContent: "flex-end" , alignItems:"center",}]}>
+          <View
+            style={[
+              {
+                flexDirection: "row",
+                justifyContent: "flex-end",
+                alignItems: "center",
+              },
+            ]}
+          >
             <Icon
               fill="#626567"
-              style={{ width: 30, height: 30, alignSelf: "center",marginTop: 20 ,marginHorizontal: 5}}
+              style={{
+                width: 30,
+                height: 30,
+                alignSelf: "center",
+                marginTop: 20,
+                marginHorizontal: 5,
+              }}
               name="image"
               onPress={() => {
-               
+                sendImg();
               }}
             ></Icon>
+            {/* {image.length > 0 &&
+          image.map((item, index) => {
+            console.log(item)
+            return (
+              <View
+                key={index}
+                style={{
+                  flex: 1,
+                  position: "relative",
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  margin: 20,
+                  padding: 5,
+                  width: "80%",
+                }}
+              >
+                {item.uri == undefined && (
+                  <Image
+                    source={{ width: "100%", height: 300, uri: item }}
+                    resizeMode="cover"
+                  />
+                )}
+                {item.uri != undefined && (
+                  <Image
+                    source={{ width: "100%", height: 300, uri: item.uri }}
+                    resizeMode="cover"
+                  />
+                )}
+                
+                <TouchableOpacity
+                  onPress={() => deleteImage(index)}
+                  style={{
+                    backgroundColor: "pink",
+                    position: "absolute",
+                    top: -10,
+                    right: -10,
+                    borderRadius: 50,
+                    padding: 10,
+                    shadowColor: "#000",
+                    shadowOffset: {
+                      width: 0,
+                      height: 2,
+                    },
+                    shadowOpacity: 0.25,
+                    shadowRadius: 3.84,
+
+                    elevation: 5,
+                  }}
+                >
+                  <Icon
+                    style={styles.icon}
+                    fill="#000"
+                    name="trash-2-outline"
+                  />
+                </TouchableOpacity>
+              </View>
+            );
+          })} */}
             <Button
               style={{ alignSelf: "center", marginTop: 20 }}
               size="small"
@@ -128,6 +306,44 @@ const CreatedPost = () => {
               CANCEL
             </Button> */}
           </View>
+          {image.length > 0 &&
+            image.map((item, index) => {
+              console.log(item);
+              return (
+                <View
+                  key={index}
+                  style={{
+                    flex: 1,
+                    position: "relative",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    marginTop: 20,
+                    marginLeft: 15,
+                    padding: 5,
+                    width: "100%",
+                  }}
+                >
+                  {item.uri == undefined && (
+                    <Image
+                      source={{ width: "100%", height: 150, uri: item }}
+                      resizeMode="cover"
+                    />
+                  )}
+                  {item.uri != undefined && (
+                    <Image
+                      source={{ width: "100%", height: 150, uri: item.uri }}
+                      resizeMode="cover"
+                    />
+                  )}
+                  <Icon
+                    fill="#EC1212"
+                    style={{ width: 30, height: 30, left:-20, top:-15 }}
+                    name="close-circle-outline"
+                    onPress={() => deleteImage(index)}
+                  ></Icon>
+                </View>
+              );
+            })}
         </Card>
       </Modal>
     </View>

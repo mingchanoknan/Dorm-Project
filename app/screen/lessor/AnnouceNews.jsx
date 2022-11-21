@@ -1,14 +1,6 @@
-import React, { useEffect, useState } from "react";
-import {
-  ScrollView,
-  Text,
-  View,
-  Image,
-  StyleSheet,
-  TextInput,
-  FlatList,
-  RefreshControl,
-} from "react-native";
+import React, { useState, useCallback } from "react";
+import { View, Image, StyleSheet, FlatList } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 import News from "../../component/annoucenews/news";
 import Modal from "../../component/annoucenews/createdPost";
 import { baseUrl } from "@env";
@@ -16,11 +8,34 @@ import axios from "axios";
 
 const AnnouceNews = ({ navigation }) => {
   const [news, setNews] = useState(null);
- 
+
+  useFocusEffect(
+    useCallback(() => {
+      const url = `${baseUrl}/news`;
+
+      const fetchUsers = async () => {
+        try {
+          const response = await axios.get(url);
+          if (response.status === 200) {
+            setNews(response.data);
+            // console.log(response.data);
+            return;
+          } else {
+            throw new Error("Failed");
+          }
+        } catch (error) {
+          console.log("error");
+        }
+      };
+      fetchUsers();
+    }, [])
+  );
+
   const renderGridItem = (itemData) => {
     return (
       <News
         item={itemData}
+        // index={index}
         width={"90%"}
         numberOfLines={2}
         canEdit={true}
@@ -34,25 +49,6 @@ const AnnouceNews = ({ navigation }) => {
       />
     );
   };
-
-  useEffect(() => {
-    const url = `${baseUrl}/news`;
-    const fetchUsers = async () => {
-      try {
-        const response = await axios.get(url);
-        if (response.status === 200) {
-          setNews(response.data);
-          console.log(response.data);
-          return;
-        } else {
-          throw new Error("Failed");
-        }
-      } catch (error) {
-        console.log("error");
-      }
-    };
-    fetchUsers();
-  }, []);
 
   return (
     <View style={styles.container}>
@@ -68,7 +64,6 @@ const AnnouceNews = ({ navigation }) => {
           data={news}
           renderItem={renderGridItem}
           numColumns={1}
-          // keyExtractor={(item) => item.id}
           navigation={navigation}
         />
       </View>

@@ -14,6 +14,7 @@ import Reports from "../screen/tenant/Report";
 import MainTenant from "../screen/tenant/MainTenant";
 import AnnouceNews from "../screen/tenant/AnnouceNews";
 import NewsDetail from "../screen/tenant/NewsDetail";
+import ManageAccount from "../screen/MangeAccount";
 import { FontAwesome } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 const TenantNavigation = (props) => {
@@ -26,49 +27,42 @@ const TenantNavigation = (props) => {
   const NewsNavigator = createNativeStackNavigator();
 
   const logout2 = () => (
-    <Ionicons name="ios-log-out-outline"
+    <Ionicons
+      name="ios-log-out-outline"
       size={24}
       color="black"
       onPress={() => {
-        Alert.alert(
-          "ต้องการออกจากระบบหรือไม่",
-          undefined,
-          [
-            {
-              text: "Cancel",
-              onPress: () => console.log("Cancel Pressed"),
-              style: "cancel",
-            },
-            { text: "Yes", onPress: () =>props.setUserFromApp(null) },
-          ]
-        );
-        
+        Alert.alert("ต้องการออกจากระบบหรือไม่", undefined, [
+          {
+            text: "Cancel",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel",
+          },
+          { text: "Yes", onPress: () => props.setUserFromApp(null) },
+        ]);
       }}
       style={{ paddingLeft: 10 }}
     />
   );
 
   const logout = () => (
-    <Ionicons name="ios-log-out-outline"
+    <Ionicons
+      name="ios-log-out-outline"
       size={24}
       color="black"
       onPress={() => {
-        Alert.alert(
-          "ต้องการออกจากระบบหรือไม่",
-          undefined,
-          [
-            {
-              text: "Cancel",
-              onPress: () => console.log("Cancel Pressed"),
-              style: "cancel",
-            },
-            { text: "Yes", onPress: () => props.setUserFromApp(null) },
-          ]
-        );
-        
+        Alert.alert("ต้องการออกจากระบบหรือไม่", undefined, [
+          {
+            text: "Cancel",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel",
+          },
+          { text: "Yes", onPress: () => props.setUserFromApp(null) },
+        ]);
       }}
       style={{ marginRight: 10 }}
-    />);
+    />
+  );
   const listIconToOpenDrawer = (navigation) => (
     <FontAwesome
       name="bars"
@@ -156,7 +150,7 @@ const TenantNavigation = (props) => {
           component={Reports}
           options={({ route }) => ({
             // title: route.params.categoryTitle,
-            
+
             headerShown: true,
           })}
         />
@@ -179,7 +173,7 @@ const TenantNavigation = (props) => {
         initialRouteName="Tenants"
         screenOptions={{
           headerShown: false,
-          tabBarActiveTintColor: "#71d4d9"
+          tabBarActiveTintColor: "#71d4d9",
           //     tabBarStyle: {
           //   backgroundColor: '#d1cfcf',
           //   borderTopColor: 'transparent',
@@ -194,7 +188,7 @@ const TenantNavigation = (props) => {
               return <Entypo name="home" size={24} color={color} />;
             },
             tabBarLabel: ({ color, size }) => {
-              return <Text style={{ fontSize: "12px", }}>หน้าหลัก</Text>;
+              return <Text style={{ fontSize: "12px" }}>หน้าหลัก</Text>;
             },
           }}
         />
@@ -216,10 +210,12 @@ const TenantNavigation = (props) => {
 
   const InvoiceNavigation = () => {
     return (
-      <InvoiceNavigator.Navigator initialRouteName="Invoice"
-      screenOptions={{
-        headerRight: () => logout2(),
-      }}>
+      <InvoiceNavigator.Navigator
+        initialRouteName="Invoice"
+        screenOptions={{
+          headerRight: () => logout2(),
+        }}
+      >
         <InvoiceNavigator.Screen
           name="Invoices"
           component={Invoices}
@@ -227,7 +223,7 @@ const TenantNavigation = (props) => {
             return {
               title: "Invoices",
               headerLeft: () => listIconToOpenDrawer2(navigation),
-           
+
               headerTintColor: "white",
               headerStyle: { backgroundColor: "transparent" },
             };
@@ -269,7 +265,6 @@ const TenantNavigation = (props) => {
             return {
               title: "Annouce News",
               headerLeft: () => listIconToOpenDrawer(navigation),
-              
             };
           }}
         />
@@ -305,34 +300,37 @@ const TenantNavigation = (props) => {
         })}
       />
       <TenantNavigator.Screen name="AllInvoice" component={InvoiceNavigation} />
-      <TenantNavigator.Screen name="Parcels" component={Parcel}
-      options={({ route, navigation }) => {
+      <TenantNavigator.Screen
+        name="Parcels"
+        component={Parcel}
+        options={({ route, navigation }) => {
           return {
             headerShown: true,
-            title: 'Parcel',
+            title: "Parcel",
             headerShown: true,
             headerStyle: { backgroundColor: "transparent" },
             headerTintColor: "white",
             headerLeft: () => listIconToOpenDrawer3(navigation),
-            
-              headerRight: () => logout(),
-            
+
+            headerRight: () => logout(),
           };
         }}
-       />
+      />
       <TenantNavigator.Screen
         name="Report"
         component={Reports}
         options={({ route, navigation }) => {
           return {
             headerShown: true,
+
             headerLeft: () => listIconToOpenDrawer4(navigation),
               headerRight: () => logout(),
             
+
           };
         }}
       />
-        {/* <TenantNavigator.Screen name="News" component={NewsNavigation} /> */}
+      {/* <TenantNavigator.Screen name="News" component={NewsNavigation} /> */}
     </TenantNavigator.Navigator>
   );
 };

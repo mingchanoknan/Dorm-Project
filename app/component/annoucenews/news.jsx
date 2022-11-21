@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Button,
   Card,
@@ -9,13 +9,13 @@ import {
   Input,
   Icon,
 } from "@ui-kitten/components";
-import { TouchableOpacity, StyleSheet, View, Alert } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
+import { StyleSheet, View, Alert } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 import { baseUrl } from "@env";
 import axios from "axios";
 
-const news = ({ item, width, numberOfLines, canEdit, onSelect }) => {
-  const data = item.item;
+const news = ({ item, width, numberOfLines, canEdit, onSelect, navigation}) => {
+  const data  = item.item;
   const [visible, setVisible] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [id, setId] = useState(data._id);
@@ -39,6 +39,34 @@ const news = ({ item, width, numberOfLines, canEdit, onSelect }) => {
     created_date;
     created_byId;
   }
+// console.log("HI",data)
+  useEffect(() => {
+    setId(data._id);
+    // console.log(id);
+  }, [data]);
+
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     console.log(data)
+  //     const url = `${baseUrl}/news`;
+
+  //     const fetchUsers = async () => {
+  //       try {
+  //         const response = await axios.get(url);
+  //         if (response.status === 200) {
+  //           // setData(response.data);
+  //           console.log("---------------\nDATA\n---------------\n",response.data[index]);
+  //           return;
+  //         } else {
+  //           throw new Error("Failed");
+  //         }
+  //       } catch (error) {
+  //         console.log(error);
+  //       }
+  //     };
+  //     fetchUsers();
+  //   }, [])
+  // );
 
   const Edited = async () => {
     let record = new news();
@@ -47,8 +75,6 @@ const news = ({ item, width, numberOfLines, canEdit, onSelect }) => {
     record.text = text;
     record.created_date = created_date;
     record.created_byId = created_byId;
-
-    console.log(record);
 
     const res = await axios.post(`${baseUrl}/updateNews`, record);
     Alert.alert("แก้ไขสำเร็จ", undefined, [

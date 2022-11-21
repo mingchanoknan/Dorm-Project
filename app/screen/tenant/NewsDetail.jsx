@@ -11,8 +11,8 @@ const NewsDetail = ({ route, navigation }) => {
   const [title, setTitle] = React.useState(data.title);
   const [text, setText] = React.useState(data.text);
   const [created_date, setCreated_byId] = useState(data.created_date);
-
-  console.log("--------\n", data);
+  const [image, setImage] = useState(data.url);
+  console.log("-----------------------\n", data);
 
   const Edited = () => {
     console.log("title : " + title);
@@ -40,10 +40,9 @@ const NewsDetail = ({ route, navigation }) => {
           <Text style={styles.text} category="p1">
             {text}
           </Text>
-          <Image
-            source={require("../../assets/user.jpg")}
-            style={styles.image}
-          ></Image>
+          {image ? (
+            <Image source={{ uri: image }} style={styles.image}></Image>
+          ) : null}
           <Text
             style={{
               fontSize: 12,

@@ -96,6 +96,7 @@ const ManageInvoice = ({ route, navigation }) => {
         if (room.status === 200) {
           setRoom(room.data);
           setAll(room.data);
+          console.log(room.data)
           return;
         } else {
           throw new Error("Failed to fetch manageinvoice");

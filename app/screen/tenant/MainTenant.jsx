@@ -53,7 +53,7 @@ const MainTenant = ({ route, navigation }) => {
         const response = await axios.get(url);
         if (response.status === 200) {
           setNews(response.data);
-          console.log(response.data);
+          // console.log(response.data);
           return;
         } else {
           throw new Error("Failed");
@@ -146,7 +146,7 @@ const MainTenant = ({ route, navigation }) => {
           data={news}
           renderItem={renderGridItem}
           numColumns={1}
-          keyExtractor={(item) => item.id}
+          // keyExtractor={(item) => item.id}
           navigation={navigation}
         />
       </View>
