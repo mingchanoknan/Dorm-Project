@@ -330,6 +330,20 @@ const TenantNavigation = (props) => {
           };
         }}
       />
+      <TenantNavigator.Screen
+        name="Manage Account"
+        component={ManageAccount}
+        options={({ route, navigation }) => {
+          return {
+            headerShown: true,
+
+            headerLeft: () => listIconToOpenDrawer4(navigation),
+              headerRight: () => logout(),
+            
+
+          };
+        }}
+      />
       {/* <TenantNavigator.Screen name="News" component={NewsNavigation} /> */}
     </TenantNavigator.Navigator>
   );
