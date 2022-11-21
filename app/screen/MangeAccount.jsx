@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   Text,
   View,
@@ -8,6 +8,7 @@ import {
   TextInput,
   Alert,
 } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 import { baseUrl } from "@env";
 import axios from "axios";
 import { useSelector } from "react-redux";
@@ -15,7 +16,7 @@ import { ScrollView } from "react-native-gesture-handler";
 
 const MangeAccount = () => {
   const user = useSelector((state) => state.user);
-  const [id, setId] = React.useState(null);
+  const [id, setId] = React.useState(user._id);
   const [isEditable, setEditable] = useState(false);
   const [isUpdate, setUpdate] = useState(false);
   const [firstname, onChangeFirstname] = useState(user.first_name);
@@ -24,37 +25,42 @@ const MangeAccount = () => {
   const [tel1, onChangeTel1] = useState(user.tel_no1);
   const [tel2, onChangeTel2] = useState(user.tel_no2);
 
+  useFocusEffect(
+    useCallback(() => {
+      const url = `${baseUrl}/news`;
+
+      const fetchUsers = async () => {
+        try {
+          const response = await axios.get(url);
+          if (response.status === 200) {
+            // setNews(response.data);
+            console.log(response.data);
+            return;
+          } else {
+            throw new Error("Failed");
+          }
+        } catch (error) {
+          console.log("error");
+        }
+      };
+      fetchUsers();
+    }, [])
+  );
+
   useEffect(() => {
     console.log("------\n", user);
     console.log("pass", user.password);
     setId(user._id);
-    console.log(id)
+    console.log(id);
   }, [user]);
-
-  class editUser {
-    constructor() {
-      this._id = id;
-      this.first_name = "";
-      this.last_name = "";
-      this.address = "";
-      this.tel_no1 = "";
-      this.tel_no2 = "";
-    }
-    id;
-    first_name;
-    last_name;
-    address;
-    tel_no1;
-    tel_no2;
-  }
 
   const edit = () => {
     setEditable(true);
   };
 
   const submit = async () => {
-    let record = new editUser();
-    record._id = id;
+    const res = await axios.get(`${baseUrl}/getUserById/${id}`);
+    let record = { ...res.data };
     record.first_name = firstname;
     record.last_name = lastname;
     record.address = address;
@@ -62,29 +68,20 @@ const MangeAccount = () => {
     record.tel_no2 = tel2;
 
     console.log("--------", record);
-    const res = await axios.post(`${baseUrl}/updateUser`, record);
-    Alert.alert("แก้ไขสำเร็จ", undefined, [
-      {
-        text: "ปิด",
-        onPress: () => {
-          // setTitle(title);
-          // setText(text);
-          setUpdate(false);
+    const res2 = await axios.post(`${baseUrl}/updateUser`, record);
+    console.log(res2.data);
+    if (res2.status === 200) {
+      Alert.alert("แก้ไขสำเร็จ", undefined, [
+        {
+          text: "ปิด",
+          onPress: () => {
+            setUpdate(false);
+          },
         },
-      },
-    ]);
-
-    // Alert.alert("แก้ไขสำเร็จ", undefined, [
-    //   {
-    //     text: "ปิด",
-    //     onPress: () => {
-    //       setEditable(false);
-    //       // setTitle(title);
-    //       // setText(text);
-    //     },
-    //   },
-    // ]);
-    // setEditable(false);
+      ]);
+    } else {
+      throw new Error("Failed");
+    }
   };
 
   return (
@@ -215,45 +212,79 @@ const MangeAccount = () => {
             keyboardType="default"
             editable={isEditable}
           />
-
-          {isUpdate ? (
-            <TouchableOpacity style={[styles.button, { marginTop: 10 }]}>
-              <Text
-                style={{
-                  fontSize: 16,
-                  fontWeight: "500",
-                  color: "white",
-                  textAlign: "center",
-                }}
-                onPress={() => {
-                  Alert.alert("ยืนยันการแก้ไข", undefined, [
-                    {
-                      text: "ยืนยัน",
-                      onPress: () => {
-                        submit();
-                        setEditable(false);
-                      },
-                    },
-                    {
-                      text: "ยกเลิก",
-                      onPress: () => {
-                        onChangeFirstname(user.first_name);
-                        onChangeLastname(user.last_name);
-                        onChangeAddress(user.address);
-                        onChangeTel1(user.tel_no1);
-                        onChangeTel2(user.tel_no2);
-                        setEditable(false);
-                        console.log("Cancel Pressed");
-                      },
-                      style: "cancel",
-                    },
-                  ]);
-                }}
+          <View style={[{ flexDirection: "row", justifyContent: "center" }]}>
+            {isUpdate ? (
+              <TouchableOpacity
+                style={[
+                  styles.button,
+                  {
+                    marginTop: 10,
+                    marginRight: 10,
+                    backgroundColor: "white",
+                  },
+                ]}
               >
-                Update Profile
-              </Text>
-            </TouchableOpacity>
-          ) : null}
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontWeight: "500",
+                    textAlign: "center",
+                  }}
+                  onPress={() => {
+                    setEditable(false);
+                    onChangeFirstname(user.first_name);
+                    onChangeLastname(user.last_name);
+                    onChangeAddress(user.address);
+                    onChangeTel1(user.tel_no1);
+                    onChangeTel2(user.tel_no2);
+                    setEditable(false);
+                    console.log("Cancel Pressed");
+                  }}
+                >
+                  Cancel
+                </Text>
+              </TouchableOpacity>
+            ) : null}
+
+            {isUpdate ? (
+              <TouchableOpacity style={[styles.button, { marginTop: 10 }]}>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontWeight: "500",
+                    color: "white",
+                    textAlign: "center",
+                  }}
+                  onPress={() => {
+                    Alert.alert("ยืนยันการแก้ไข", undefined, [
+                      {
+                        text: "ยืนยัน",
+                        onPress: () => {
+                          submit();
+                          setEditable(false);
+                        },
+                      },
+                      {
+                        text: "ยกเลิก",
+                        onPress: () => {
+                          onChangeFirstname(user.first_name);
+                          onChangeLastname(user.last_name);
+                          onChangeAddress(user.address);
+                          onChangeTel1(user.tel_no1);
+                          onChangeTel2(user.tel_no2);
+                          setEditable(false);
+                          console.log("Cancel Pressed");
+                        },
+                        style: "cancel",
+                      },
+                    ]);
+                  }}
+                >
+                  Update Profile
+                </Text>
+              </TouchableOpacity>
+            ) : null}
+          </View>
         </ScrollView>
       </View>
     </View>
@@ -302,6 +333,7 @@ const styles = StyleSheet.create({
     borderRadius: 80,
     backgroundColor: "#FFB085",
     padding: 7,
+    marginBottom: 15,
   },
   input: {
     height: 45,
