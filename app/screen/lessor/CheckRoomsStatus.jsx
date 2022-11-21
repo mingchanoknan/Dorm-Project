@@ -20,7 +20,7 @@ const CheckRoomsStatus = ({ route, navigation }) => {
   const [user, setUser] = useState(null);
   const [all, setAll] = useState(null);
 
-  const data = ["ชั้น", "ชั้นที่ 2", "ชั้นที่ 3"];
+  const data = ["All", "ชั้นที่ 2", "ชั้นที่ 3"];
   const [selectedFloor, setSelectedFloor] = React.useState(new IndexPath(0));
   const displayValue = data[selectedFloor.row];
 
@@ -37,7 +37,7 @@ const CheckRoomsStatus = ({ route, navigation }) => {
       if (displayBuild != "ตึก") {
         newUser = newUser.filter((x) => x.build == displayBuild.slice(7, 8));
       }
-      if (displayValue != "ชั้น") {
+      if (displayValue != "All") {
         newUser = newUser.filter((y) => y.floor == displayValue.slice(8, 9));
       }
       setUser(newUser);
@@ -77,7 +77,7 @@ const CheckRoomsStatus = ({ route, navigation }) => {
   const renderGridItem = (itemData) => {
     return (
       <>
-        {displayValue === "ชั้น" &&
+        {displayValue === "All" &&
           (displayBuild === "ตึก" ||
             displayBuild.slice(7, 8) === itemData.item.build) && (
             <RoomGridTile
@@ -161,7 +161,7 @@ const CheckRoomsStatus = ({ route, navigation }) => {
       <View style={styles.header}>
         <Layout style={styles.buildHead} level="1">
           <Select
-            style={{ width: "100%", borderRadius: "50%" }}
+            style={{ width: 130, borderRadius: "50%" }}
             placeholder="รอบบิล"
             value={displayBuild}
             selectedFloor={selectedBuild}
@@ -252,7 +252,7 @@ const CheckRoomsStatus = ({ route, navigation }) => {
       <View style={styles.header2}>
         <Layout style={styles.floorHead}>
           <Select
-            style={{ width: "100%", borderRadius: "50%" }}
+            style={{ width: 120, borderRadius: "50%" }}
             placeholder="รอบบิล"
             value={displayValue}
             selectedFloor={selectedFloor}

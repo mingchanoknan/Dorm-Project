@@ -18,7 +18,7 @@ const InvoiceBox = (props) => {
     <View style={styles.container}>
     {props.filter === 'AllBill' && (
       <Card
-        style={[styles.cardContainer]}
+        style={[styles.cardContainer, props.data.fine > 0 ? {backgroundColor: 'rgb(245, 225, 225)'} : ""]}
         onPress={() =>
           props.navigation.navigate("InvoiceDetail", {  id:  props.data.id,
               categoryTitle:  props.data.room_number, month: props.data.month, year: props.data.year})

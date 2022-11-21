@@ -8,12 +8,9 @@ import {
   TouchableOpacity,
   TextInput,
   FlatList,
+  Alert,
 } from "react-native";
-import {
-  Divider,
-  Layout,
-  Modal
-} from "@ui-kitten/components";
+import { Divider, Layout, Modal } from "@ui-kitten/components";
 import {
   Ionicons,
   MaterialCommunityIcons,
@@ -88,43 +85,60 @@ function User({ userObject, navigation, contract, roomNumber, vehicle }) {
       _id: userObject._id,
     };
     try {
-      const updateContract = await axios.put(
-        `${baseUrl}/updateStatusContract/${room_number}/${status}`
+      Alert.alert(
+        "ยืนยันที่จะยกเลิกสัญญาเช่า",
+        "ถ้าลบเเล้วไม่สามารถกู้คืนได้ โปรดตรวจสอบให้ครบถ้วน",
+        [
+          {
+            text: "ยืนยัน",
+            onPress: async (event) => {
+              const updateContract = await axios.put(
+                `${baseUrl}/updateStatusContract/${room_number}/${status}`
+              );
+
+              const updateRoom = await axios.put(
+                `${baseUrl}/updateStatus/${room_number}/${statusRoom}`
+              );
+
+              let arrayids = [];
+              vehicle.forEach((d) => {
+                arrayids.push(d._Id);
+              });
+
+              if (arrayids.length > 0) {
+                var deleteCar = await axios.delete(
+                  `${baseUrl}/deleteAllVehicle/${arrayids}`
+                );
+              }
+
+              const deleteUser = await axios.delete(
+                `${baseUrl}/deleteUser/${userObject._id}`
+              );
+
+              if (
+                updateContract.status === 200 &&
+                updateRoom.status === 200 &&
+                deleteUser.status === 200
+              ) {
+                alert("ยกเลิกสัญญาเช่าแล้ว");
+                navigation.dispatch(
+                  StackActions.replace("CheckRoomsStatus", {
+                    categoryTitle: room_number,
+                  })
+                );
+              } else {
+                throw new Error("An error ");
+              }
+            },
+          },
+          {
+            text: "เลิกทำ",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel",
+          },
+        ],
+        { cancelable: false }
       );
-
-      const updateRoom = await axios.put(
-        `${baseUrl}/updateStatus/${room_number}/${statusRoom}`
-      );
-        
-      let arrayids = [];
-      vehicle.forEach((d) => {
-        arrayids.push(d._Id);
-      });
-
-      if (arrayids.length > 0) {
-        var deleteCar = await axios.delete(
-          `${baseUrl}/deleteAllVehicle/${arrayids}`
-        );
-      }
-
-      const deleteUser = await axios.delete(
-        `${baseUrl}/deleteUser/${userObject._id}`
-      );
-
-      if (
-        updateContract.status === 200 &&
-        updateRoom.status === 200 &&
-        deleteUser.status === 200
-      ) {
-        alert("ยกเลิกสัญญาเช่าแล้ว");
-        navigation.dispatch(
-          StackActions.replace("CheckRoomsStatus", {
-            categoryTitle: room_number,
-          })
-        );
-      } else {
-        throw new Error("An error ");
-      }
     } catch (error) {
       alert(error);
     }
@@ -132,13 +146,13 @@ function User({ userObject, navigation, contract, roomNumber, vehicle }) {
 
   const deleteVehicle = (item) => {
     axios
-      .post(`${baseUrl}/deleteVehicle`, item )
+      .post(`${baseUrl}/deleteVehicle`, item)
       .then((response) => {
         console.log("delete vehicle success");
       })
       .catch((error) => console.log("error deleteVehicle"));
-  }
-  
+  };
+
   return (
     <View style={styles.view2}>
       <Modal
@@ -902,13 +916,26 @@ function User({ userObject, navigation, contract, roomNumber, vehicle }) {
                         {""} สี{item.color}
                       </Text>
                     </View>
-                    <View style={{ display: "flex", flexDirection: "row", justifyContent: "center" }}>
-                      <Text category="label" style={{ fontWeight: "bold", marginRight: 5 }}>
+                    <View
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Text
+                        category="label"
+                        style={{ fontWeight: "bold", marginRight: 5 }}
+                      >
                         {item.brand}
                       </Text>
                       <TouchableOpacity onPress={() => deleteVehicle(item)}>
-                          <AntDesign name="closecircleo" size={20} color="black" />
-                    </TouchableOpacity>
+                        <AntDesign
+                          name="closecircleo"
+                          size={20}
+                          color="black"
+                        />
+                      </TouchableOpacity>
                     </View>
                   </View>
                 </View>

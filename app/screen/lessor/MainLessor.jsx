@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Text,
   View,
@@ -15,37 +15,109 @@ import { AntDesign } from "@expo/vector-icons";
 import { Card, Layout, Divider } from "@ui-kitten/components";
 import { baseUrl } from "@env";
 import axios from "axios";
+import { useFocusEffect } from "@react-navigation/native";
 
 const MainLessor = ({ route, navigation }) => {
+  const [currentMonth, setCurrentMonth] = useState("");
+  const [currentYear, setCurrentYear] = useState("");
+  const [currentDay, setCurrentDay] = useState("");
+  const [monthandyear, setMonthandyear] = useState("");
+
+  useEffect(() => {
+    const dateCurrent = new Date().toISOString().slice(0, 10);
+    const formatedDate = (yearAndMonth) => {
+      let array = yearAndMonth.split("-");
+      const months = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ];
+
+      setCurrentMonth(months[parseInt(array[1]) - 1]);
+      setCurrentYear(array[0]);
+      setCurrentDay(array[2]);
+      setMonthandyear(currentMonth + " " + currentYear);
+    };
+    formatedDate(dateCurrent);
+  });
+
   const [countUser, setCountUser] = useState(0);
   const [countRoom, setCountRoom] = useState(0);
+  const [countPayInvoice, setCountPayInvoice] = useState(0.0);
+  const [countUsewater, setCountUseWater] = useState(0.0);
+  const [countUseElec, setCountUseElec] = useState(0.0);
+
   const [room_status, setRoom_status] = useState("available");
+  const [status, setStatus] = useState("APPROVED_BILL");
+  const [typeWater, setTypeWater] = useState("water");
+  const [typeElec, setTypeElec] = useState("electricity");
+
+  const dateCurrent = new Date().toISOString().slice(0, 10);
 
   useEffect(() => {
     axios
-    .get(`${baseUrl}/countUser`)
-    .then((response) => {
-      setCountUser(response.data)
-      console.log(response.data)
-    })
-    .catch((error) => console.log("error countUser"));
-  })
+      .get(`${baseUrl}/countUser`)
+      .then((response) => {
+        setCountUser(response.data);
+      })
+      .catch((error) => console.log("error countUser"));
+  });
 
   useEffect(() => {
     axios
-    .get(`${baseUrl}/countRoom/${room_status}`)
-    .then((response) => {
-      setCountRoom(response.data)
-    })
-    .catch((error) => console.log("error countRoom"));
-  })
+
+      .get(`${baseUrl}/countRoom/${room_status}`)
+      .then((response) => {
+        setCountRoom(response.data);
+      })
+      .catch((error) => console.log("error countRoom"));
+  });
+
+
+  useEffect(() => {
+    axios
+      .get(
+        `${baseUrl}/countPayInvoice/${currentMonth}/${currentYear}/${status}`
+      )
+      .then((response) => {
+        setCountPayInvoice(response.data);
+      })
+      .catch((error) => console.log("error countPayInvoice"));
+  });
+
+  useEffect(() => {
+    axios
+      .get(`${baseUrl}/meter/countPayMeter/${monthandyear}/${typeWater}`)
+      .then((response) => {
+        setCountUseWater(response.data);
+      })
+      .catch((error) => console.log("error countUseWater"));
+  });
+
+  useEffect(() => {
+    axios
+      .get(`${baseUrl}/meter/countPayMeter/${monthandyear}/${typeElec}`)
+      .then((response) => {
+        setCountUseElec(response.data);
+      })
+      .catch((error) => console.log("error countUseElec"));
+  });
+
   return (
     <View style={styles.view}>
       {/* <View style={styles.header2}>
       </View> */}
       <View style={[styles.container]}>
         <ScrollView style={{ flex: 1 }}>
-  
           <View
             style={{
               // backgroundColor: 'red',
@@ -87,26 +159,30 @@ const MainLessor = ({ route, navigation }) => {
               </View>
 
               <View style={styles.viewCircle}>
-
                 <TouchableOpacity
                   style={styles.circle}
                   onPress={() => navigation.navigate("ManageParcels")}
                 >
-
                   <Feather name="box" size={24} color="white" />
                 </TouchableOpacity>
                 <Text style={styles.headTxt}>พัสดุ</Text>
               </View>
 
               <View style={styles.viewCircle}>
-                <TouchableOpacity style={styles.circle} onPress={() => navigation.navigate("Response")}>
+                <TouchableOpacity
+                  style={styles.circle}
+                  onPress={() => navigation.navigate("Response")}
+                >
                   <AntDesign name="notification" size={24} color="white" />
                 </TouchableOpacity>
                 <Text style={styles.headTxt}>แจ้งเรื่อง</Text>
               </View>
 
               <View style={styles.viewCircle}>
-                <TouchableOpacity style={styles.circle} onPress={() => navigation.navigate("News")}>
+                <TouchableOpacity
+                  style={styles.circle}
+                  onPress={() => navigation.navigate("News")}
+                >
                   <Ionicons name="newspaper-outline" size={24} color="white" />
                 </TouchableOpacity>
                 <Text style={styles.headTxt}>ข่าวสาร</Text>
@@ -124,12 +200,10 @@ const MainLessor = ({ route, navigation }) => {
               height: "20%",
             }}
           >
-
             <TouchableOpacity
               style={styles.box}
               onPress={() => navigation.navigate("Room")}
             >
-
               <Image
                 source={require("../../assets/home2.png")}
                 style={{ width: "30%", height: "40%" }}
@@ -139,25 +213,26 @@ const MainLessor = ({ route, navigation }) => {
               </Text>
             </TouchableOpacity>
 
-
             <TouchableOpacity
               style={styles.box}
-              onPress={() => navigation.navigate("Contract")}
+              onPress={() => navigation.navigate("CheckPayment")}
             >
               <Image
                 source={require("../../assets/contract2.png")}
                 style={{ width: "30%", height: "40%" }}
               ></Image>
               <Text style={{ fontWeight: "bold", top: 5, fontSize: "12px" }}>
-                สัญญาเช่า
+                ตรวจสอบ
+              </Text>
+              <Text style={{ fontWeight: "bold", top: 5, fontSize: "12px" }}>
+                การชำระเงิน
               </Text>
             </TouchableOpacity>
 
-
             <TouchableOpacity
               style={styles.box}
-              onPress={() => navigation.navigate("Room Status")}>
-
+              onPress={() => navigation.navigate("Room Status")}
+            >
               <Image
                 source={require("../../assets/room2.png")}
                 style={{ width: "30%", height: "40%" }}
@@ -178,12 +253,10 @@ const MainLessor = ({ route, navigation }) => {
               height: "20%",
             }}
           >
-
             <TouchableOpacity
               style={styles.box}
               onPress={() => navigation.navigate("RecordMeter")}
             >
-
               <Image
                 source={require("../../assets/faucet2.png")}
                 style={{ width: "30%", height: "40%" }}
@@ -205,7 +278,6 @@ const MainLessor = ({ route, navigation }) => {
                 ใบแจ้งหนี้
               </Text>
             </TouchableOpacity>
-
 
             <TouchableOpacity
               style={styles.box}
@@ -328,7 +400,7 @@ const MainLessor = ({ route, navigation }) => {
             }}
           >
             <Text style={{ fontSize: "15px", fontWeight: "bold" }}>
-              รายรับ เดือน พฤศจิกายน 2565
+              รายรับ-รายจ่าย {currentMonth} {currentYear}
             </Text>
           </View>
           <View
@@ -352,7 +424,7 @@ const MainLessor = ({ route, navigation }) => {
                   color: "#ffc014",
                 }}
               >
-                ฿10,000
+                ฿ {countPayInvoice}
               </Text>
             </View>
           </View>
@@ -385,7 +457,7 @@ const MainLessor = ({ route, navigation }) => {
                   color: "#ffc014",
                 }}
               >
-                ฿10,000
+                ฿ {countUsewater}
               </Text>
             </View>
           </View>
@@ -418,7 +490,7 @@ const MainLessor = ({ route, navigation }) => {
                   color: "#ffc014",
                 }}
               >
-                ฿10,000
+                ฿ {countUseElec}
               </Text>
             </View>
           </View>
@@ -478,6 +550,7 @@ const styles = StyleSheet.create({
     shadowRadius: 6.68,
 
     elevation: 11,
+    flex: 1,
   },
   circle: {
     backgroundColor: "#333b5f",

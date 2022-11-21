@@ -261,6 +261,7 @@ const TableInvoice = (props) => {
             >
              ฿ {props.invoice.common_fee}
             </TextInput>
+            <View style={{ flexDirection:"row" }}>
             <TextInput
               keyboardType="numeric"
               editable={edit}
@@ -273,7 +274,11 @@ const TableInvoice = (props) => {
               ]}
             >
              ฿ {props.invoice.expenses}
-            </TextInput>
+              </TextInput>
+              {props.invoice.fine != 0 && (
+                <Text style={{ color: 'red', fontSize: "12px", fontWeight: "bold", marginLeft: 5, marginTop: 10 }}>+ {props.invoice.fine}</Text>
+              )}
+              </View>
             <TextInput
               keyboardType="numeric"
               editable={false}
@@ -365,7 +370,7 @@ const TableInvoice = (props) => {
             { fontSize: "10px", color: "#F26565", top: 45, left: 20, textAlign: 'left', alignSelf: "flex-start" },
           ]}
         >
-          *หากชำระล่าช้าจะถูกทบในเดือนถัดไป{" "}
+          *หากชำระล่าช้าจะคิดค่าปรับ{" "}
         </Text>
       </View>
       <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
@@ -394,7 +399,24 @@ const TableInvoice = (props) => {
         )}
         {props.invoice.status == "checking_payment" && (
           <TouchableOpacity
-            style={[styles.btnLoad, {backgroundColor: 'gray'}]}
+            style={[styles.btnLoad, {backgroundColor: 'gray', width: 110,}]}
+            disabled={true}
+          >
+            <Text
+              style={{
+                fontSize: "10px",
+                fontWeight: "bold",
+                color: "white",
+              }}
+            >
+              {" "}
+              กำลังตรวจสอบ{" "}
+            </Text>
+          </TouchableOpacity>
+        )}
+        {props.invoice.status == "APPROVED_BILL" && (
+          <TouchableOpacity
+            style={[styles.btnLoad, {backgroundColor: 'gray', width: 90,}]}
             disabled={true}
           >
             <Text

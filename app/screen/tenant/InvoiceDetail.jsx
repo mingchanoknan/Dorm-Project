@@ -18,6 +18,88 @@ import { useFocusEffect } from "@react-navigation/native";
 
 function User({userObject, navigation, userInfo}) {
   //console.log(userObject.dorm_fee);
+  const [currentMonth, setCurrentMonth] = useState("");
+  const [currentYear, setCurrentYear] = useState("");
+  const [currentDay, setCurrentDay] = useState("")
+  const [nextMonth, setNextMonth] = useState("");
+  const [date, setDate] = useState(userObject.month);
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  
+  useEffect(() => {
+    let temp = months.findIndex((item) => item === date)
+    const dateCurrent = new Date().toISOString().slice(0, 10);
+    const formatedDate = (yearAndMonth) => {
+      let array = yearAndMonth.split("-");
+      setNextMonth(months[temp + 1])
+
+      setCurrentMonth(months[parseInt(array[1]) - 1]);
+      setCurrentYear(array[0]);
+      setCurrentDay(array[2]);
+    };
+
+    formatedDate(dateCurrent);
+
+    const compare = async (event) => {
+      let indexCurrent = new Date().getMonth();
+      let indexInvoice = temp + 1;
+      let fine = (indexCurrent - indexInvoice) * 50;
+      let amount = userObject.amount + fine;
+      let tax = amount * 0.07;
+      
+      if (indexCurrent > indexInvoice && userObject.status == "UNAPPROVED_BILL") {
+        alert("เกินกำหนดชำระบิล คิดค่าปรับเดือนละ 1000 บาท");
+
+        try {
+          const response = await axios.put(`${baseUrl}/updateInvoice`, {
+          _id: userObject._id,
+          month : userObject.month,
+          year : userObject.year,
+          room_number : userObject.room_number,
+          common_fee : userObject.common_fee,
+          dorm_fee : userObject.dorm_fee,
+          electricity_fee : userObject.electricity_fee,
+          water_fee : userObject.water_fee,
+          expenses : userObject.expenses,
+          fine : fine,
+          amount : amount,
+          tax : tax,
+          total : amount+tax,
+          note : userObject.note,
+          status : userObject.status
+          });
+    
+          if (response.status === 200) {
+            console.log("bill add fine")
+          } else {
+            throw new Error("An error ");
+          }
+        } catch (error) {
+          alert(error);
+        }
+
+      }
+    }
+
+    compare();
+  }, [date])
+
+  console.log(nextMonth);
+  console.log(currentMonth + " " + currentYear)
+
   return (
     <View style={styles.container1}>
       {userObject && userInfo && (
@@ -45,7 +127,7 @@ function User({userObject, navigation, userInfo}) {
               top: 6,
             }}
           >
-            วันครบกำหนดชำระ 10 {userObject.month} {userObject.year}
+            วันครบกำหนดชำระ 10 {nextMonth} {userObject.year}
           </Text>
         </View>
       )}
@@ -104,7 +186,9 @@ const InvioveDetail = ({ route, navigation }) => {
         source={require("../../assets/bg_invoice.png")}
         style={styles.background}
       ></Image>
-      <User userObject={invoice} userInfo={user} navigation={navigation} />
+      {invoice && user && (
+        <User userObject={invoice} userInfo={user} navigation={navigation} />
+      )}
     </View>
   );
 };

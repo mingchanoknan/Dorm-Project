@@ -43,7 +43,7 @@ const CheckRoomPrice = ({ route, navigation }) => {
         }}
       >
         <Text category="label" style={{ marginRight: 10, color: "gray" }}>
-          Add New Type Add Edit Imforation
+          Add New Type And Edit Imforation
         </Text>
         {checkedEditable && (
           <Toggle

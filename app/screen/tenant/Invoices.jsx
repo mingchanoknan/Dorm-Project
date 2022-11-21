@@ -14,8 +14,11 @@ import Box from "../../component/invoice/InvoiveBox";
 import { INVOICE } from "../../dummy/INVOICE";
 import { baseUrl } from "@env";
 import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
 
 const Invoices = ({ route, navigation }) => {
+  const myUser = useSelector((state) => state.user)
+
   const data = [
     "AllBill",
     "January",
@@ -36,14 +39,16 @@ const Invoices = ({ route, navigation }) => {
 
   const renderOption = (title) => <SelectItem title={title} />;
   const [user, setUser] = useState(null);
-
+  
+  
   useEffect(() => {
-    const url = `${baseUrl}/invoices`;
+    const url = `${baseUrl}/getListInvoiceNum/${myUser.room_number}`;
     const fetchUsers = async () => {
       try {
         const response = await axios.get(url);
         if (response.status === 200) {
           setUser(response.data);
+          console.log("POPO")
           console.log(response.data);
           return;
         } else {

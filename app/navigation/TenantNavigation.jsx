@@ -90,6 +90,16 @@ const TenantNavigation = (props) => {
       style={{ paddingLeft: 10 }}
     />
   );
+
+  const listIconToOpenDrawer4 = (navigation) => (
+    <FontAwesome
+      name="bars"
+      size={24}
+      color="black"
+      onPress={() => navigation.openDrawer()}
+      style={{ paddingLeft: 10 }}
+    />
+  );
   //Stack
   const MyTenantsNavigator = () => {
     return (
@@ -282,7 +292,7 @@ const TenantNavigation = (props) => {
       {/* <TenantNavigator.Screen name="AnnouceNews" component={AnnouceNews} /> */}
       <TenantNavigator.Screen
         name="Main"
-        component={MyTenantsFavTabNavigator}
+        component={MyTenantsNavigator}
         options={({ route, navigation }) => ({
           drawerLabel: "Main",
           title: "",
@@ -313,18 +323,10 @@ const TenantNavigation = (props) => {
           return {
             headerShown: true,
 
-            headerRight: () => logout(),
-          };
-        }}
-      />
-      <TenantNavigator.Screen
-        name="Manage Account"
-        component={ManageAccount}
-        options={({ route, navigation }) => {
-          return {
-            headerShown: true,
-            headerStyle: { backgroundColor: "transparent" },
-            headerRight: () => logout(),
+            headerLeft: () => listIconToOpenDrawer4(navigation),
+              headerRight: () => logout(),
+            
+
           };
         }}
       />

@@ -18,11 +18,13 @@ const CheckRoomDetail = ({ route, navigation }) => {
   const height = Dimensions.get("window").height;
   const { id, editable } = route.params;
   const [data, setData] = useState();
+  const [countRoom, setCountRoom] = useState(0);
 
 
   useFocusEffect(
     useCallback(() => {
-      axios
+      const getInfo = async () => {
+        await axios
         .get(`${baseUrl}/room/getbyid`, {
           params: {
             id : id
@@ -34,8 +36,48 @@ const CheckRoomDetail = ({ route, navigation }) => {
         .catch((err) => {
           console.log(err);
         });
+      
+      //  await axios
+      //   .get(`${baseUrl}/countRentByType/${data.typeName}/${"available"}`, {
+      //     params: {
+      //       id : id
+      //   } })
+      //   .then((response) => {
+      //     console.log(response.data);
+      //     // setData(response.data);
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //   });
+       
+      }
+      getInfo()
+      
     }, [])
   );
+
+  useEffect(() => {
+    const countRentBytype = async () => {
+    console.log(data)
+    if (data != undefined) {
+      await axios
+        .get(`${baseUrl}/countRentByType/${data.typeName}/${"available"}`, {
+          params: {
+            id : id
+        } })
+        .then((response) => {
+          // console.log(response.data);
+          setCountRoom(response.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    }
+    countRentBytype()
+  },[data])
+  
+  
   return (
     <View style={{ flex: 1, backgroundColor: "#FDF8F4" }}>
       <HeaderBackground
@@ -134,7 +176,7 @@ const CheckRoomDetail = ({ route, navigation }) => {
                 category="label"
                 style={{ textAlign: "right", color: "red" }}
               >
-                {"เหลือ 1 ห้อง"}
+                เหลือ {countRoom} ห้อง
               </Text>
             </View>
             <ScrollView
