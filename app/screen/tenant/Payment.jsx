@@ -35,6 +35,7 @@ const Payment = ({ route, navigation }) => {
   const [showTotal, setShowTotal] = useState(false);
   const [showSlip, setShowSlip] = useState(false);
   const [statusPay, setStatusPay] = useState("checking_payment");
+  const [urlImg, setUrlImg] = useState([]);
 
   console.log(totalPay);
   const onChangeDateHandler = (date) => {
@@ -79,9 +80,7 @@ if (h > 1000) {
 }
   const sendReport = async () => {
     if (image.length > 0 && totalPay != ""){
-      setLoading(true);
-      let imageUrl = [];
-      const uploadImage = async () => {
+        setLoading(true);
         let formData = new FormData();
         for (var i = 0; i < image.length; i++) {
           // ImagePicker saves the taken photo to disk and returns a local URI to it
@@ -100,42 +99,25 @@ if (h > 1000) {
         };
         try {
           const re = await axios.post(`${baseUrl}/file/upload`, formData, config);
-          imageUrl = re.data;
+          setUrlImg(re.data)
           console.log(re.data);
+          const res = await axios.post(`${baseUrl}/addPayment`, {
+            payment_date : date,
+            payment_time : time,
+            payment_note : note,
+            idInvoice : id,
+            url : re.data[0],
+            amount : totalPay,
+            room_number : categoryTitle,
+            payment_status : statusPay
+          });
+          setLoading(false);
+          alert('ส่งสลีปเรียบร้อย')
+          navigation.navigate("InvoiceDetail", {  id:  id,
+          categoryTitle:  categoryTitle, month: month, year: year});
         } catch (err) {
           console.log(err);
         }
-      };
-
-      if (image.length > 0) {
-        await uploadImage();
-      }
-
-
-      try {
-      const res = await axios.post(`${baseUrl}/addPayment`, {
-        payment_date : date,
-        payment_time : time,
-        payment_note : note,
-        idInvoice : id,
-        url : image[0].uri,
-        amount : totalPay,
-        room_number : categoryTitle,
-        payment_status : statusPay
-      });
-
-      setLoading(false);
-      alert('ส่งสลีปเรียบร้อย')
-      navigation.navigate("InvoiceDetail", {  id:  id,
-        categoryTitle:  categoryTitle, month: month, year: year});
-      // navigation.dispatch(
-      //   StackActions.replace("InvoiceDetail", {  id:  id,
-      //     categoryTitle:  categoryTitle, month: month, year: year})
-      // );
-
-    } catch (err) {
-      console.log(err);
-    }
 
     try {
       const response = await axios.put(`${baseUrl}/updateStatusInvoice/${id}/${statusPay}`);

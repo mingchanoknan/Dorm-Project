@@ -91,16 +91,6 @@ const MangeAccount = () => {
         style={styles.background}
       ></Image>
 
-      <Image
-        source={require("../assets/user.png")}
-        style={{
-          width: 170,
-          height: 170,
-          position: "relative",
-          alignSelf: "center",
-          top: -300,
-        }}
-      ></Image>
 
       <View style={styles.box}>
         <TouchableOpacity
@@ -306,8 +296,8 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 60,
   },
   box: {
-    width: 320,
-    height: 490,
+    width: "90%",
+    height: "80%",
     paddingTop: 20,
     shadowColor: "000000",
     shadowOffset: {
@@ -322,7 +312,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255, 255, 255, 0.8)",
     justifyContent: "flex-start",
     alignItems: "center",
-    top: 210,
+    top: 70,
     zIndex: 1,
   },
   button: {
