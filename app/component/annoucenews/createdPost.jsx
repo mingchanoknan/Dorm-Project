@@ -44,96 +44,51 @@ const CreatedPost = () => {
   }, []);
 
   const Created = async () => {
-    let imageUrl = [];
-    if (image.length > 0) {
-      const uploadImage = async () => {
-        let formData = new FormData();
-        for (var i = 0; i < image.length; i++) {
-          // ImagePicker saves the taken photo to disk and returns a local URI to it
-          let localUri = image[i].uri;
-          let filename = localUri.split("/").pop();
-          // Infer the type of the image
-          let match = /\.(\w+)$/.exec(filename);
-          let type = match ? `image/${match[i]}` : `image`;
+    let formData = new FormData();
+    for (var i = 0; i < image.length; i++) {
+      // ImagePicker saves the taken photo to disk and returns a local URI to it
+      let localUri = image[i].uri;
+      let filename = localUri.split("/").pop();
+      // Infer the type of the image
+      let match = /\.(\w+)$/.exec(filename);
+      let type = match ? `image/${match[i]}` : `image`;
 
-          formData.append("files", { uri: localUri, name: filename, type });
-        }
-        const config = {
-          headers: {
-            "content-type": "multipart/form-data",
-          },
-        };
-        try {
-          const re = await axios.post(
-            `${baseUrl}/file/upload`,
-            formData,
-            config
-          );
-          imageUrl = re.data;
-          console.log(re.data);
-        } catch (err) {
-          console.log(err);
-        }
-      };
-
-      if (image.length > 0) {
-        await uploadImage();
-      }
-
-      try {
-        let record = new news();
+      formData.append("files", { uri: localUri, name: filename, type });
+    }
+    const config = {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    };
+    try {
+      const re = await axios.post(
+        `${baseUrl}/file/upload`,
+        formData,
+        config
+      );
+      let imageUrl = re.data;
+      let record = new news();
         record.title = title;
         record.text = text;
         record.created_date = created_date;
         record.created_byId = 1;
-        record.url = image[0].uri;
+        record.url = imageUrl
 
-        console.log(record);
-
-        try {
-          const res = await axios.post(`${baseUrl}/addNews`, record);
-          Alert.alert(res.data, undefined, [
-            {
-              text: "Yes",
-              onPress: () => {
-                setTitle("");
-                setText("");
-                setVisible(false);
-              },
-            },
-          ]);
-        } catch (err) {
-          console.log(err);
-        }
-      } catch (err) {
-        console.log(err);
-      }
+        const res = await axios.post(`${baseUrl}/addNews`, record);
+                Alert.alert(res.data, undefined, [
+                  {
+                    text: "Yes",
+                    onPress: () => {
+                      setTitle("");
+                      setText("");
+                      setVisible(false);
+                    },
+                  },
+                ]);
+      
+    } catch (err) {
+      console.log(err);
     }
-
-    // let record = new news();
-    // record.title = title;
-    // record.text = text;
-    // record.created_date = created_date;
-    // record.created_byId = 1;
-    // record.url = image[0].uri;
-
-    // console.log(record);
-
-    // try {
-    //   const res = await axios.post(`${baseUrl}/addNews`, record);
-    //   Alert.alert(res.data, undefined, [
-    //     {
-    //       text: "Yes",
-    //       onPress: () => {
-    //         setTitle("");
-    //         setText("");
-    //         setVisible(false);
-    //       },
-    //     },
-    //   ]);
-    // } catch (err) {
-    //   console.log(err);
-    // }
   };
 
   const sendImg = async () => {
@@ -150,7 +105,6 @@ const CreatedPost = () => {
       list.unshift(result);
       // props.changeInput(list, "image");
       setImage(list);
-      console.log(list);
     }
   };
 
