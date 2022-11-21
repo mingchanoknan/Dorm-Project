@@ -49,7 +49,7 @@ const MainLessor = ({ route, navigation }) => {
     };
     formatedDate(dateCurrent);
   });
-
+ 
   const [countUser, setCountUser] = useState(0);
   const [countRoom, setCountRoom] = useState(0);
   const [countPayInvoice, setCountPayInvoice] = useState(0.0);
@@ -82,14 +82,14 @@ const MainLessor = ({ route, navigation }) => {
       .catch((error) => console.log("error countRoom"));
   });
 
-
+  console.log(status);
   useEffect(() => {
     axios
       .get(
         `${baseUrl}/countPayInvoice/${currentMonth}/${currentYear}/${status}`
       )
       .then((response) => {
-        setCountPayInvoice(response.data);
+        setCountPayInvoice(response.data.toFixed(2));
       })
       .catch((error) => console.log("error countPayInvoice"));
   });
@@ -98,7 +98,7 @@ const MainLessor = ({ route, navigation }) => {
     axios
       .get(`${baseUrl}/meter/countPayMeter/${monthandyear}/${typeWater}`)
       .then((response) => {
-        setCountUseWater(response.data);
+        setCountUseWater(response.data.toFixed(2));
       })
       .catch((error) => console.log("error countUseWater"));
   });
@@ -107,7 +107,7 @@ const MainLessor = ({ route, navigation }) => {
     axios
       .get(`${baseUrl}/meter/countPayMeter/${monthandyear}/${typeElec}`)
       .then((response) => {
-        setCountUseElec(response.data);
+        setCountUseElec(response.data.toFixed(2));
       })
       .catch((error) => console.log("error countUseElec"));
   });

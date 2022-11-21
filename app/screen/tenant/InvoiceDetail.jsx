@@ -95,7 +95,7 @@ function User({userObject, navigation, userInfo}) {
     }
 
     compare();
-  }, [date])
+  }, [])
 
   console.log(nextMonth);
   console.log(currentMonth + " " + currentYear)
