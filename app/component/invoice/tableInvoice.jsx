@@ -103,7 +103,7 @@ const TableInvoice = (props) => {
             <Text style={styles.txtHead}> สถานะบิล</Text>
             <Text style={[styles.txtHead, { color: "red", marginLeft: 20 }]}>
               {" "}
-              {props.invoice.status == "UNAPPROVED_BILL" ? 'ยังไม่ชำระ' : props.invoice.status == "checking_payment" ? "กำลังตรวจสอบ" : "ชำระแล้ว"}
+              {props.invoice.status == "UNAPPROVED_BILL" ? 'ยังไม่ชำระ' : props.invoice.status == "checking_payment" ? "กำลังตรวจสอบ" : props.invoice.status == "WRONG_BILL" ? "บิลเกิดข้อผิดพลาด" : "ชำระแล้ว"}
             </Text>
           </View>
 
@@ -411,6 +411,23 @@ const TableInvoice = (props) => {
             >
               {" "}
               กำลังตรวจสอบ{" "}
+            </Text>
+          </TouchableOpacity>
+        )}
+        {props.invoice.status == "WRONG_BILL" && (
+          <TouchableOpacity
+            style={[styles.btnLoad, {backgroundColor: 'gray', width: 110,}]}
+            disabled={true}
+          >
+            <Text
+              style={{
+                fontSize: "10px",
+                fontWeight: "bold",
+                color: "white",
+              }}
+            >
+              {" "}
+              บิลมีปัญหา{" "}
             </Text>
           </TouchableOpacity>
         )}
