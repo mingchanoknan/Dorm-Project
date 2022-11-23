@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   StyleSheet,
@@ -8,11 +8,7 @@ import {
 } from "react-native";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import BillGridTile from "../../component/invoice/BillGridTile";
-import { RENT } from "../../dummy/RENT";
-import Search from "../../component/contract/searchBar";
-import Time from "../../component/invoice/time";
-import RESERVE from "../../dummy/RESERVE";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useFocusEffect } from "@react-navigation/native";
 import {
   Text,
   IndexPath,
@@ -85,28 +81,44 @@ const ManageInvoice = ({ route, navigation }) => {
     }
   }, [selectedBuild, selectedFloor]);
 
-  useEffect(() => {
-    const urlAllRoom = `${baseUrl}/rent`;
+  useFocusEffect(
+    useCallback(() => {
+      //console.log("Hello CheckroomStatus");
+      axios
+        .get(`${baseUrl}/rent`)
+        .then((response) => {
+          setRoom(response.data);
+          setAll(response.data);
+        })
+        .catch((error) => console.log("error checkroomstatus"));
+      return () => {
+        console.log("success checkroom");
+      };
+    }, [])
+  );
 
-    const fetchrooms = async () => {
-      try {
-        const room = await axios.get(urlAllRoom);
+  // useEffect(() => {
+  //   const urlAllRoom = `${baseUrl}/rent`;
+
+  //   const fetchrooms = async () => {
+  //     try {
+  //       const room = await axios.get(urlAllRoom);
         
-        // const user = await axios.get(urlUser);
-        if (room.status === 200) {
-          setRoom(room.data);
-          setAll(room.data);
-          console.log(room.data)
-          return;
-        } else {
-          throw new Error("Failed to fetch manageinvoice");
-        }
-      } catch (error) {
-        console.log("error manage invoice");
-      }
-    };
-    fetchrooms();
-  }, []);
+  //       // const user = await axios.get(urlUser);
+  //       if (room.status === 200) {
+  //         setRoom(room.data);
+  //         setAll(room.data);
+  //         console.log(room.data)
+  //         return;
+  //       } else {
+  //         throw new Error("Failed to fetch manageinvoice");
+  //       }
+  //     } catch (error) {
+  //       console.log("error manage invoice");
+  //     }
+  //   };
+  //   fetchrooms();
+  // }, []);
 
   const formatedDate = (yearAndMonth) => {
     let array = yearAndMonth.split(" ");
@@ -131,6 +143,7 @@ const ManageInvoice = ({ route, navigation }) => {
   };
 
   const renderGridItem = (itemData) => {
+    
     return (
       <>
         {displayValue === "All" &&
@@ -161,6 +174,7 @@ const ManageInvoice = ({ route, navigation }) => {
                     Alert.alert("ยังไม่มีผู้เช่า", "ในห้องนี้", [
                       { text: "OK", onPress: () => console.log("OK Pressed") },
                     ]);
+                    console.log(itemData.item.room_status)
                   }
                 }
               }}
