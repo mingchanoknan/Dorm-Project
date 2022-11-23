@@ -3,6 +3,7 @@ import { View, Image, StyleSheet, TextInput, FlatList } from "react-native";
 import { Button, Card, Text, Modal, Input } from "@ui-kitten/components";
 import { FontAwesome } from "@expo/vector-icons";
 import { NEWS } from "../../dummy/NEWS";
+import RoomImageCarousel from "../../component/carousel/imageCarousel";
 // import News from "../../component/AnnouceNews/news";
 // import Modal from "../../component/AnnouceNews/createdPost";
 
@@ -13,6 +14,7 @@ const NewsDetail = ({ route, navigation }) => {
   const [created_date, setCreated_byId] = useState(data.created_date);
   const [image, setImage] = useState(data.url);
   console.log("-----------------------\n", data);
+  console.log(image)
 
   const Edited = () => {
     console.log("title : " + title);
@@ -40,9 +42,17 @@ const NewsDetail = ({ route, navigation }) => {
           <Text style={styles.text} category="p1">
             {text}
           </Text>
-          {image ? (
-            <Image source={{ uri: image }} style={styles.image}></Image>
-          ) : null}
+          <View style={{display: "flex", alignItems: "center"}}>
+            {image.length > 0 && (
+            <RoomImageCarousel
+            image={image}
+            width={200}
+            height={200}
+            paginationColor={"#84E6E3"}
+          />
+          )}
+          </View>
+          
           <Text
             style={{
               fontSize: 12,
