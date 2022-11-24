@@ -43,7 +43,7 @@ const NewsDetail = ({ route, navigation }) => {
             {text}
           </Text>
           <View style={{display: "flex", alignItems: "center"}}>
-            {image.length > 0 && (
+            {image != null &&image.length > 0 && (
             <RoomImageCarousel
             image={image}
             width={200}

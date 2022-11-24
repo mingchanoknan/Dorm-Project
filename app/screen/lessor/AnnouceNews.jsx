@@ -65,6 +65,7 @@ const AnnouceNews = ({ navigation }) => {
           renderItem={renderGridItem}
           numColumns={1}
           navigation={navigation}
+        
         />
       </View>
     </View>
