@@ -15,6 +15,7 @@ import MainTenant from "../screen/tenant/MainTenant";
 import AnnouceNews from "../screen/tenant/AnnouceNews";
 import NewsDetail from "../screen/tenant/NewsDetail";
 import ManageAccount from "../screen/MangeAccount";
+import Machine from "../screen/tenant/Machine";
 import { FontAwesome } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 const TenantNavigation = (props) => {
@@ -327,6 +328,22 @@ const TenantNavigation = (props) => {
               headerRight: () => logout(),
             
 
+          };
+        }}
+      />
+      <TenantNavigator.Screen
+        name="Machines"
+        component={Machine}
+        options={({ route, navigation }) => {
+          return {
+            headerShown: true,
+            title: "Wash & dry",
+            headerShown: true,
+            headerStyle: { backgroundColor: "transparent" },
+            headerTintColor: "white",
+            headerLeft: () => listIconToOpenDrawer3(navigation),
+
+            headerRight: () => logout(),
           };
         }}
       />

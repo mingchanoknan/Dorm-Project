@@ -41,7 +41,7 @@ const getStepIndicatorIconConfig = ({ position, stepStatus }) => {
   const iconConfig = {
     name: "feed",
     color: stepStatus === "finished" ? "#ffffff" : "#000",
-    size: 15,
+    size: 16,
   };
   switch (position) {
     case 0: {
